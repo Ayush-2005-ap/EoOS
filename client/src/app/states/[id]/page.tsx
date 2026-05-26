@@ -168,9 +168,9 @@ export default function StateDashboard() {
                       <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #c5c6ce" }} />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
                       <Bar dataKey={stateData.name} fill="#00071b" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="National Average" fill="#9b4500" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="National Average" fill="#263780" radius={[4, 4, 0, 0]} />
                       {compareState && (
-                        <Bar dataKey={compareState.name} fill="#ff8d46" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey={compareState.name} fill="#50639B" radius={[4, 4, 0, 0]} />
                       )}
                     </BarChart>
                   </ResponsiveContainer>

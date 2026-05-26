@@ -319,71 +319,91 @@ export default function Simulator() {
                   </p>
                 </div>
 
-                <div className="overflow-y-auto max-h-[620px] custom-scrollbar">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-surface-container bg-opacity-35 border-b border-outline-variant/30 select-none sticky top-0 bg-white z-10">
-                        <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider w-20">
-                          Rank
-                        </th>
-                        <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
-                          State
-                        </th>
-                        <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right w-24">
-                          Score
-                        </th>
-                        <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-center w-28">
-                          Change
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-outline-variant/20">
-                      {simulatedRankings.map((state) => {
-                        const originalRank = STATES_DATA.find((o) => o.id === state.id)!.baseRank;
-                        const improvement = state.rankChange;
+                {Object.values(weights).some(w => w === 0) ? (
+                  <div className="p-12 flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-16 h-16 bg-red-50 text-red-500 flex items-center justify-center rounded-full">
+                      <Info size={32} />
+                    </div>
+                    <h4 className="font-plus-jakarta font-extrabold text-xl text-primary">
+                      Domain Weight is Already 100%
+                    </h4>
+                    <p className="text-on-surface-variant max-w-md">
+                      You need to distribute the weight across all 6 domains to generate a valid ranking. Please ensure no domain has 0% weight.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-y-auto max-h-[620px] custom-scrollbar">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-surface-container bg-opacity-35 border-b border-outline-variant/30 select-none sticky top-0 bg-white z-10">
+                          <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider w-20">
+                            Rank
+                          </th>
+                          <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                            State
+                          </th>
+                          <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-center w-32">
+                            Original Rank
+                          </th>
+                          <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right w-24">
+                            Score
+                          </th>
+                          <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-center w-28">
+                            Change
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-outline-variant/20">
+                        {simulatedRankings.map((state) => {
+                          const originalRank = STATES_DATA.find((o) => o.id === state.id)!.baseRank;
+                          const improvement = state.rankChange;
 
-                        return (
-                          <tr
-                            key={state.id}
-                            className="hover:bg-surface-container-low/30 transition-colors"
-                          >
-                            <td className="py-3.5 px-6 font-plus-jakarta text-[15px] font-extrabold text-primary">
-                              #{state.simulatedRank}
-                            </td>
-                            <td className="py-3.5 px-6">
-                              <div className="font-bold text-[14px] text-primary">
-                                {state.name}
-                              </div>
-                              <div className="text-[10px] text-on-surface-variant uppercase font-semibold">
-                                {state.type} • Original Rank: #{originalRank}
-                              </div>
-                            </td>
-                            <td className="py-3.5 px-6 text-right font-plus-jakarta text-[14px] font-bold text-secondary">
-                              {state.simulatedScore}
-                            </td>
-                            <td className="py-3.5 px-6 text-center">
-                              {improvement > 0 ? (
-                                <span className="inline-flex items-center gap-0.5 text-green-600 bg-green-50 px-2.5 py-0.5 rounded-full text-[12px] font-bold">
-                                  <ArrowUp size={12} className="stroke-[3]" />
-                                  {improvement}
-                                </span>
-                              ) : improvement < 0 ? (
-                                <span className="inline-flex items-center gap-0.5 text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full text-[12px] font-bold">
-                                  <ArrowDown size={12} className="stroke-[3]" />
-                                  {Math.abs(improvement)}
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-0.5 text-on-surface-variant bg-surface-container px-2.5 py-0.5 rounded-full text-[12px] font-bold">
-                                  <Minus size={12} className="stroke-[3]" />
-                                </span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                          return (
+                            <tr
+                              key={state.id}
+                              className="hover:bg-surface-container-low/30 transition-colors"
+                            >
+                              <td className="py-3.5 px-6 font-plus-jakarta text-[15px] font-extrabold text-primary">
+                                #{state.simulatedRank}
+                              </td>
+                              <td className="py-3.5 px-6">
+                                <div className="font-bold text-[14px] text-primary">
+                                  {state.name}
+                                </div>
+                                <div className="text-[10px] text-on-surface-variant uppercase font-semibold">
+                                  {state.type}
+                                </div>
+                              </td>
+                              <td className="py-3.5 px-6 text-center font-plus-jakarta text-[14px] font-bold text-on-surface-variant">
+                                #{originalRank}
+                              </td>
+                              <td className="py-3.5 px-6 text-right font-plus-jakarta text-[14px] font-bold text-secondary">
+                                {state.simulatedScore}
+                              </td>
+                              <td className="py-3.5 px-6 text-center">
+                                {improvement > 0 ? (
+                                  <span className="inline-flex items-center gap-0.5 text-green-600 bg-green-50 px-2.5 py-0.5 rounded-full text-[12px] font-bold">
+                                    <ArrowUp size={12} className="stroke-[3]" />
+                                    {improvement}
+                                  </span>
+                                ) : improvement < 0 ? (
+                                  <span className="inline-flex items-center gap-0.5 text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full text-[12px] font-bold">
+                                    <ArrowDown size={12} className="stroke-[3]" />
+                                    {Math.abs(improvement)}
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-0.5 text-on-surface-variant bg-surface-container px-2.5 py-0.5 rounded-full text-[12px] font-bold">
+                                    <Minus size={12} className="stroke-[3]" />
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </section>
           </div>
