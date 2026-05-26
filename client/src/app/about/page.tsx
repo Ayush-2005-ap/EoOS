@@ -33,12 +33,12 @@ export default function About() {
   ];
 
   const domains = [
-    { id: "01", name: "Ease of Regulatory Clarity,Predictability & Accessibility ", desc: "Evaluates school proximity and enrollment ease for marginalized groups." },
-    { id: "02", name: "Ease of Regulatory Compliance ", desc: "Measures parity across gender, caste, and socioeconomic status." },
-    { id: "03", name: "Ease of Operations without Arbitary Regulatory Action", desc: "Analyzes teacher-student ratios and pedagogy effectiveness." },
-    { id: "04", name: "Ease of Financial Mobiliation", desc: "Focuses on sanitation, digital connectivity, and safe classrooms." },
-    { id: "05", name: "Ease of School Lifecycle Operations", desc: "Tracks fund utilization and policy implementation speed." },
-    { id: "06", name: "Ease of Institutional Autonomy", desc: "Direct assessment of literacy rates and student transition metrics." },
+    { id: "01", name: "Ease of Regulatory Clarity,Predictability & Accessibility ", desc: "This domain assesses the extent to which school regulations are publicly available and accessible, particularly through the official State Education Department websites and related digital platforms. It also covers the extent to which laws are clear, stable, and rule-based, and supported by well-defined timelines, approving authorities and procedures." },
+    { id: "02", name: "Ease of Regulatory Compliance ", desc: "This domain examines the procedural and administrative burden placed on private schools in order to comply with regulatory requirements." },
+    { id: "03", name: "Ease of Operations without Arbitary Regulatory Action", desc: "This domain evaluates the extent to which school operations are protected from discretionary regulatory action through the presence of objectives safeguards and accountability mechanisms." },
+    { id: "04", name: "Ease of Financial Mobiliation", desc: "This domain assess the degree of operational and managerial flexibility available to schools within the existing legal framework." },
+    { id: "05", name: "Ease of School Lifecycle Operations", desc: "This domain evaluatres the regulatory requiremnts governing the establishment of new schools, expansion of existing institutions, and closure or exit of schools." },
+    { id: "06", name: "Ease of Institutional Autonomy", desc: "This domain assesses the ability of schools to accumulate and allocate funds recieved for organizational use and investments." },
   ];
 
   const researchers = [
@@ -153,7 +153,60 @@ export default function About() {
           </div>
         </section>
 
-        {/* Section 3: Why It Matters */}
+        {/* Section 3: The Six Domains */}
+        <section className="bg-surface-container-low py-24 border-t border-outline-variant/20">
+          <div className="max-w-container-max-width mx-auto px-gutter space-y-12">
+            <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
+              The Six Evaluation Domains
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {domains.map((domain) => (
+                <div
+                  key={domain.id}
+                  className="bg-white p-8 rounded-2xl border-b-4 border-secondary shadow-sm hover:shadow-md transition-shadow space-y-3"
+                >
+                  <div className="text-secondary font-plus-jakarta font-extrabold text-2xl">
+                    {domain.id}
+                  </div>
+                  <h3 className="font-plus-jakarta text-lg font-bold text-primary">
+                    {domain.name}
+                  </h3>
+                  <p className="text-on-surface-variant text-[14px] leading-relaxed">
+                    {domain.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: Methodology Timeline */}
+        <section className="py-24 bg-white">
+          <div className="max-w-3xl mx-auto px-gutter space-y-12">
+            <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
+              How Rankings Are Calculated
+            </h2>
+            <div className="space-y-10">
+              {steps.map((step) => (
+                <div key={step.step} className="relative flex gap-6 step-line">
+                  <div className="flex-none w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold z-10 shadow-md">
+                    {step.step}
+                  </div>
+                  <div className="pb-6">
+                    <h4 className="font-plus-jakarta text-lg font-bold text-primary mb-1">
+                      {step.title}
+                    </h4>
+                    <p className="text-on-surface-variant text-[14px] leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 5: Why It Matters  */}
         <section className="bg-surface-container-low py-24 border-y border-outline-variant/20">
           <div className="max-w-container-max-width mx-auto px-gutter space-y-12">
             <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
@@ -187,59 +240,6 @@ export default function About() {
                   Empowering communities with transparent data on local education, fostering a culture of informed civic participation.
                 </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4: Methodology Timeline */}
-        <section className="py-24 bg-white">
-          <div className="max-w-3xl mx-auto px-gutter space-y-12">
-            <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
-              How Rankings Are Calculated
-            </h2>
-            <div className="space-y-10">
-              {steps.map((step) => (
-                <div key={step.step} className="relative flex gap-6 step-line">
-                  <div className="flex-none w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold z-10 shadow-md">
-                    {step.step}
-                  </div>
-                  <div className="pb-6">
-                    <h4 className="font-plus-jakarta text-lg font-bold text-primary mb-1">
-                      {step.title}
-                    </h4>
-                    <p className="text-on-surface-variant text-[14px] leading-relaxed">
-                      {step.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Section 5: The Six Evaluation Domains */}
-        <section className="bg-surface-container-low py-24 border-t border-outline-variant/20">
-          <div className="max-w-container-max-width mx-auto px-gutter space-y-12">
-            <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
-              The Six Evaluation Domains
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {domains.map((domain) => (
-                <div
-                  key={domain.id}
-                  className="bg-white p-8 rounded-2xl border-b-4 border-secondary shadow-sm hover:shadow-md transition-shadow space-y-3"
-                >
-                  <div className="text-secondary font-plus-jakarta font-extrabold text-2xl">
-                    {domain.id}
-                  </div>
-                  <h3 className="font-plus-jakarta text-lg font-bold text-primary">
-                    {domain.name}
-                  </h3>
-                  <p className="text-on-surface-variant text-[14px] leading-relaxed">
-                    {domain.desc}
-                  </p>
-                </div>
-              ))}
             </div>
           </div>
         </section>

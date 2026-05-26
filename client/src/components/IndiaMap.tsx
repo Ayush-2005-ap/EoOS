@@ -15,11 +15,10 @@ export default function IndiaMap({ activeDomain, stateScores, onStateHover, onSt
     const data = stateScores[stateId];
     if (!data) return "#eff4ff"; // default surface container low
     const rank = data.rank;
-    if (rank <= 5) return "#004d20"; // Tier 1: Deep green
-    if (rank <= 10) return "#2e7d32"; // Tier 2: Light green
-    if (rank <= 20) return "#fbc02d"; // Tier 3: Amber / Yellow
-    if (rank <= 28) return "#f57c00"; // Tier 4: Orange
-    return "#d32f2f"; // Tier 5: Red / Coral
+    if (rank <= 10) return "#49aa49"; // Tier 1: Deep green
+    if (rank <= 20) return "#eeb01c"; // Tier 2: Light yellow
+    if (rank <= 25) return "#263780"; // Tier 3: blue 
+    return "#d91c40"; // Tier 4: Red 
   };
 
   return (
