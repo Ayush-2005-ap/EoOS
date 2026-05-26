@@ -1,0 +1,464 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>About | EoOS Index</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .step-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: #c5c6ce;
+        }
+        .step-line:last-child::before {
+            display: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#7887ab",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#6b2d00",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#213145",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-fixed": "#331200",
+                        "primary-fixed": "#d8e2ff",
+                        "primary": "#00071b",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-fixed-variant": "#763300",
+                        "primary-container": "#0f1f3d",
+                        "on-primary-fixed-variant": "#384667",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#0a1b39",
+                        "surface-container-low": "#eff4ff",
+                        "on-error": "#ffffff",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed": "#ffdcc0",
+                        "tertiary-container": "#331900",
+                        "outline-variant": "#c5c6ce",
+                        "on-tertiary-container": "#a97f59",
+                        "secondary-fixed-dim": "#ffb68e",
+                        "on-surface-variant": "#45474e",
+                        "inverse-on-surface": "#eaf1ff",
+                        "inverse-primary": "#b7c6ed",
+                        "on-surface": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "secondary": "#9b4500",
+                        "on-tertiary-fixed-variant": "#613f1f",
+                        "tertiary": "#100500",
+                        "tertiary-fixed-dim": "#eebd93",
+                        "surface-tint": "#505e80",
+                        "primary-fixed-dim": "#b7c6ed",
+                        "secondary-fixed": "#ffdbc9",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-fixed": "#2d1600",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#ff8d46",
+                        "outline": "#75777e",
+                        "surface-dim": "#cbdbf5",
+                        "surface": "#f8f9ff",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "container-max-width": "1280px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center h-16 px-gutter max-w-container-max-width mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary"><span style="letter-spacing: -0.6px; background-color: rgba(255, 255, 255, 0.9);">EoOS</span><span class="text-secondary cursor-text" spellcheck="false" data-stitch-added-classes="cursor-text" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; --tw-text-opacity: 1; color: rgb(155, 69, 0); letter-spacing: -0.6px; background-color: rgba(255, 255, 255, 0.9);">Index</span></div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Home</a>
+<a class="font-label-md text-label-md text-secondary border-b-2 border-secondary pb-1" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Voices</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-label-md focus:ring-2 focus:ring-primary/20 w-48" placeholder="Search insights..." type="text">
+</div>
+
+</div>
+</div>
+</nav>
+<main class="pt-16">
+<!-- Section 1: Hero -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-container-max-width mx-auto px-gutter text-center">
+<span class="inline-block px-4 py-1.5 bg-secondary/10 text-secondary rounded-full font-label-sm text-label-sm mb-6">About the Index</span>
+<h1 class="font-display-lg text-display-lg text-primary mb-8 max-w-3xl mx-auto">Understanding the EoOS Index</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-4xl mx-auto leading-relaxed">
+                    The Education Out-of-School (EoOS) Index is India’s first comprehensive framework designed to measure and rank states based on their progress in ensuring every child has access to quality education. Through data-driven insights, we aim to bridge the gap between policy intent and ground-level outcomes.
+                </p>
+</div>
+</section>
+<!-- Section 2: What is EoOS? -->
+<section class="bg-surface-container-lowest py-24">
+<div class="max-w-container-max-width mx-auto px-gutter flex flex-col md:flex-row gap-16 items-start">
+<div class="md:w-[60%] space-y-8">
+<h2 class="font-headline-lg text-headline-lg text-primary">What is the Education Out-of-School Index?</h2>
+<div class="space-y-6 text-on-surface-variant font-body-md leading-relaxed">
+<p class="">The EoOS Index serves as a critical diagnostic tool for the Indian education ecosystem. By moving beyond simple enrollment numbers, the index captures the nuanced realities of student retention, socioeconomic barriers, and systemic gaps that lead to children falling out of the formal schooling system.</p>
+<p class="">Our methodology combines rigorous academic research with real-world policy application. We utilize primary data from national surveys and administrative records to create a multi-dimensional view of educational health across diverse geographies, from urban centers to remote rural districts.</p>
+<p class="">Ultimately, the Index is not just a ranking; it is a roadmap for reform. It provides state governments with the evidence needed to allocate resources more effectively and implement interventions that are tailored to their specific educational challenges.</p>
+</div>
+<div class="inline-flex items-center gap-3 bg-secondary-container/20 text-secondary px-4 py-2 rounded-lg border border-secondary-container/30">
+<span class="material-symbols-outlined">verified</span>
+<span class="font-label-md">First comprehensive state-level education ranking framework in India</span>
+</div>
+</div>
+<div class="md:w-[40%] w-full">
+<div class="bg-primary p-10 rounded-xl shadow-xl text-on-primary space-y-8 h-full">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-lg bg-on-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">category</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md">6 Domains</div>
+<div class="font-label-sm opacity-70">Core Structural Pillars</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-lg bg-on-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">analytics</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md">80+ Indicators</div>
+<div class="font-label-sm opacity-70">Granular Data Points</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-lg bg-on-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">map</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md">36 States &amp; UTs</div>
+<div class="font-label-sm opacity-70">Nation-wide Coverage</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 rounded-lg bg-on-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">calendar_today</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md">Annual Edition</div>
+<div class="font-label-sm opacity-70">Consistent Monitoring</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Why It Matters -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-16">Why It Matters</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-outline-variant/10 hover:-translate-y-1 transition-transform">
+<div class="w-14 h-14 bg-secondary-container/10 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">gavel</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 text-primary">Policy Accountability</h3>
+<p class="text-on-surface-variant font-body-md">Providing a metric-based look at policy efficacy, ensuring that legislative promises translate into tangible school improvements.</p>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-outline-variant/10 hover:-translate-y-1 transition-transform">
+<div class="w-14 h-14 bg-secondary-container/10 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">leaderboard</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 text-primary">State Benchmarking</h3>
+<p class="text-on-surface-variant font-body-md">Enabling states to learn from peer success and challenges through comparative analysis and shared best practices.</p>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.04)] border border-outline-variant/10 hover:-translate-y-1 transition-transform">
+<div class="w-14 h-14 bg-secondary-container/10 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">groups</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 text-primary">Citizen Awareness</h3>
+<p class="text-on-surface-variant font-body-md">Empowering communities with transparent data on local education, fostering a culture of informed civic participation.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Methodology Deep Dive -->
+<section class="bg-surface-container-lowest py-24">
+<div class="max-w-4xl mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-16">How Rankings Are Calculated</h2>
+<div class="space-y-12">
+<!-- Step 1 -->
+<div class="relative flex gap-8 step-line">
+<div class="flex-none w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold z-10 shadow-lg">1</div>
+<div class="pb-8">
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Data Collection</h4>
+<p class="text-on-surface-variant font-body-md">Primary and secondary datasets are analyzed. Sub-indicators are objectively scored based on compliance and availability: <span class="text-primary font-semibold">Yes (1)</span>, <span class="text-primary font-semibold">Limited (0.5)</span>, or <span class="text-primary font-semibold">No (0)</span>.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative flex gap-8 step-line">
+<div class="flex-none w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold z-10 shadow-lg">2</div>
+<div class="pb-8">
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Indicator Aggregation</h4>
+<p class="text-on-surface-variant font-body-md">Individual sub-indicator scores are mathematically combined to produce a unified score for each specific educational indicator, normalized across states.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative flex gap-8 step-line">
+<div class="flex-none w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold z-10 shadow-lg">3</div>
+<div class="pb-8">
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Domain Score Computation</h4>
+<p class="text-on-surface-variant font-body-md">Indicators are grouped into our six core evaluation domains. Domain scores are derived through a geometric mean approach to ensure balanced performance requirement.</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="relative flex gap-8 step-line">
+<div class="flex-none w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold z-10 shadow-lg">4</div>
+<div class="pb-8">
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Weighted Final Score</h4>
+<p class="text-on-surface-variant font-body-md mb-4">Each domain is assigned a weight based on its critical impact on out-of-school populations.</p>
+<code class="inline-block bg-primary-container text-on-primary-fixed-variant px-4 py-2 rounded font-mono text-label-md">Final Score = Σ (Domain Score × Domain Weight)</code>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="relative flex gap-8 step-line">
+<div class="flex-none w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold z-10 shadow-lg">5</div>
+<div class="">
+<h4 class="font-headline-md text-headline-md text-primary mb-2">State Ranking</h4>
+<p class="text-on-surface-variant font-body-md">Final sorting of all 36 states and Union Territories by their aggregate weighted scores to assign national rankings and percentile buckets.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: 6 Domains Grid -->
+<section class="bg-surface-container py-24">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-16">The Six Evaluation Domains</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Domain 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">01</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Access</h3>
+<p class="text-on-surface-variant text-label-md">Evaluates school proximity and enrollment ease for marginalized groups.</p>
+</div>
+<!-- Domain 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">02</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Equity</h3>
+<p class="text-on-surface-variant text-label-md">Measures parity across gender, caste, and socioeconomic status.</p>
+</div>
+<!-- Domain 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">03</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Quality</h3>
+<p class="text-on-surface-variant text-label-md">Analyzes teacher-student ratios and pedagogy effectiveness.</p>
+</div>
+<!-- Domain 4 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">04</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Infrastructure</h3>
+<p class="text-on-surface-variant text-label-md">Focuses on sanitation, digital connectivity, and safe classrooms.</p>
+</div>
+<!-- Domain 5 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">05</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Governance</h3>
+<p class="text-on-surface-variant text-label-md">Tracks fund utilization and policy implementation speed.</p>
+</div>
+<!-- Domain 6 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border-b-4 border-secondary shadow-sm">
+<div class="text-secondary font-bold text-headline-lg mb-4">06</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Outcomes</h3>
+<p class="text-on-surface-variant text-label-md">Direct assessment of literacy rates and student transition metrics.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Who Is This For? -->
+<section class="bg-surface-container-lowest py-24">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-16">Who Is This For?</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="p-6 rounded-xl bg-surface-container-low flex flex-col items-center text-center">
+<div class="mb-4 text-primary"><span class="material-symbols-outlined text-4xl">account_balance</span></div>
+<h4 class="font-label-md text-primary font-bold">Policymakers</h4>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low flex flex-col items-center text-center">
+<div class="mb-4 text-primary"><span class="material-symbols-outlined text-4xl">science</span></div>
+<h4 class="font-label-md text-primary font-bold">Researchers</h4>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low flex flex-col items-center text-center">
+<div class="mb-4 text-primary"><span class="material-symbols-outlined text-4xl">volunteer_activism</span></div>
+<h4 class="font-label-md text-primary font-bold">Civil Society</h4>
+</div>
+<div class="p-6 rounded-xl bg-surface-container-low flex flex-col items-center text-center">
+<div class="mb-4 text-primary"><span class="material-symbols-outlined text-4xl">family_restroom</span></div>
+<h4 class="font-label-md text-primary font-bold">Citizens</h4>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 7: The Research Team -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-16">The Research Team</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Profile 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm text-center">
+<div class="w-20 h-20 rounded-full mx-auto mb-6 overflow-hidden">
+<img alt="Dr. Aruna Singh" class="w-full h-full object-cover" data-alt="A professional headshot of a female academic researcher in her late 40s, wearing business attire. She is in a brightly lit, modern office environment with blurred bookshelves in the background. The lighting is soft and natural, emphasizing a trustworthy and authoritative look. The style is clean and high-end editorial, matching a professional research institution's branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGeQmu30QhG5ZWayD5BTlpX6pLL6GgXcLaZlzQxE4-Cn0cLM1_9HF8GKmZecA4VD4hy9rRAfowDDfFRqhO_5BD4LNQHOgfX2pa14B3_kktnE2DH4nP1vW2oIQcFxahsxMxsSTFOz--R6DCaQ9pQ3Eps27VLTwY9HpT_nsxj_qi0Oqxcy49859Dh2DBlQxBLVwVrZLNbIHHUgWKg9wjuE7RVCHQcAMc-GUmda9URk1j1XMnERlfBOOmy7EZY33RpuesNz1tBmXvgc3A">
+</div>
+<h4 class="font-headline-md text-headline-md text-primary">Dr. Aruna Singh</h4>
+<div class="text-secondary font-label-md mb-1">Director of Research</div>
+<div class="text-on-surface-variant text-label-sm mb-4">Indian Institute of Policy Studies</div>
+<p class="text-on-surface-variant text-label-md line-clamp-2">Leading expert in education economics with over 20 years of experience in data modeling.</p>
+</div>
+<!-- Profile 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm text-center">
+<div class="w-20 h-20 rounded-full mx-auto mb-6 overflow-hidden">
+<img alt="Vikram Malhotra" class="w-full h-full object-cover" data-alt="A professional portrait of a male researcher in his mid 30s, wearing a crisp white shirt. He has a friendly yet serious expression, set against a minimal light-gray studio background. The image is captured with sharp focus and professional studio lighting, creating a bright and clean modern look that conveys academic rigor and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgzRIPpJuLDE25qEcXrjyF2QSOehqZeMXe_n1C6SZ_3qEzSAWUDso-bSvBzRG2ejcBPe34gtElpDH-EnYxM-WiwgHR3EZ591CoESrRStEwmef_kLwYvVNOEKyaNkbB0JvT2_x_akhMN7MUCsitXLnurLahnjw_jJKvu6WNibcLT8PItljnnyOewhWy6UKnxwOeBhO_nv5TK-XCzzNHTxbHsz7lA-5a9ncWZWdaRi_e0iwsFlOd7GY-SOOKxIf0QXScOQGN4kgOtwnA">
+</div>
+<h4 class="font-headline-md text-headline-md text-primary">Vikram Malhotra</h4>
+<div class="text-secondary font-label-md mb-1">Lead Data Scientist</div>
+<div class="text-on-surface-variant text-label-sm mb-4">CCS Research Lab</div>
+<p class="text-on-surface-variant text-label-md line-clamp-2">Specializes in large-scale geospatial data analysis and socioeconomic indicators.</p>
+</div>
+<!-- Profile 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm text-center">
+<div class="w-20 h-20 rounded-full mx-auto mb-6 overflow-hidden">
+<img alt="Dr. Priya Verma" class="w-full h-full object-cover" data-alt="A professional academic headshot of a woman in her 50s with a confident expression. She is wearing professional attire and glasses, positioned in a modern minimalist space with soft side-lighting. The overall aesthetic is clean, sophisticated, and high-contrast, fitting for a senior policy advisor. The background is a simple, off-white wall to keep the focus entirely on the subject." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuPFulSo_f7gqTqPl4KzkIcK_JAl8nxqHQXWArHALr6cl2lGhzSaAwKFSMGa4zLAktfm-JSASlrCR7QqW4UqGHpNLiMFSGFLL5grMW9bldPsXkq3MQGF6TzuZv9Ly5xKEYc_MZGfPYdjjonUIIuTBZgp4RlUnUWBFuqQDZZ6gl7tjcvQIPzU9_yD2jzq5wQkYWghmsuMs4tNXqflLNRikokrNYRzi6zuZHxkG5M0auCYnQHQKcnWvdL5dcLx84By_nQ0_Ks9M2FbWC">
+</div>
+<h4 class="font-headline-md text-headline-md text-primary">Dr. Priya Verma</h4>
+<div class="text-secondary font-label-md mb-1">Senior Policy Advisor</div>
+<div class="text-on-surface-variant text-label-sm mb-4">Global Education Council</div>
+<p class="text-on-surface-variant text-label-md line-clamp-2">Former education ministry advisor focused on bridge-school frameworks and child rights.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 mt-16 bg-surface-container-lowest border-t border-outline-variant/50">
+<div class="max-w-container-max-width mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-base">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-primary mb-4">EoOS Index</div>
+<p class="text-on-surface-variant text-label-md leading-relaxed">India's first data-driven framework for tracking and resolving education access gaps.</p>
+</div>
+<div>
+<h5 class="font-label-md font-bold text-primary mb-4">The Index</h5>
+<ul class="space-y-2">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Methodology</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">State Rankings</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Data Portal</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md font-bold text-primary mb-4">Quick Links</h5>
+<ul class="space-y-2">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Privacy Policy</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Terms of Service</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Data Methodology</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md font-bold text-primary mb-4">Contact</h5>
+<ul class="space-y-2">
+<li class="text-on-surface-variant text-label-md">research@ccsindia.org</li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-opacity text-label-md" href="#">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max-width mx-auto px-gutter mt-12 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-body-md text-body-md text-on-surface-variant">© 2024 CCS Research. All rights reserved.</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#"><span class="material-symbols-outlined">mail</span></a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if(link.getAttribute('href') === '#') {
+                    // Prevent jumping for placeholders
+                }
+            });
+        });
+
+        // Simple scroll observer for nav shadow
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 10) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+
+
+
+
+</body></html>

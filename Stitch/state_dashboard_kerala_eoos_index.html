@@ -1,0 +1,525 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kerala State Profile | EoOS Index</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .radar-grid {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c5c6ce;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#505e80",
+                        "primary-fixed-dim": "#b7c6ed",
+                        "secondary-fixed": "#ffdbc9",
+                        "secondary-container": "#ff8d46",
+                        "on-secondary-container": "#6b2d00",
+                        "on-tertiary-fixed": "#2d1600",
+                        "surface": "#f8f9ff",
+                        "inverse-surface": "#213145",
+                        "on-surface": "#0b1c30",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "secondary": "#9b4500",
+                        "on-tertiary-container": "#a97f59",
+                        "inverse-primary": "#b7c6ed",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#331900",
+                        "on-primary-container": "#7887ab",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#763300",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e5eeff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#384667",
+                        "secondary-fixed-dim": "#ffb68e",
+                        "primary-container": "#0f1f3d",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#100500",
+                        "surface-bright": "#f8f9ff",
+                        "outline": "#75777e",
+                        "primary": "#00071b",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed-variant": "#613f1f",
+                        "tertiary-fixed": "#ffdcc0",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-fixed": "#331200",
+                        "outline-variant": "#c5c6ce",
+                        "on-surface-variant": "#45474e",
+                        "tertiary-fixed-dim": "#eebd93",
+                        "on-primary-fixed": "#0a1b39"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "container-max-width": "1280px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center h-16 px-gutter max-w-container-max-width mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary">EoOS Index</span>
+<div class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Voices</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container-low/50 rounded-full">search</button>
+
+</div>
+</div>
+</nav>
+<main class="pt-16">
+<!-- Section 1: Hero Band -->
+<section class="bg-primary-container text-white py-16 w-full">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<nav class="mb-8 flex items-center gap-2 text-on-primary-container text-label-md font-label-md">
+<span class="">Explore</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="">State Profiles</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-white">Kerala</span>
+</nav>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<div class="md:col-span-4">
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded text-label-sm font-label-sm">KL</span>
+<h1 class="font-display-lg text-display-lg">Kerala</h1>
+</div>
+<p class="text-on-primary-container font-body-md opacity-80">Southern Region • Coastal Belt</p>
+</div>
+<div class="md:col-span-4 flex flex-col items-center justify-center text-center">
+<div class="w-20 h-20 rounded-full bg-secondary flex flex-col items-center justify-center shadow-lg mb-2">
+<span class="text-headline-md font-bold text-white">#1</span>
+</div>
+<span class="font-label-md text-on-primary-container uppercase tracking-wider">Overall Rank 2024</span>
+</div>
+<div class="md:col-span-4 text-right">
+<div class="mb-6">
+<div class="font-headline-lg text-headline-lg">87.4 / 100</div>
+<div class="text-secondary-fixed text-label-md">Above national average by 26.2 pts</div>
+</div>
+<div class="flex gap-4 justify-end">
+<button class="flex items-center gap-2 border border-outline-variant px-5 py-2 rounded-lg font-label-md hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[20px]">share</span> Share
+                            </button>
+<button class="flex items-center gap-2 bg-secondary-container text-on-secondary-container px-5 py-2 rounded-lg font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">download</span> Download State Brief
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Domain Cards -->
+<section class="bg-white py-12">
+<div class="max-w-container-max-width mx-auto px-gutter overflow-x-auto custom-scrollbar">
+<div class="flex gap-gutter min-w-[1000px] pb-4">
+<!-- Domain Card Template -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Access</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">91</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #2</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 91%"></div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Equity</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">88</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #4</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 88%"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Quality</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">95</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #1</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 95%"></div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Infrastructure</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">89</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #3</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 89%"></div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Governance</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">86</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #5</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 86%"></div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="flex-1 bg-white border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="text-label-sm text-on-surface-variant uppercase mb-4 tracking-tighter">Outcomes</div>
+<div class="flex justify-between items-end mb-2">
+<div class="text-headline-md font-bold text-primary">84</div>
+<div class="bg-surface-container text-on-primary-fixed-variant px-2 py-1 rounded text-[10px] font-bold">RANK #6</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 84%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Analytics -->
+<section class="bg-surface-container-low py-16">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-gutter">
+<!-- Left: Grouped Bar Chart -->
+<div class="lg:col-span-6 bg-white p-8 rounded-xl shadow-sm">
+<h3 class="font-headline-md text-headline-md mb-8">Domain Performance vs National Average</h3>
+<div class="space-y-6">
+<!-- Chart Row -->
+<div class="space-y-2" v-for="domain in ['Quality', 'Access', 'Infra', 'Equity', 'Gov', 'Outcomes']">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span class="">Quality</span>
+<span class="">95 vs 68</span>
+</div>
+<div class="relative h-8 flex flex-col gap-1">
+<div class="h-3 bg-secondary-container rounded-r-full" style="width: 95%"></div>
+<div class="h-3 bg-primary/20 rounded-r-full" style="width: 68%"></div>
+</div>
+</div>
+<!-- Repeated for layout -->
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span class="">Access</span>
+<span class="">91 vs 64</span>
+</div>
+<div class="relative h-8 flex flex-col gap-1">
+<div class="h-3 bg-secondary-container rounded-r-full" style="width: 91%"></div>
+<div class="h-3 bg-primary/20 rounded-r-full" style="width: 64%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span class="">Infrastructure</span>
+<span class="">89 vs 55</span>
+</div>
+<div class="relative h-8 flex flex-col gap-1">
+<div class="h-3 bg-secondary-container rounded-r-full" style="width: 89%"></div>
+<div class="h-3 bg-primary/20 rounded-r-full" style="width: 55%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-6 text-label-sm">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-secondary-container rounded-full"></span> Kerala
+                            </div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-primary/20 rounded-full"></span> National Avg
+                            </div>
+</div>
+</div>
+<!-- Right: Performance Radar -->
+<div class="lg:col-span-4 bg-white p-8 rounded-xl shadow-sm flex flex-col items-center">
+<h3 class="font-headline-md text-headline-md mb-8 w-full">Performance Radar</h3>
+<div class="relative w-64 h-64 mt-4">
+<!-- Mock Radar Chart using CSS -->
+<div class="absolute inset-0 radar-grid bg-surface-container opacity-20 border border-outline"></div>
+<div class="absolute inset-0 radar-grid bg-surface-container opacity-20 scale-75 border border-outline"></div>
+<div class="absolute inset-0 radar-grid bg-surface-container opacity-20 scale-50 border border-outline"></div>
+<div class="absolute inset-0 radar-grid bg-secondary/30 scale-90" style="clip-path: polygon(50% 5%, 95% 20%, 90% 80%, 50% 95%, 15% 85%, 10% 25%);"></div>
+<!-- Labels -->
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-label-sm font-bold">QUALITY</span>
+<span class="absolute top-1/4 -right-12 text-label-sm font-bold">ACCESS</span>
+<span class="absolute bottom-1/4 -right-12 text-label-sm font-bold">EQUITY</span>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-label-sm font-bold">OUTCOMES</span>
+<span class="absolute bottom-1/4 -left-12 text-label-sm font-bold">GOV</span>
+<span class="absolute top-1/4 -left-12 text-label-sm font-bold">INFRA</span>
+</div>
+<p class="mt-12 text-center text-body-md text-on-surface-variant italic">
+                            Kerala shows a highly balanced footprint with notable peaks in Quality and Infrastructure.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Insights -->
+<section class="bg-white py-16">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Strengths -->
+<div class="bg-surface-container-low border-l-4 border-green-600 p-8 rounded-r-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-green-700">trending_up</span>
+<h3 class="font-headline-md text-headline-md text-green-900">Key Strengths</h3>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-primary">Quality of Education</span>
+<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-label-sm">95/100</span>
+</div>
+<p class="text-on-surface-variant font-body-md">Exceptional teacher-student ratios and high learning outcome consistency across rural districts. Kerala maintains the highest literacy standards globally recognized.</p>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-primary">Digital Access</span>
+<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-label-sm">91/100</span>
+</div>
+<p class="text-on-surface-variant font-body-md">Universal broadband connectivity in government schools and widespread availability of smart classrooms in both urban and hilly terrains.</p>
+</div>
+</div>
+</div>
+<!-- Areas for Improvement -->
+<div class="bg-secondary-container/5 border-l-4 border-secondary p-8 rounded-r-xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-secondary">analytics</span>
+<h3 class="font-headline-md text-headline-md text-on-secondary-fixed">Areas for Improvement</h3>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-primary">Administrative Efficiency</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm">86/100</span>
+</div>
+<p class="text-on-surface-variant font-body-md">Minor delays in fund utilization for new infrastructure projects and a need for streamlining inter-departmental data reporting cycles.</p>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-bold text-primary">Higher Ed Transitions</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm">84/100</span>
+</div>
+<p class="text-on-surface-variant font-body-md">While school metrics are high, vocational track alignment and higher education transition rates show room for localized policy adjustment.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 5: Breakdown -->
+<section class="bg-surface py-16">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<h2 class="font-headline-lg text-headline-lg mb-8">Detailed Indicator Breakdown</h2>
+<div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+<!-- Accordion Item (Expanded) -->
+<div class="border-b border-outline-variant/30">
+<button class="w-full flex items-center justify-between p-6 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<span class="bg-primary-container text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">A</span>
+<span class="font-headline-md text-headline-md">Access Domain</span>
+</div>
+<span class="material-symbols-outlined">expand_less</span>
+</button>
+<div class="px-6 pb-8">
+<table class="w-full text-left">
+<thead class="text-label-sm text-on-surface-variant uppercase bg-surface-container-lowest">
+<tr>
+<th class="py-4 px-4 border-b">Indicator Name</th>
+<th class="py-4 px-4 border-b">Category</th>
+<th class="py-4 px-4 border-b text-center">Current Score</th>
+<th class="py-4 px-4 border-b text-center">Yearly Change</th>
+<th class="py-4 px-4 border-b text-right">Trend</th>
+</tr>
+</thead>
+<tbody class="font-body-md">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="py-4 px-4 border-b font-medium">School Proximity</td>
+<td class="py-4 px-4 border-b text-on-surface-variant">Infrastructure</td>
+<td class="py-4 px-4 border-b text-center font-bold">98.2</td>
+<td class="py-4 px-4 border-b text-center text-green-600">+0.4%</td>
+<td class="py-4 px-4 border-b text-right">
+<span class="material-symbols-outlined text-green-600">show_chart</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="py-4 px-4 border-b font-medium">Enrollment Rate (K-12)</td>
+<td class="py-4 px-4 border-b text-on-surface-variant">Outcomes</td>
+<td class="py-4 px-4 border-b text-center font-bold">99.8</td>
+<td class="py-4 px-4 border-b text-center text-on-surface-variant">0.0%</td>
+<td class="py-4 px-4 border-b text-right">
+<span class="material-symbols-outlined text-outline">horizontal_rule</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="py-4 px-4 border-b font-medium">Teacher Availability</td>
+<td class="py-4 px-4 border-b text-on-surface-variant">Resources</td>
+<td class="py-4 px-4 border-b text-center font-bold">88.5</td>
+<td class="py-4 px-4 border-b text-center text-green-600">+1.2%</td>
+<td class="py-4 px-4 border-b text-right">
+<span class="material-symbols-outlined text-green-600">show_chart</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Other Accordion Items (Collapsed) -->
+<div class="border-b border-outline-variant/30" v-for="item in ['Equity', 'Quality', 'Infrastructure', 'Governance', 'Outcomes']">
+<button class="w-full flex items-center justify-between p-6 hover:bg-surface-container-low transition-colors opacity-70 hover:opacity-100">
+<div class="flex items-center gap-4">
+<span class="bg-surface-variant text-on-surface-variant w-10 h-10 rounded-lg flex items-center justify-center font-bold">E</span>
+<span class="font-headline-md text-headline-md">Equity Domain</span>
+</div>
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 6: Comparison -->
+<section class="bg-white py-20">
+<div class="max-w-container-max-width mx-auto px-gutter text-center">
+<h2 class="font-headline-lg text-headline-lg mb-8">Compare Kerala With</h2>
+<div class="flex flex-wrap justify-center gap-4 mb-10">
+<button class="px-8 py-3 rounded-full border border-outline-variant font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Bihar
+                    </button>
+<button class="px-8 py-3 rounded-full border border-outline-variant font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Gujarat
+                    </button>
+<button class="px-8 py-3 rounded-full border border-outline-variant font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Tamil Nadu
+                    </button>
+<button class="px-8 py-3 rounded-full border border-outline-variant font-label-md hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Himachal
+                    </button>
+</div>
+<a class="inline-flex items-center gap-2 text-secondary font-label-md hover:underline" href="#">
+                    Or go to Compare page <span class="material-symbols-outlined">arrow_right_alt</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest py-12 border-t border-outline-variant/50">
+<div class="max-w-container-max-width mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-base">
+<div class="col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-primary mb-4">EoOS Index</div>
+<p class="text-on-surface-variant text-body-md opacity-80">Empowering policy makers with data-driven insights for sustainable educational outcomes.</p>
+</div>
+<div class="col-span-1 flex flex-col gap-2">
+<h4 class="font-label-md font-bold text-on-surface mb-2">Explore</h4>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">State Profiles</a>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">Methodology</a>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">Reports</a>
+</div>
+<div class="col-span-1 flex flex-col gap-2">
+<h4 class="font-label-md font-bold text-on-surface mb-2">Legal</h4>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary underline" href="#">Data Methodology</a>
+</div>
+<div class="col-span-1">
+<h4 class="font-label-md font-bold text-on-surface mb-2">Connect</h4>
+<p class="text-on-surface-variant text-body-md mb-4">Contact Us for data partnerships or research queries.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined p-2 bg-surface-container rounded-full cursor-pointer hover:bg-surface-container-high transition-colors">alternate_email</span>
+<span class="material-symbols-outlined p-2 bg-surface-container rounded-full cursor-pointer hover:bg-surface-container-high transition-colors">share</span>
+</div>
+</div>
+</div>
+<div class="max-w-container-max-width mx-auto px-gutter mt-12 pt-8 border-t border-outline-variant/30 text-center text-label-sm text-on-surface-variant">
+            © 2024 CCS Research. All rights reserved.
+        </div>
+</footer>
+<script>
+        // Simple micro-interaction for the share button
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.98)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+
+</body></html>

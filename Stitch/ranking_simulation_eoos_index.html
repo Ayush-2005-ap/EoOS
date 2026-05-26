@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Build Your Own Ranking | EoOS Index</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 198, 206, 0.3);
+        }
+        input[type='range'] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type='range']::-webkit-slider-runnable-track {
+            background: #e5eeff;
+            height: 6px;
+            border-radius: 3px;
+        }
+        input[type='range']::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #9b4500;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8f9ff;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d3e4fe;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffdcc0",
+                      "secondary-fixed-dim": "#ffb68e",
+                      "on-secondary": "#ffffff",
+                      "on-primary-fixed-variant": "#384667",
+                      "primary-fixed": "#d8e2ff",
+                      "tertiary-fixed-dim": "#eebd93",
+                      "surface-container-high": "#dce9ff",
+                      "on-surface-variant": "#45474e",
+                      "background": "#f8f9ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-secondary-fixed-variant": "#763300",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#0f1f3d",
+                      "on-secondary-fixed": "#331200",
+                      "inverse-primary": "#b7c6ed",
+                      "on-error-container": "#93000a",
+                      "surface-tint": "#505e80",
+                      "on-error": "#ffffff",
+                      "outline-variant": "#c5c6ce",
+                      "secondary": "#9b4500",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed": "#ffdbc9",
+                      "on-tertiary-container": "#a97f59",
+                      "on-primary-container": "#7887ab",
+                      "inverse-surface": "#213145",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container": "#e5eeff",
+                      "surface": "#f8f9ff",
+                      "on-tertiary-fixed": "#2d1600",
+                      "secondary-container": "#ff8d46",
+                      "primary": "#00071b",
+                      "outline": "#75777e",
+                      "tertiary": "#100500",
+                      "surface-bright": "#f8f9ff",
+                      "tertiary-container": "#331900",
+                      "on-secondary-container": "#6b2d00",
+                      "surface-variant": "#d3e4fe",
+                      "on-tertiary": "#ffffff",
+                      "on-surface": "#0b1c30",
+                      "on-tertiary-fixed-variant": "#613f1f",
+                      "on-primary-fixed": "#0a1b39",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#b7c6ed",
+                      "inverse-on-surface": "#eaf1ff",
+                      "error": "#ba1a1a",
+                      "on-background": "#0b1c30"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max-width": "1280px",
+                      "margin-mobile": "16px",
+                      "base": "8px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "headline-lg": ["Plus Jakarta Sans"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "label-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30 dark:border-outline-variant/10">
+<div class="flex justify-between items-center h-16 px-gutter max-w-container-max-width mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">
+                EoOS Index
+            </div>
+<nav class="hidden md:flex gap-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+<a class="font-label-md text-label-md text-secondary border-b-2 border-secondary pb-1" href="#">Voices</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</nav>
+<button class="bg-primary text-white px-6 py-2 rounded-lg font-label-md hover:bg-primary-container transition-all">Sign In</button>
+</div>
+</header>
+<main class="flex-grow pt-32 pb-16 px-gutter max-w-container-max-width mx-auto w-full">
+<!-- Title & Subtitle Section -->
+<header class="mb-12">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Build Your Own Ranking</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Adjust the importance of each domain to see how rankings change</p>
+</header>
+<!-- Main Layout -->
+<div class="flex flex-col md:grid md:grid-cols-10 gap-10 items-start">
+<!-- Left Panel: Simulation Controls -->
+<aside class="md:col-span-4 w-full sticky top-32">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_24px_48px_rgba(0,0,0,0.04)] border border-outline-variant/30 p-8">
+<div class="flex items-center justify-between mb-8 pb-4 border-b border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md text-primary">Domain Weights</h2>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">TOTAL</span>
+<span class="bg-secondary text-white font-bold px-3 py-1 rounded-full text-label-md" id="total-weight">100%</span>
+</div>
+</div>
+<div class="space-y-8" id="slider-container">
+<!-- Sliders generated by JS for better interaction control -->
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Access</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">16%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Access" max="100" min="0" type="range" value="16"/>
+</div>
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Equity</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">17%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Equity" max="100" min="0" type="range" value="17"/>
+</div>
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Quality</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">17%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Quality" max="100" min="0" type="range" value="17"/>
+</div>
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Infrastructure</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">16%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Infrastructure" max="100" min="0" type="range" value="16"/>
+</div>
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Governance</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">17%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Governance" max="100" min="0" type="range" value="17"/>
+</div>
+<div class="slider-group space-y-3">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface">Outcomes</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold weight-display">17%</span>
+</div>
+<input class="w-full domain-slider" data-domain="Outcomes" max="100" min="0" type="range" value="17"/>
+</div>
+</div>
+<div class="mt-10 pt-6 border-t border-outline-variant/30">
+<button class="w-full py-3 px-4 border-1.5 border-primary text-primary hover:bg-surface-container-low transition-colors rounded-lg font-label-md flex items-center justify-center gap-2" id="reset-weights">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+                            Reset to Default
+                        </button>
+</div>
+<p class="mt-6 text-label-sm text-on-surface-variant opacity-70 leading-relaxed italic">
+                        * Disclaimer: This simulation tool uses a linear weighted average model. Actual rankings are subject to complex methodological constraints and normalized variances across data points.
+                    </p>
+</div>
+</aside>
+<!-- Right Panel: Results -->
+<section class="md:col-span-6 w-full">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_24px_48px_rgba(0,0,0,0.04)] border border-outline-variant/30 overflow-hidden">
+<div class="p-8 border-b border-outline-variant/30 bg-surface-container-low/30">
+<h2 class="font-headline-md text-headline-md text-primary">Simulated Rankings</h2>
+<p class="text-label-md text-on-surface-variant">Live updates based on weight adjustments</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Rank</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Entity</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Simulated Score</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Change</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20" id="ranking-table-body">
+<!-- Table rows generated by JS -->
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low/20 flex items-center justify-center">
+<button class="text-primary font-label-md hover:underline flex items-center gap-1">
+                            Download Data Report
+                            <span class="material-symbols-outlined text-[16px]">download</span>
+</button>
+</div>
+</div>
+<!-- Featured Highlight Card -->
+<div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="bg-surface-container-high/50 p-6 rounded-xl border border-outline-variant/30 flex items-start gap-4">
+<div class="bg-white p-3 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-1">Most Improved</h4>
+<p class="text-headline-md text-on-surface font-bold">Nordic Alliance</p>
+<p class="text-label-sm text-on-surface-variant">+4 ranks with current weights</p>
+</div>
+</div>
+<div class="bg-surface-container-high/50 p-6 rounded-xl border border-outline-variant/30 flex items-start gap-4">
+<div class="bg-white p-3 rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-1">Sensitivity Index</h4>
+<p class="text-headline-md text-on-surface font-bold">Medium-High</p>
+<p class="text-label-sm text-on-surface-variant">High correlation with Equity weights</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-primary-container w-full py-12 mt-16 border-t border-outline-variant/50">
+<div class="max-w-container-max-width mx-auto px-gutter grid grid-cols-1 md:grid-cols-4 gap-base">
+<div class="md:col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed mb-4">EoOS Index</div>
+<p class="text-on-surface-variant dark:text-on-surface-variant font-body-md text-body-md">
+                    Leading the frontier of open science research through institutional rigor and data-driven insights.
+                </p>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-md text-label-md text-primary mb-4 font-bold">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Privacy Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-md text-label-md text-primary mb-4 font-bold">Resources</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Data Methodology</a></li>
+<li><a class="text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Whitepaper</a></li>
+</ul>
+</div>
+<div class="md:col-span-1">
+<h4 class="font-label-md text-label-md text-primary mb-4 font-bold">Connect</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary underline transition-opacity" href="#">Contact Us</a></li>
+<li><p class="text-on-surface-variant font-body-md text-body-md mt-4">© 2024 CCS Research. All rights reserved.</p></li>
+</ul>
+</div>
+</div>
+</footer>
+<script>
+        const entities = [
+            { name: "Switzerland", baseScore: 92, Access: 95, Equity: 88, Quality: 98, Infrastructure: 94, Governance: 90, Outcomes: 91 },
+            { name: "Netherlands", baseScore: 89, Access: 92, Equity: 94, Quality: 85, Infrastructure: 96, Governance: 88, Outcomes: 89 },
+            { name: "Singapore", baseScore: 87, Access: 84, Equity: 82, Quality: 96, Infrastructure: 98, Governance: 92, Outcomes: 93 },
+            { name: "Nordic Alliance", baseScore: 85, Access: 98, Equity: 96, Quality: 88, Infrastructure: 82, Governance: 94, Outcomes: 86 },
+            { name: "Canada", baseScore: 82, Access: 88, Equity: 90, Quality: 84, Infrastructure: 85, Governance: 86, Outcomes: 82 },
+            { name: "South Korea", baseScore: 79, Access: 81, Equity: 76, Quality: 85, Infrastructure: 94, Governance: 82, Outcomes: 88 },
+            { name: "Australia", baseScore: 78, Access: 85, Equity: 88, Quality: 82, Infrastructure: 80, Governance: 84, Outcomes: 78 },
+            { name: "Japan", baseScore: 75, Access: 72, Equity: 74, Quality: 88, Infrastructure: 86, Governance: 85, Outcomes: 80 },
+            { name: "United Kingdom", baseScore: 74, Access: 82, Equity: 80, Quality: 86, Infrastructure: 78, Governance: 74, Outcomes: 76 },
+            { name: "Germany", baseScore: 72, Access: 78, Equity: 76, Quality: 84, Infrastructure: 82, Governance: 80, Outcomes: 72 }
+        ];
+
+        const sliders = document.querySelectorAll('.domain-slider');
+        const displays = document.querySelectorAll('.weight-display');
+        const totalDisplay = document.getElementById('total-weight');
+        const tableBody = document.getElementById('ranking-table-body');
+        const resetBtn = document.getElementById('reset-weights');
+
+        function updateRankings() {
+            let total = 0;
+            const weights = {};
+            
+            sliders.forEach((slider, index) => {
+                const val = parseInt(slider.value);
+                weights[slider.dataset.domain] = val / 100;
+                total += val;
+                displays[index].textContent = val + '%';
+            });
+
+            totalDisplay.textContent = total + '%';
+            if (total !== 100) {
+                totalDisplay.classList.replace('bg-secondary', 'bg-error');
+            } else {
+                totalDisplay.classList.replace('bg-error', 'bg-secondary');
+            }
+
+            const simulated = entities.map(entity => {
+                let score = 0;
+                let weightSum = 0;
+                for (let domain in weights) {
+                    score += entity[domain] * weights[domain];
+                    weightSum += weights[domain];
+                }
+                // Normalize if total isn't 100%
+                const finalScore = weightSum > 0 ? (score / weightSum).toFixed(1) : "0.0";
+                return { ...entity, simulatedScore: parseFloat(finalScore) };
+            });
+
+            // Sort by score
+            simulated.sort((a, b) => b.simulatedScore - a.simulatedScore);
+
+            // Render table
+            tableBody.innerHTML = '';
+            simulated.forEach((entity, index) => {
+                const originalRank = entities.findIndex(e => e.name === entity.name) + 1;
+                const newRank = index + 1;
+                const change = originalRank - newRank;
+
+                let changeIcon = 'drag_handle';
+                let changeClass = 'text-on-surface-variant';
+                if (change > 0) {
+                    changeIcon = 'arrow_drop_up';
+                    changeClass = 'text-green-600';
+                } else if (change < 0) {
+                    changeIcon = 'arrow_drop_down';
+                    changeClass = 'text-error';
+                }
+
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-surface-container transition-colors group';
+                row.innerHTML = `
+                    <td class="py-4 px-6 font-label-md text-primary font-bold">#${newRank}</td>
+                    <td class="py-4 px-6 font-body-md text-on-surface">${entity.name}</td>
+                    <td class="py-4 px-6 font-label-md text-secondary text-right font-bold">${entity.simulatedScore}</td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="flex items-center justify-center gap-0.5 ${changeClass} font-label-sm">
+                            <span class="material-symbols-outlined text-[20px]">${changeIcon}</span>
+                            ${change !== 0 ? Math.abs(change) : ''}
+                        </span>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        sliders.forEach(slider => {
+            slider.addEventListener('input', updateRankings);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            const defaults = [16, 17, 17, 16, 17, 17];
+            sliders.forEach((slider, i) => {
+                slider.value = defaults[i];
+            });
+            updateRankings();
+        });
+
+        // Init
+        updateRankings();
+
+        // Subtle animation on load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('opacity-0');
+            setTimeout(() => {
+                document.body.classList.replace('opacity-0', 'opacity-100');
+                document.body.classList.add('transition-opacity', 'duration-700');
+            }, 100);
+        });
+    </script>
+</body></html>

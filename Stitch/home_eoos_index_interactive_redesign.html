@@ -1,0 +1,538 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EoOS Index — Measuring Education Opportunity Across India</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#00071b",
+                        "secondary": "#9b4500",
+                        "background": "#f8f9ff",
+                        "surface": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#45474e",
+                        "outline-variant": "#c5c6ce",
+                        "primary-container": "#0f1f3d",
+                        "secondary-container": "#ff8d46",
+                        "on-secondary-container": "#331200",
+                        "on-primary-fixed": "#0a1b39",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-variant": "#d3e4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "2rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "container-max-width": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dot-grid-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 3D Book Styles */
+        .book-container {
+            perspective: 1200px;
+        }
+        .book {
+            width: 320px;
+            height: 440px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: bookFloat 12s infinite linear;
+        }
+        @keyframes bookFloat {
+            0% { transform: rotateY(-20deg) translateY(0); }
+            50% { transform: rotateY(10deg) translateY(-20px); }
+            100% { transform: rotateY(-20deg) translateY(0); }
+        }
+        .book-page {
+            position: absolute;
+            width: 320px;
+            height: 440px;
+            top: 0;
+            left: 0;
+            background: #0f1f3d;
+            border: 2px solid #1E3A5F;
+            border-radius: 4px 12px 12px 4px;
+        }
+        .book-cover {
+            transform: translateZ(25px);
+            background: linear-gradient(135deg, #00071b 0%, #0f1f3d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 30px;
+            box-shadow: 10px 10px 50px rgba(0,0,0,0.5);
+        }
+        .book-spine {
+            position: absolute;
+            width: 50px;
+            height: 440px;
+            background: #000410;
+            transform: rotateY(-90deg) translateZ(25px);
+            left: -25px;
+        }
+        .book-back {
+            transform: translateZ(-25px) rotateY(180deg);
+        }
+
+        /* Map Interactivity */
+        .state-path {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            stroke: #ffffff;
+            stroke-width: 0.5px;
+        }
+        .state-path:hover {
+            fill: #2563EB !important;
+            filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.4));
+            z-index: 10;
+        }
+        .tier-high { fill: #1E3A5F; }
+        .tier-mid { fill: #378ADD; }
+        .tier-low { fill: #B5D4F4; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary/20">
+<!-- TopNavBar -->
+<nav class="bg-surface/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max-width mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary tracking-tight">
+            EoOS<span class="text-secondary">Index</span>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="font-label-md text-label-md text-primary font-semibold border-b-2 border-secondary pb-1" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Voices</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all">search</button>
+
+</div>
+</div>
+</nav>
+<!-- SECTION 1: HERO -->
+<section class="min-h-screen pt-20 flex items-center relative overflow-hidden bg-primary-container text-white dot-grid-bg">
+<div class="max-w-container-max-width mx-auto px-gutter w-full grid lg:grid-cols-2 gap-20 items-center z-10 py-20">
+<div class="space-y-10 animate-in fade-in slide-in-from-left duration-700">
+<div class="inline-flex items-center gap-2 bg-white/10 px-5 py-2 rounded-full border border-white/20">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container animate-pulse shadow-[0_0_10px_rgba(255,141,70,0.5)]"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-white/90">2024 Edition • 36 States Ranked</span>
+</div>
+<h1 class="font-display-lg text-[56px] leading-[1.1] font-bold tracking-tight">
+                Measuring Education <br> Opportunity Across India
+            </h1>
+<p class="font-body-lg text-body-lg text-white/70 max-w-xl leading-relaxed">
+                A comprehensive data-driven framework assessing educational outcomes, infrastructure, and equity across the Indian landscape to drive systemic change.
+            </p>
+<div class="flex flex-wrap gap-5 pt-4">
+<button class="px-10 py-5 bg-secondary-container text-on-secondary-container rounded-xl font-bold transition-all hover:scale-105 shadow-xl shadow-secondary-container/20">
+                    Explore Rankings
+                </button>
+<button class="px-10 py-5 bg-transparent border-2 border-white/20 text-white rounded-xl font-bold transition-all hover:bg-white/10 hover:border-white/40">
+                    Download Report
+                </button>
+</div>
+<div class="grid grid-cols-3 gap-6 pt-12">
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">36</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">States &amp; UTs</div>
+</div>
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">6</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">Domains</div>
+</div>
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">80+</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">Indicators</div>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex justify-center items-center book-container">
+<div class="book">
+<div class="book-spine"></div>
+<div class="book-page book-cover">
+<div class="flex flex-col items-center">
+<div class="w-16 h-1 px-4 bg-secondary-container rounded-full mb-6"></div>
+<h2 class="text-center font-display-lg text-2xl tracking-tight leading-tight">EoOS Index <br><span class="text-secondary-container">2024 Report</span></h2>
+</div>
+<div class="relative w-full aspect-square flex items-center justify-center">
+<!-- Simplified SVG for book cover visual -->
+<svg class="w-3/4 opacity-40 fill-white" viewBox="0 0 612 700">
+<path d="M306,100 L350,150 L450,180 L500,250 L480,350 L520,450 L450,550 L350,650 L250,650 L150,550 L100,450 L120,350 L100,250 L150,180 L250,150 Z"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary-container">analytics</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-[10px] uppercase tracking-[0.3em] font-bold text-white/40">CCS Research Publication</p>
+</div>
+</div>
+<div class="book-page book-back"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2 & 3: INTERACTIVE INDIA MAP & FILTER BAR -->
+<section class="py-24 bg-white">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<div class="max-w-3xl mb-12">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">State Performance Benchmarking</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Analyze regional disparities and progress across our core evaluation pillars. Select a domain to reconfigure the national heatmap.</p>
+</div>
+<!-- Sticky Domain Filter Bar -->
+<div class="sticky top-20 z-40 bg-white/80 backdrop-blur-md py-4 mb-12 -mx-4 px-4">
+<div class="flex flex-wrap gap-2 justify-start md:justify-between items-center bg-surface-container-low p-2 rounded-full border border-outline-variant/30">
+<button class="domain-pill active px-6 py-2 rounded-full font-label-md bg-primary text-white transition-all shadow-md" data-domain="overall">Overall</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="access">Access</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="equity">Equity</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="quality">Quality</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="infrastructure">Infrastructure</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="governance">Governance</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="outcomes">Outcomes</button>
+</div>
+</div>
+<div class="grid lg:grid-cols-12 gap-12 items-start">
+<!-- Map Area -->
+<div class="lg:col-span-8 bg-surface-container-low/30 rounded-3xl p-8 border border-outline-variant/20 relative aspect-[4/3] flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full max-h-[600px]" id="india-map" viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+<g id="states-group">
+    <!-- North -->
+    <path class="state-path tier-mid" d="M380,50 L420,40 L460,80 L440,150 L380,160 Z" id="JK" title="Jammu &amp; Kashmir"></path>
+    <path class="state-path tier-high" d="M420,150 L460,160 L470,220 L430,230 L400,190 Z" id="HP" title="Himachal Pradesh"></path>
+    <path class="state-path tier-mid" d="M370,180 L410,200 L390,250 L340,240 Z" id="PB" title="Punjab"></path>
+    <path class="state-path tier-mid" d="M390,250 L430,230 L450,290 L400,310 Z" id="HR" title="Haryana"></path>
+    <path class="state-path tier-high" d="M460,220 L510,240 L530,300 L470,320 Z" id="UK" title="Uttarakhand"></path>
+    <path class="state-path tier-low" d="M450,290 L580,330 L550,450 L420,480 L400,310 Z" id="UP" title="Uttar Pradesh"></path>
+    
+    <!-- West -->
+    <path class="state-path tier-mid" d="M200,280 L340,240 L400,310 L420,480 L380,550 L250,580 L200,450 Z" id="RJ" title="Rajasthan"></path>
+    <path class="state-path tier-mid" d="M180,480 L250,580 L240,680 L120,700 L100,580 Z" id="GJ" title="Gujarat"></path>
+    <path class="state-path tier-high" d="M250,580 L380,550 L480,720 L400,850 L280,820 L240,680 Z" id="MH" title="Maharashtra"></path>
+    <path class="state-path tier-high" d="M280,820 L300,830 L290,845 Z" id="GA" title="Goa"></path>
+
+    <!-- Central -->
+    <path class="state-path tier-mid" d="M380,550 L520,530 L580,620 L480,720 Z" id="MP" title="Madhya Pradesh"></path>
+    <path class="state-path tier-low" d="M580,620 L650,620 L680,750 L580,780 Z" id="CH" title="Chhattisgarh"></path>
+
+    <!-- East -->
+    <path class="state-path tier-low" d="M580,330 L680,310 L700,380 L620,420 Z" id="BR" title="Bihar"></path>
+    <path class="state-path tier-low" d="M580,450 L720,420 L710,550 L620,580 Z" id="JH" title="Jharkhand"></path>
+    <path class="state-path tier-mid" d="M620,580 L710,550 L750,700 L650,780 L580,720 Z" id="OR" title="Odisha"></path>
+    <path class="state-path tier-mid" d="M720,420 L770,440 L760,600 L710,550 Z" id="WB" title="West Bengal"></path>
+
+    <!-- South -->
+    <path class="state-path tier-mid" d="M400,850 L520,730 L580,850 L520,880 Z" id="TS" title="Telangana"></path>
+    <path class="state-path tier-mid" d="M480,720 L580,720 L680,750 L650,880 L520,880 L520,730 Z" id="AP" title="Andhra Pradesh"></path>
+    <path class="state-path tier-high" d="M280,820 L400,850 L520,880 L480,950 L380,920 Z" id="KA" title="Karnataka"></path>
+    <path class="state-path tier-high" d="M480,950 L580,920 L540,995 L480,995 Z" id="TN" title="Tamil Nadu"></path>
+    <path class="state-path tier-high" d="M380,920 L480,950 L480,995 L420,985 Z" id="KL" title="Kerala"></path>
+
+    <!-- North East -->
+    <path class="state-path tier-mid" d="M770,300 L850,280 L880,450 L800,480 L770,400 Z" id="NE" title="Northeastern States"></path>
+</g>
+</svg>
+<div class="absolute bottom-8 left-8 flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-[#1E3A5F]"></div>
+<span class="text-xs font-bold text-on-surface-variant">High Performers</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-[#378ADD]"></div>
+<span class="text-xs font-bold text-on-surface-variant">Mid Tier</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-[#B5D4F4]"></div>
+<span class="text-xs font-bold text-on-surface-variant">Development Focus</span>
+</div>
+</div>
+</div>
+<!-- Detail Panel -->
+<div class="lg:col-span-4 sticky top-44 space-y-6">
+<div class="bg-primary text-white p-10 rounded-3xl shadow-2xl transition-all duration-300 transform" id="state-detail-panel" style="opacity: 1; transform: translateY(-10px);">
+<div class="flex justify-between items-start mb-10">
+<div>
+<h3 class="text-3xl font-bold mb-2 tracking-tight" id="dp-name">Odisha</h3>
+<div class="inline-flex items-center px-3 py-1 rounded bg-white/10 text-[10px] uppercase font-bold tracking-widest text-white/80" id="dp-region">Eastern Region</div>
+</div>
+<div class="w-16 h-16 rounded-full border-2 border-secondary-container flex items-center justify-center text-xl font-bold text-secondary-container" id="dp-rank">#20</div>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between text-[11px] font-extrabold uppercase text-white/40 mb-3 tracking-wider">Overall Score</div>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-2.5 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" id="dp-score-bar" style="width: 58.2%;"></div>
+</div>
+<span class="text-2xl font-bold font-display-lg" id="dp-score">58.2</span>
+</div>
+</div>
+<div class="pt-6 border-t border-white/10 grid gap-5">
+<div class="domain-row">
+<div class="flex justify-between text-[10px] font-bold text-white/40 mb-1.5">ACCESS</div>
+<div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-white/80 w-[82%]"></div>
+</div>
+</div>
+<div class="domain-row">
+<div class="flex justify-between text-[10px] font-bold text-white/40 mb-1.5">EQUITY</div>
+<div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-white/80 w-[65%]"></div>
+</div>
+</div>
+<div class="domain-row">
+<div class="flex justify-between text-[10px] font-bold text-white/40 mb-1.5">INFRASTRUCTURE</div>
+<div class="h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-white/80 w-[91%]"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-12 py-4 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold transition-all border border-white/10 flex items-center justify-center gap-2">
+                        View Detailed Report <span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Highlight Cards -->
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+<div class="p-6 bg-[#f1f8ff] rounded-2xl border border-blue-100 flex items-center gap-5">
+<div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">🏆</div>
+<div>
+<div class="text-[10px] font-extrabold uppercase text-blue-800/60 mb-1">Top State</div>
+<div class="text-sm font-bold text-primary">Kerala | Rank #1</div>
+</div>
+</div>
+<div class="p-6 bg-[#fff8f1] rounded-2xl border border-orange-100 flex items-center gap-5">
+<div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-2xl">📈</div>
+<div>
+<div class="text-[10px] font-extrabold uppercase text-orange-800/60 mb-1">Most Improved</div>
+<div class="text-sm font-bold text-primary">H.P. | +6 ranks</div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-center gap-5">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center text-2xl">📊</div>
+<div>
+<div class="text-[10px] font-extrabold uppercase text-on-surface-variant/60 mb-1">National Avg</div>
+<div class="text-sm font-bold text-primary">Score: 61.2</div>
+</div>
+</div>
+<div class="p-6 bg-[#fff1f1] rounded-2xl border border-red-100 flex items-center gap-5">
+<div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-2xl">⚠️</div>
+<div>
+<div class="text-[10px] font-extrabold uppercase text-red-800/60 mb-1">Needs Focus</div>
+<div class="text-sm font-bold text-primary">Bihar | Rank #34</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: CTA BANNER -->
+<section class="py-24 max-w-container-max-width mx-auto px-gutter mb-24">
+<div class="bg-primary-container rounded-3xl p-16 md:p-24 text-center relative overflow-hidden">
+<!-- Ambient Globs -->
+<div class="absolute -top-32 -left-32 w-80 h-80 bg-secondary-container/20 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-32 -right-32 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px]"></div>
+<div class="relative z-10 space-y-8 max-w-4xl mx-auto">
+<h2 class="font-display-lg text-[48px] md:text-[64px] text-white leading-tight">Explore the Data. <br> Influence the Policy.</h2>
+<p class="font-body-lg text-white/60 max-w-2xl mx-auto text-xl">
+                We empower policymakers, researchers, and citizens with the tools to understand and improve educational outcomes nationwide.
+            </p>
+<div class="flex flex-wrap justify-center gap-6 pt-10">
+<button class="px-12 py-5 bg-secondary-container text-on-secondary-container rounded-2xl font-bold shadow-2xl shadow-secondary-container/30 transition-all hover:scale-105 active:scale-95 text-lg">
+                    Start Exploring
+                </button>
+<button class="px-12 py-5 bg-transparent border-2 border-white/20 text-white rounded-2xl font-bold transition-all hover:bg-white/10 hover:border-white/40 text-lg">
+                    Customize Rankings
+                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-16 border-t border-outline-variant/30">
+<div class="max-w-container-max-width mx-auto px-gutter grid grid-cols-1 md:grid-cols-12 gap-12">
+<div class="md:col-span-5">
+<div class="font-headline-md text-headline-md font-bold text-primary mb-8 tracking-tight">EoOS<span class="text-secondary">Index</span></div>
+<p class="text-on-surface-variant text-base leading-relaxed max-w-sm mb-10">
+                Advancing education through rigorous measurement and transparent reporting across India's diverse state landscapes. A initiative by CCS Research.
+            </p>
+<p class="text-on-surface-variant text-sm font-medium opacity-60">© 2024 CCS Research. All rights reserved.</p>
+</div>
+<div class="md:col-span-2">
+<h5 class="font-bold text-primary mb-8 uppercase text-xs tracking-[0.2em]">Platform</h5>
+<ul class="space-y-5 font-body-md text-on-surface-variant">
+<li class=""><a class="hover:text-primary transition-colors" href="#">Methodology</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">The 6 Domains</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Indicators Guide</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Download Center</a></li>
+</ul>
+</div>
+<div class="md:col-span-2">
+<h5 class="font-bold text-primary mb-8 uppercase text-xs tracking-[0.2em]">Resources</h5>
+<ul class="space-y-5 font-body-md text-on-surface-variant">
+<li class=""><a class="hover:text-primary transition-colors" href="#">Case Studies</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Policy Briefs</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Expert Voices</a></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">API Access</a></li>
+</ul>
+</div>
+<div class="md:col-span-3">
+<h5 class="font-bold text-primary mb-8 uppercase text-xs tracking-[0.2em]">Contact &amp; Connect</h5>
+<div class="flex flex-col gap-6">
+<p class="text-on-surface-variant text-sm">Join our newsletter for quarterly insights on Indian education trends.</p>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-xl border border-outline-variant/50 flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="w-12 h-12 rounded-xl border border-outline-variant/50 flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="w-12 h-12 rounded-xl border border-outline-variant/50 flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">link</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stateData = {
+            'KA': { name: 'Karnataka', rank: '#5', score: 74.2, region: 'Southern Region' },
+            'KL': { name: 'Kerala', rank: '#1', score: 87.4, region: 'Southern Region' },
+            'TN': { name: 'Tamil Nadu', rank: '#2', score: 82.1, region: 'Southern Region' },
+            'MH': { name: 'Maharashtra', rank: '#4', score: 76.5, region: 'Western Region' },
+            'HP': { name: 'Himachal Pradesh', rank: '#3', score: 79.8, region: 'Northern Region' },
+            'BR': { name: 'Bihar', rank: '#34', score: 41.2, region: 'Eastern Region' },
+            'UP': { name: 'Uttar Pradesh', rank: '#30', score: 48.7, region: 'Northern Region' },
+            'GJ': { name: 'Gujarat', rank: '#7', score: 71.3, region: 'Western Region' },
+            'MP': { name: 'Madhya Pradesh', rank: '#22', score: 56.4, region: 'Central Region' },
+            'NE': { name: 'NE States', rank: 'Avg #15', score: 62.5, region: 'Northeastern Region' },
+            'JK': { name: 'J&K', rank: '#18', score: 59.1, region: 'Northern Region' },
+            'PB': { name: 'Punjab', rank: '#8', score: 70.4, region: 'Northern Region' },
+            'HR': { name: 'Haryana', rank: '#10', score: 68.2, region: 'Northern Region' },
+            'RJ': { name: 'Rajasthan', rank: '#15', score: 62.8, region: 'Western Region' },
+            'UK': { name: 'Uttarakhand', rank: '#12', score: 66.5, region: 'Northern Region' },
+            'CH': { name: 'Chhattisgarh', rank: '#28', score: 51.3, region: 'Central Region' },
+            'JH': { name: 'Jharkhand', rank: '#32', score: 45.8, region: 'Eastern Region' },
+            'OR': { name: 'Odisha', rank: '#20', score: 58.2, region: 'Eastern Region' },
+            'WB': { name: 'West Bengal', rank: '#14', score: 64.1, region: 'Eastern Region' },
+            'GA': { name: 'Goa', rank: '#6', score: 72.9, region: 'Western Region' },
+            'AP': { name: 'Andhra Pradesh', rank: '#11', score: 67.4, region: 'Southern Region' },
+            'TS': { name: 'Telangana', rank: '#9', score: 69.1, region: 'Southern Region' }
+        };
+
+        const statePaths = document.querySelectorAll('.state-path');
+        const dpName = document.getElementById('dp-name');
+        const dpRegion = document.getElementById('dp-region');
+        const dpRank = document.getElementById('dp-rank');
+        const dpScore = document.getElementById('dp-score');
+        const dpScoreBar = document.getElementById('dp-score-bar');
+        const panel = document.getElementById('state-detail-panel');
+
+        statePaths.forEach(path => {
+            path.addEventListener('mouseenter', () => {
+                const id = path.id;
+                const data = stateData[id];
+                
+                if (data) {
+                    panel.style.opacity = '0';
+                    setTimeout(() => {
+                        dpName.textContent = data.name;
+                        dpRegion.textContent = data.region;
+                        dpRank.textContent = data.rank;
+                        dpScore.textContent = data.score;
+                        dpScoreBar.style.width = `${data.score}%`;
+                        panel.style.opacity = '1';
+                        panel.style.transform = 'translateY(-10px)';
+                    }, 150);
+                }
+            });
+            path.addEventListener('mouseleave', () => {
+                panel.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Domain Filtering Mockup
+        const domainPills = document.querySelectorAll('.domain-pill');
+        domainPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                domainPills.forEach(p => {
+                    p.classList.remove('active', 'bg-primary', 'text-white', 'shadow-md');
+                    p.classList.add('text-on-surface-variant');
+                });
+                pill.classList.add('active', 'bg-primary', 'text-white', 'shadow-md');
+                pill.classList.remove('text-on-surface-variant');
+                
+                // Shuffle colors slightly to simulate data update
+                statePaths.forEach(path => {
+                    const tiers = ['tier-high', 'tier-mid', 'tier-low'];
+                    path.classList.remove(...tiers);
+                    path.classList.add(tiers[Math.floor(Math.random() * tiers.length)]);
+                });
+            });
+        });
+    });
+</script>
+
+
+
+
+</body></html>

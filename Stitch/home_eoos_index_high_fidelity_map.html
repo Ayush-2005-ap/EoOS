@@ -1,0 +1,255 @@
+<html class="light" lang="en"><head></head><body class="bg-background text-on-surface font-body-md selection:bg-secondary/20">```html
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EoOS Index — Measuring Education Opportunity Across India</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#00071b",
+                        "secondary": "#9b4500",
+                        "background": "#f8f9ff",
+                        "surface": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#45474e",
+                        "outline-variant": "#c5c6ce",
+                        "primary-container": "#0f1f3d",
+                        "secondary-container": "#ff8d46",
+                        "on-secondary-container": "#331200",
+                        "on-primary-fixed": "#0a1b39",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-variant": "#d3e4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "2rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "container-max-width": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dot-grid-bg {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 3D Book Styles */
+        .book-container {
+            perspective: 1200px;
+        }
+        .book {
+            width: 320px;
+            height: 440px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: bookFloat 12s infinite linear;
+        }
+        @keyframes bookFloat {
+            0% { transform: rotateY(-20deg) translateY(0); }
+            50% { transform: rotateY(10deg) translateY(-20px); }
+            100% { transform: rotateY(-20deg) translateY(0); }
+        }
+        .book-page {
+            position: absolute;
+            width: 320px;
+            height: 440px;
+            top: 0;
+            left: 0;
+            background: #0f1f3d;
+            border: 2px solid #1E3A5F;
+            border-radius: 4px 12px 12px 4px;
+        }
+        .book-cover {
+            transform: translateZ(25px);
+            background: linear-gradient(135deg, #00071b 0%, #0f1f3d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 30px;
+            box-shadow: 10px 10px 50px rgba(0,0,0,0.5);
+        }
+        .book-spine {
+            position: absolute;
+            width: 50px;
+            height: 440px;
+            background: #000410;
+            transform: rotateY(-90deg) translateZ(25px);
+            left: -25px;
+        }
+        .book-back {
+            transform: translateZ(-25px) rotateY(180deg);
+        }
+
+        /* Map Interactivity */
+        .state-path {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            stroke: #ffffff;
+            stroke-width: 0.5px;
+        }
+        .state-path:hover {
+            fill: #2563EB !important;
+            filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.4));
+            z-index: 10;
+        }
+        .tier-high { fill: #1E3A5F; }
+        .tier-mid { fill: #378ADD; }
+        .tier-low { fill: #B5D4F4; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+<!-- TopNavBar -->
+<nav class="bg-surface/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center h-20 px-gutter max-w-container-max-width mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary tracking-tight">
+            EoOS<span class="text-secondary">Index</span>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="font-label-md text-label-md text-primary font-semibold border-b-2 border-secondary pb-1" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Explore</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Resources</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Voices</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all">search</button>
+</div>
+</div>
+</nav>
+<!-- SECTION 1: HERO -->
+<section class="min-h-screen pt-20 flex items-center relative overflow-hidden bg-primary-container text-white dot-grid-bg">
+<div class="max-w-container-max-width mx-auto px-gutter w-full grid lg:grid-cols-2 gap-20 items-center z-10 py-20">
+<div class="space-y-10 animate-in fade-in slide-in-from-left duration-700">
+<div class="inline-flex items-center gap-2 bg-white/10 px-5 py-2 rounded-full border border-white/20">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container animate-pulse shadow-[0_0_10px_rgba(255,141,70,0.5)]"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-white/90">2024 Edition • 36 States Ranked</span>
+</div>
+<h1 class="font-display-lg text-[56px] leading-[1.1] font-bold tracking-tight">
+                Measuring Education <br/> Opportunity Across India
+            </h1>
+<p class="font-body-lg text-body-lg text-white/70 max-w-xl leading-relaxed">
+                A comprehensive data-driven framework assessing educational outcomes, infrastructure, and equity across the Indian landscape to drive systemic change.
+            </p>
+<div class="flex flex-wrap gap-5 pt-4">
+<button class="px-10 py-5 bg-secondary-container text-on-secondary-container rounded-xl font-bold transition-all hover:scale-105 shadow-xl shadow-secondary-container/20">
+                    Explore Rankings
+                </button>
+<button class="px-10 py-5 bg-transparent border-2 border-white/20 text-white rounded-xl font-bold transition-all hover:bg-white/10 hover:border-white/40">
+                    Download Report
+                </button>
+</div>
+<div class="grid grid-cols-3 gap-6 pt-12">
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">36</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">States &amp; UTs</div>
+</div>
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">6</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">Domains</div>
+</div>
+<div class="glass-card p-6 rounded-2xl border-l-4 border-l-secondary-container">
+<div class="text-3xl font-bold text-white mb-1">80+</div>
+<div class="text-[10px] font-extrabold uppercase text-white/40 tracking-[0.2em]">Indicators</div>
+</div>
+</div>
+</div>
+<div class="hidden lg:flex justify-center items-center book-container">
+<div class="book">
+<div class="book-spine"></div>
+<div class="book-page book-cover">
+<div class="flex flex-col items-center">
+<div class="w-16 h-1 px-4 bg-secondary-container rounded-full mb-6"></div>
+<h2 class="text-center font-display-lg text-2xl tracking-tight leading-tight">EoOS Index <br/><span class="text-secondary-container">2024 Report</span></h2>
+</div>
+<div class="relative w-full aspect-square flex items-center justify-center">
+<!-- Simplified SVG for book cover visual -->
+<svg class="w-3/4 opacity-40 fill-white" viewbox="0 0 612 700">
+<path d="M306,100 L350,150 L450,180 L500,250 L480,350 L520,450 L450,550 L350,650 L250,650 L150,550 L100,450 L120,350 L100,250 L150,180 L250,150 Z"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-5xl text-secondary-container">analytics</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-[10px] uppercase tracking-[0.3em] font-bold text-white/40">CCS Research Publication</p>
+</div>
+</div>
+<div class="book-page book-back"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2 & 3: INTERACTIVE INDIA MAP & FILTER BAR -->
+<section class="py-24 bg-white">
+<div class="max-w-container-max-width mx-auto px-gutter">
+<div class="max-w-3xl mb-12">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">State Performance Benchmarking</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Analyze regional disparities and progress across our core evaluation pillars. Select a domain to reconfigure the national heatmap.</p>
+</div>
+<!-- Sticky Domain Filter Bar -->
+<div class="sticky top-20 z-40 bg-white/80 backdrop-blur-md py-4 mb-12 -mx-4 px-4">
+<div class="flex flex-wrap gap-2 justify-start md:justify-between items-center bg-surface-container-low p-2 rounded-full border border-outline-variant/30">
+<button class="domain-pill active px-6 py-2 rounded-full font-label-md bg-primary text-white transition-all shadow-md" data-domain="overall">Overall</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="access">Access</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="equity">Equity</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="quality">Quality</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="infrastructure">Infrastructure</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="governance">Governance</button>
+<button class="domain-pill px-6 py-2 rounded-full font-label-md text-on-surface-variant hover:bg-surface-container-high transition-all" data-domain="outcomes">Outcomes</button>
+</div>
+</div>
+<div class="grid lg:grid-cols-12 gap-12 items-start">
+<!-- Map Area -->
+<div class="lg:col-span-8 bg-surface-container-low/30 rounded-3xl p-8 border border-outline-variant/20 relative aspect-[4/3] flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full max-h-[600px]" id="india-map" viewbox="0 0 611.86 695.7" xmlns="http://www.w3.org/2000/svg">
+<g fill="#E0E7FF" id="states-group">
+<path class="state-path cursor-pointer transition-all duration-300" d="m 537.188,685.44148 -0.041,0.4695 0.768,0.30627 0.104,2.47542 1.258,1.84675 -0.71,-0.0232 0.661,0.93295 -0.574,0.18739 -0.437,0.94503 0.103,1.88201 -0.409,0.42617 -0.663,-0.49065 -0.502,1.30269 -0.461,-0.2156 0.224,-1.08911 -0.606,-0.31434 -0.121,-1.2503 -0.813,-0.73346 0.069,-0.77879 -1.076,-1.12336 -0.646,0.17933 -0.121,-1.96159 0.365,-0.27304 -0.4,-0.27001 0.64,-1.36616 0.994,0.0584 0.564,-0.57427 0.878,0.27505 0.092,-0.68006 0.86,-0.14307 z m -2.826,-4.29496 0.895,1.77017 -2.249,2.47845 -0.57,-1.39035 0.238,-1.31478 1.704,-0.4695 -0.018,-1.07399 z m -6.972,-12.28743 0.62,0.37378 0.054,0.95511 0.372,-0.12392 0.733,0.79995 -0.07,1.22108 -0.819,-0.73849 -1.384,0.38789 -0.288,-0.63372 0.323,-0.48259 -0.855,0.17027 0.198,-1.45785 1.116,-0.47151 z m 3.502,-0.0695 0.743,0.76973 -0.11,1.34098 -1.472,-1.19389 0.529,-0.85234 0.383,0.60853 -0.073,-0.67301 z m 0.656,-2.05731 0.291,1.85178 -0.652,-1.69864 0.361,-0.15314 z m -1.091,-2.2447 0.394,0.70928 -0.884,1.04981 0.947,1.26743 0.041,1.10422 -0.412,-0.27001 -0.465,0.31837 -0.158,0.77476 -0.325,-0.99943 0.426,0.0796 0.114,-0.58536 0.146,0.45237 0.247,-0.67099 -0.938,0.56621 0.092,-0.83824 -0.627,-0.64883 -0.116,-1.08809 1.518,-1.22109 z m -6.096,-0.7264 0.087,0.94704 -0.404,-0.51281 0.317,-0.43423 z m -2.282,-1.91123 0.359,0.19848 -0.356,1.48404 1.639,1.28758 -0.11,0.45942 -1.593,-0.57024 -0.756,-1.02865 0.157,-1.47599 0.66,-0.35464 z m -1.725,-2.48851 0.285,0.72439 -0.466,-0.2005 0.181,-0.52389 z m 11.976,-2.12381 0.554,2.22556 -0.33,0.0282 -0.08,0.96619 -0.144,-3.21996 z m -17.337,-14.22082 0.765,1.02563 0.632,-0.27504 -0.606,0.35464 0.105,1.13444 -0.86,0.46244 -1.209,-0.15818 -0.228,-1.89409 0.96,-0.0353 0.151,-0.86645 0.29,0.25187 z m -5.693,-35.18985 0.303,0.69114 0.034,-0.42113 0.553,0.46244 0.043,1.32486 0.571,0.30426 0.19,2.31624 -1.188,1.3984 0.616,0.72339 -1.181,1.43165 -1.64,-0.7798 -1.035,0.34255 0.738,-1.75809 -0.843,-1.12537 -0.088,-2.43411 0.448,0.45035 1.244,-2.15202 0.892,-0.62565 0.231,0.45942 0.112,-0.60853 z m 2.629,-13.08436 0.929,1.5727 -0.763,0.62868 0.924,0.42415 -0.055,0.36472 -1.862,0.51684 -0.434,-0.43927 0.123,-0.72237 0.751,-0.10478 -0.195,-1.47195 0.582,-0.76872 z m -0.926,-0.67402 -0.284,0.15415 0.186,-0.91783 0.098,0.76368 z m -7.918,-1.08407 1.085,0.17632 -0.019,1.31679 -1.158,-0.1481 0.092,-1.34501 z m 6.716,-0.23474 0.622,0.3093 -0.822,0.74252 0.2,-1.05182 z m 10.071,-5.13723 1.075,0.16624 -0.465,0.49972 -0.716,-0.34457 0.106,-0.32139 z m -1.074,-4.07532 0.271,-0.21158 0.564,0.52793 0.933,2.47844 -0.237,0.44733 -0.886,-1.45482 -0.543,0.0383 -1.023,-1.01455 0.826,-1.1556 0.095,0.34457 z m 0.412,-1.48405 0.074,1.27046 -0.647,-0.61256 -0.046,-0.72641 0.619,0.0685 z m 0.807,-1.15963 0.371,2.3918 -0.807,-0.65185 0.006,-0.67401 -1.081,-0.74958 0.615,-0.12695 0.421,0.57831 0.475,-0.76772 z m 0.855,-1.16466 0.553,1.47598 -0.427,1.26038 -0.784,-1.06593 0.658,-1.67043 z m -7.699,-0.52088 0.06,1.5052 0.968,-0.15717 -0.584,2.06436 1.288,0.63271 -0.452,0.56521 -0.476,-0.43625 -0.055,0.53498 0.673,0.36169 -1.042,0.80298 0.111,2.37769 0.468,-1.74801 0.792,-0.0836 0.084,0.74555 -0.687,4.25768 -0.257,-0.22467 -0.058,0.48561 -0.813,-0.3637 0.133,0.79189 -0.88,0.34759 0.156,0.61356 0.294,-0.32945 0.144,0.38285 0.739,-0.78081 -0.176,-0.57931 0.734,0.44632 -0.947,4.02394 -0.272,-0.63674 -1.076,-0.31937 0.008,-1.07601 -0.615,0.20452 -0.202,-1.21806 0.583,0.0897 0.174,-0.4433 -0.264,-0.31233 -0.496,0.35061 -0.418,-1.78427 -0.55,0.50173 -0.324,-3.01141 -0.489,0.20553 -0.198,-0.48058 1.023,-2.1097 0.51,1.2624 0.312,-0.20553 0.053,0.83421 0.144,-0.28009 0.264,-4.95991 1.616,-2.84819 z m 0.75,0.37277 0.37,-0.0131 -0.121,0.73346 -0.526,-0.0897 0.277,-0.6307 z m 3.455,-0.807 0.246,0.70021 -0.456,-0.22971 -0.099,0.44733 -0.164,-0.60853 0.473,-0.3093 z m 3.685,-0.13097 0.187,0.52994 0.404,-0.49267 -0.109,1.20698 -0.783,-0.54102 0.301,-0.70323 z m -2.854,-0.40401 -0.404,1.06996 -0.432,-1.22915 0.529,0.16423 0.161,-0.64379 0.146,0.63875 z m -3.45,-0.63271 1.278,0.37076 0.601,-0.27102 0.48,0.85134 -0.638,0.43221 0.453,1.08709 -0.71,-0.0554 0.088,0.85738 -0.591,-0.16523 -0.426,0.74152 0.215,0.5108 -1.001,0.93596 -0.534,-0.67401 0.644,-3.04566 -0.578,-0.18639 0.169,-0.60651 0.297,0.21459 0.359,-0.45639 -0.106,-0.54103 z m 22.254,-0.22568 0.744,0.70223 0.114,1.10321 -1.131,-0.17632 -0.248,-0.86644 0.521,-0.76268 z m -18.511,-2.01398 -0.482,1.18481 -0.272,-0.10982 0.235,-1.08406 0.519,0.009 z m -5.117,-8.89721 0.142,2.36661 -0.486,-1.68957 0.344,-0.67704 z m 3.934,-1.86588 0.482,0.0766 -0.353,0.58737 0.48,0.0252 0.547,1.64928 -0.418,0.71431 0.97,1.37624 -0.47,1.44375 0.217,3.1313 -0.76,0.34254 -0.021,0.31938 0.562,-0.0403 -0.893,0.51483 -0.017,0.81204 -1.764,-0.46949 1.351,2.31019 -1.306,0.3758 -1.274,-0.36774 -0.351,0.51584 -0.719,-0.0997 -0.439,-0.60551 0.168,-5.76087 -0.481,-0.23978 0.412,0.0141 1.029,-1.36013 -0.528,-0.48057 0.377,-0.63069 -0.465,-2.24672 0.291,0.36068 1.548,-1.94044 0.653,0.52189 0,0 0.628,-0.14911 0,0 0.544,-0.70021 z m -4.254,-1.63618 0.507,0.29217 0.034,1.9344 -0.425,1.01455 -0.541,0.11385 0.285,0.41105 -0.437,0.73447 -0.419,-1.68957 0.448,-2.16209 0.548,-0.64883 z m 6.511,-0.1078 -0.569,0.64379 0.07,0.69819 -0.646,-0.12996 0.163,-1.03974 0.261,0.42416 0.721,-0.59644 z m 0.475,-12.41236 0.326,1.0357 -0.216,1.94044 0.222,0.67603 0.337,-0.37076 0.198,0.32341 -0.326,0.51483 0.739,0.99642 -0.519,0.70726 -0.691,-0.90876 -0.617,-0.1743 -0.355,0.52692 -0.337,-0.67502 -0.412,0.35161 1.233,0.51483 0.063,0.93395 0.704,-0.11384 -0.007,0.49065 0.437,-0.28714 -0.721,2.016 0.056,2.10668 -0.648,1.12739 -0.797,-0.13904 0.185,0.47655 -0.837,-1.03369 -0.385,0.14709 -0.306,0.69517 0.771,1.08609 -0.548,0.53195 -0.113,-0.82715 -0.517,0.0494 -0.583,1.18884 0.388,0.95007 0,0 -0.628,0.14911 0,0 -1.021,-0.81909 -10e-4,-1.5314 0.505,-0.0242 0.143,-0.55815 -0.769,-0.1209 0.174,-1.53039 0.535,-0.14911 -0.256,-0.65689 0.785,-0.26396 -0.791,-0.29923 0.378,-1.79838 0.559,-0.44229 -0.669,-0.43121 0.413,-0.53196 -0.431,-0.16825 0.372,-1.40042 0.576,-0.23172 -0.5,-0.35867 0.518,0 0.343,-0.59241 -0.262,-0.89869 1.21,-0.65286 -0.25,-0.74756 0.989,-0.1743 0.506,0.35867 -0.023,-0.97626 0.467,0.67099 0.404,-0.67804 z m -0.285,-2.21549 0.251,1.06089 -1.069,-0.6055 0.818,-0.45539 z m 13.096,-26.52437 -0.617,1.4518 0.021,-0.82615 0.596,-0.62565 z" id="AN" title="Andaman and Nicobar Islands"></path>
+</g></svg></div></div></div></section></body></html>
