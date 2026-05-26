@@ -15,6 +15,8 @@ export interface StateData {
   scores: DomainScores;
   baseScore: number;
   baseRank: number;
+  stateOfSchooling?: string;
+  regulatoryFramework?: string;
   indicators: {
     [domainKey: string]: {
       name: string;
@@ -40,6 +42,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "South",
     scores: { Access: 96, Equity: 94, Quality: 90, Infrastructure: 92, Governance: 88, Outcomes: 92 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -48,6 +52,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "West",
     scores: { Access: 94, Equity: 91, Quality: 89, Infrastructure: 95, Governance: 84, Outcomes: 90 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -56,6 +62,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "South",
     scores: { Access: 91, Equity: 89, Quality: 88, Infrastructure: 90, Governance: 86, Outcomes: 87 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -64,6 +72,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 92, Equity: 92, Quality: 84, Infrastructure: 88, Governance: 82, Outcomes: 85 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -72,6 +82,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "West",
     scores: { Access: 88, Equity: 87, Quality: 86, Infrastructure: 85, Governance: 84, Outcomes: 84 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -80,6 +92,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "West",
     scores: { Access: 89, Equity: 82, Quality: 83, Infrastructure: 87, Governance: 89, Outcomes: 80 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -88,6 +102,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 90, Equity: 85, Quality: 81, Infrastructure: 86, Governance: 80, Outcomes: 82 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -96,6 +112,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "South",
     scores: { Access: 86, Equity: 83, Quality: 82, Infrastructure: 84, Governance: 82, Outcomes: 83 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -104,6 +122,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 87, Equity: 81, Quality: 80, Infrastructure: 82, Governance: 79, Outcomes: 81 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -112,6 +132,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "South",
     scores: { Access: 84, Equity: 80, Quality: 78, Infrastructure: 81, Governance: 80, Outcomes: 79 },
+    stateOfSchooling: "Andhra Pradesh has a large school-going population of nearly 8.45 million students, of which 55.6% are enrolled in private schools. Although there is a high enrolment share in private schools, these schools account for only 25.2% of total schools, suggesting a very high concentration of enrolment in private institutions.\n\nAndhra Pradesh performs best in Ease of Financial Sustainability & Resource Mobilization, indicating that the regulatory framework provides schools greatest flexibility in matters relating to fee regulation and financial management. The large gap between the State's scores and national averages in Domain 6 also indicates that the state education laws provide a degree of flexibility in internal management. At the same time, the State's relatively weak performance in Domain 3 suggests that procedural safeguards against discretionary regulatory action remain limited, especially in areas relating to inspections and adverse administrative powers.",
+    regulatoryFramework: "The regulatory framework requires prior permission to establish a school, which is granted based on applications invited through official notifications. Permission is contingent on multiple conditions, including infrastructure norms, availability of endowment funds, demonstration of educational need, and obtaining NoCs from relevant authorities. Recognition follows a stage-wise process, beginning with a provisional recognition-cum-registration certificate, renewable every three years up to nine years, after which permanent recognition may be granted subject to continued compliance. Schools are required to operate on a not-for-profit basis, meet RTE norms, reserve 25% seats for EWS students, form PTAs, and maintain prescribed endowment funds.\n\nOperational regulations include prior approval for upgradation of classes, mandatory approval of appointments by the competent authority, and restrictions on dismissal of staff without enquiry and approval. Teacher recruitment must be publicly advertised, and salary structures are guided by a state-level committee. Curriculum and textbooks are prescribed by the government unless the school affiliates with a non-state board, and a three-language formula is mandated.\n\nThe government has the authority to conduct inspections as deemed necessary. The state has two boards, the Andhra Pradesh Board of Secondary Education and the Andhra Pradesh Board of Intermediate Education, for affiliation purposes. Fee regulation involves school-level governing bodies and advisory bodies that determine fee structures based on prescribed criteria. Regulations also specify the distribution of school revenues across salaries, maintenance, development, and other heads.\n\nUnder RTE provisions, reimbursements are determined by a state-level committee and disbursed in two installments through designated bank accounts, subject to verification of enrollment, attendance, and learning outcomes. Recognition and permission may be withdrawn in case of non-compliance after due notice. Appeals lie with the collector, and revision powers rest with the Commissioner and Director of School Education.",
     indicators: {},
   },
   {
@@ -120,6 +142,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "South",
     scores: { Access: 85, Equity: 79, Quality: 77, Infrastructure: 80, Governance: 78, Outcomes: 78 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -128,6 +152,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 88, Equity: 86, Quality: 76, Infrastructure: 78, Governance: 75, Outcomes: 76 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -136,6 +162,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 82, Equity: 80, Quality: 75, Infrastructure: 77, Governance: 74, Outcomes: 75 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -144,6 +172,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 80, Equity: 74, Quality: 78, Infrastructure: 76, Governance: 78, Outcomes: 72 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -152,6 +182,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Central",
     scores: { Access: 78, Equity: 72, Quality: 74, Infrastructure: 73, Governance: 75, Outcomes: 70 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -160,6 +192,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "East",
     scores: { Access: 81, Equity: 79, Quality: 71, Infrastructure: 72, Governance: 70, Outcomes: 72 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -168,6 +202,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "East",
     scores: { Access: 79, Equity: 73, Quality: 72, Infrastructure: 70, Governance: 74, Outcomes: 69 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -176,6 +212,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Central",
     scores: { Access: 77, Equity: 71, Quality: 70, Infrastructure: 71, Governance: 72, Outcomes: 68 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -184,6 +222,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "North",
     scores: { Access: 74, Equity: 65, Quality: 68, Infrastructure: 69, Governance: 71, Outcomes: 64 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -192,6 +232,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "East",
     scores: { Access: 72, Equity: 66, Quality: 65, Infrastructure: 67, Governance: 68, Outcomes: 62 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -200,6 +242,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "East",
     scores: { Access: 70, Equity: 63, Quality: 64, Infrastructure: 65, Governance: 66, Outcomes: 60 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -208,6 +252,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 76, Equity: 72, Quality: 67, Infrastructure: 68, Governance: 69, Outcomes: 65 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -216,6 +262,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 80, Equity: 78, Quality: 70, Infrastructure: 72, Governance: 71, Outcomes: 70 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -224,6 +272,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 72, Equity: 70, Quality: 63, Infrastructure: 64, Governance: 67, Outcomes: 61 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -232,6 +282,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 79, Equity: 77, Quality: 69, Infrastructure: 68, Governance: 70, Outcomes: 67 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -240,6 +292,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 75, Equity: 73, Quality: 66, Infrastructure: 65, Governance: 68, Outcomes: 63 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -248,6 +302,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 85, Equity: 84, Quality: 75, Infrastructure: 76, Governance: 74, Outcomes: 75 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -256,6 +312,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "STATE",
     region: "Northeast",
     scores: { Access: 71, Equity: 68, Quality: 62, Infrastructure: 63, Governance: 65, Outcomes: 60 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   // UTs
@@ -265,6 +323,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "North",
     scores: { Access: 95, Equity: 87, Quality: 88, Infrastructure: 96, Governance: 84, Outcomes: 89 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -273,6 +333,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "North",
     scores: { Access: 97, Equity: 90, Quality: 89, Infrastructure: 97, Governance: 85, Outcomes: 91 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -281,6 +343,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "South",
     scores: { Access: 93, Equity: 88, Quality: 86, Infrastructure: 91, Governance: 82, Outcomes: 85 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -289,6 +353,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "North",
     scores: { Access: 80, Equity: 76, Quality: 74, Infrastructure: 78, Governance: 73, Outcomes: 72 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -297,6 +363,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "North",
     scores: { Access: 78, Equity: 75, Quality: 71, Infrastructure: 74, Governance: 72, Outcomes: 70 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -305,6 +373,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "West",
     scores: { Access: 84, Equity: 78, Quality: 77, Infrastructure: 82, Governance: 76, Outcomes: 75 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -313,6 +383,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "South",
     scores: { Access: 87, Equity: 83, Quality: 76, Infrastructure: 80, Governance: 75, Outcomes: 74 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
   {
@@ -321,6 +393,8 @@ export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
     type: "UT",
     region: "East",
     scores: { Access: 86, Equity: 82, Quality: 78, Infrastructure: 83, Governance: 77, Outcomes: 76 },
+    stateOfSchooling: "Data for this state is currently being compiled...",
+    regulatoryFramework: "Data for this state is currently being compiled...",
     indicators: {},
   },
 ];

@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { STATES_DATA, DOMAINS, DomainScores, StateData } from "@/data/mockData";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, RefreshCw, BarChart2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, RefreshCw, BarChart2, BookOpen, Scale, ChevronRight } from "lucide-react";
 
 export default function StateDashboard() {
   const params = useParams();
@@ -15,6 +15,7 @@ export default function StateDashboard() {
   
   const [compareStateId, setCompareStateId] = useState<string>("");
   const [expandedDomain, setExpandedDomain] = useState<string | null>("Access");
+  const [activeSummaryTab, setActiveSummaryTab] = useState<'schooling' | 'regulatory'>('schooling');
 
   // Find active state
   const stateData = STATES_DATA.find((s) => s.id === stateId);
@@ -129,6 +130,87 @@ export default function StateDashboard() {
             </div>
           </div>
         </section>
+
+        {/* Executive Summary Section (if data exists) */}
+        {(stateData.stateOfSchooling || stateData.regulatoryFramework) && (
+          <section className="max-w-container-max-width mx-auto px-gutter pt-10">
+            <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col md:flex-row overflow-hidden">
+              {/* Tab Navigation Sidebar */}
+              <div className="md:w-1/3 bg-surface-container-low/30 border-b md:border-b-0 md:border-r border-outline-variant/30 p-6 flex flex-col gap-2">
+                <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest mb-3">
+                  State Overview
+                </span>
+                
+                {stateData.stateOfSchooling && (
+                  <button 
+                    onClick={() => setActiveSummaryTab('schooling')}
+                    className={`text-left px-5 py-4 rounded-xl font-bold text-[14px] transition-all flex items-center justify-between ${
+                      activeSummaryTab === 'schooling' 
+                        ? 'bg-primary text-white shadow-md' 
+                        : 'text-primary hover:bg-white hover:shadow-sm border border-transparent hover:border-outline-variant/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <BookOpen size={18} className={activeSummaryTab === 'schooling' ? 'text-secondary-fixed' : 'text-secondary'} />
+                      State of Schooling
+                    </div>
+                    {activeSummaryTab === 'schooling' && <ChevronRight size={16} className="opacity-70" />}
+                  </button>
+                )}
+
+                {stateData.regulatoryFramework && (
+                  <button 
+                    onClick={() => setActiveSummaryTab('regulatory')}
+                    className={`text-left px-5 py-4 rounded-xl font-bold text-[14px] transition-all flex items-center justify-between ${
+                      activeSummaryTab === 'regulatory' 
+                        ? 'bg-primary text-white shadow-md' 
+                        : 'text-primary hover:bg-white hover:shadow-sm border border-transparent hover:border-outline-variant/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Scale size={18} className={activeSummaryTab === 'regulatory' ? 'text-secondary-fixed' : 'text-secondary'} />
+                      Regulatory Framework
+                    </div>
+                    {activeSummaryTab === 'regulatory' && <ChevronRight size={16} className="opacity-70" />}
+                  </button>
+                )}
+              </div>
+
+              {/* Tab Content Area */}
+              <div className="md:w-2/3 p-8 md:p-10">
+                {activeSummaryTab === 'schooling' && stateData.stateOfSchooling && (
+                  <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+                    <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary flex items-center gap-3">
+                      State of Schooling
+                    </h3>
+                    <div className="space-y-5 max-h-[320px] overflow-y-auto custom-scrollbar pr-4 text-[14.5px] text-on-surface-variant leading-relaxed">
+                      {stateData.stateOfSchooling.split('\n\n').map((paragraph, idx) => (
+                        <p key={idx} className={idx === 0 ? "font-semibold text-primary text-[15px]" : ""}>
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeSummaryTab === 'regulatory' && stateData.regulatoryFramework && (
+                  <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+                    <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary flex items-center gap-3">
+                      Regulatory Framework
+                    </h3>
+                    <div className="space-y-5 max-h-[320px] overflow-y-auto custom-scrollbar pr-4 text-[14.5px] text-on-surface-variant leading-relaxed">
+                      {stateData.regulatoryFramework.split('\n\n').map((paragraph, idx) => (
+                        <p key={idx} className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-secondary before:rounded-full">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Dashboard Panels */}
         <section className="max-w-container-max-width mx-auto px-gutter py-10 space-y-8">
