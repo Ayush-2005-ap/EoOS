@@ -221,26 +221,17 @@ export default function Home() {
                   />
                 </div>
                 {/* Legend */}
-                <div className="mt-8 flex flex-wrap justify-center gap-6 text-[12px] font-semibold text-on-surface-variant">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#004d20] border border-white/10" />
-                    Tier 1 (Top 5)
+                <div className="mt-8 w-full max-w-md mx-auto flex flex-col gap-2">
+                  <div className="flex justify-between text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                    <span>Rank 1</span>
+                    <span>Rank 30+</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#2e7d32] border border-white/10" />
-                    Tier 2 (6-10)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#fbc02d] border border-white/10" />
-                    Tier 3 (11-20)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#f57c00] border border-white/10" />
-                    Tier 4 (21-28)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 rounded bg-[#d32f2f] border border-white/10" />
-                    Tier 5 (Bottom)
+                  <div className="h-3 w-full rounded-full border border-black/5" style={{
+                    background: `linear-gradient(to right, #263780, #576A9F, #8FA5C3, #C7DFE7, #F1FCFF)`
+                  }} />
+                  <div className="flex justify-between text-[11px] font-medium text-on-surface-variant/70">
+                    <span>Highest Performance</span>
+                    <span>Lowest Performance</span>
                   </div>
                 </div>
               </div>
