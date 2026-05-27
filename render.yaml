@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: eoos-backend
+    env: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        value: "file:./dev.db"
+      - key: PORT
+        value: "4000"
