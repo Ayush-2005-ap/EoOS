@@ -34,7 +34,7 @@ export async function getAllDomains(req: Request, res: Response) {
  */
 export async function getDomainLeaderboard(req: Request, res: Response) {
   try {
-    const domainId = req.params.id;
+    const domainId = req.params.id as string;
 
     const domain = await prisma.domain.findUnique({ where: { id: domainId } });
     if (!domain) {

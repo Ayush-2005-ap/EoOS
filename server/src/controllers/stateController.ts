@@ -49,7 +49,7 @@ export async function getAllStates(req: Request, res: Response) {
  */
 export async function getStateById(req: Request, res: Response) {
   try {
-    const stateId = req.params.id.toUpperCase();
+    const stateId = String(req.params.id).toUpperCase();
 
     const state = await prisma.state.findUnique({
       where: { id: stateId },
