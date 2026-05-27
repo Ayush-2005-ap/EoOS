@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model State {
+  id                  String  @id // e.g., 'AP', 'DL'
+  name                String
+  type                String  // STATE or UT
+  region              String  // North, South, etc.
+  stateOfSchooling    String?
+  regulatoryFramework String?
+  baseScore           Float   // Pre-calculated score
+  baseRank            Int     // Pre-calculated rank
+  updatedAt           DateTime @default(now()) @updatedAt
+
+  domainScores        StateDomainScore[]
+  indicatorScores     StateIndicatorScore[]
+  subIndicatorData    StateSubIndicatorData[]
+}
+
+model Domain {
+  id            String  @id // e.g., 'Access', 'Equity'
+  name          String
+  defaultWeight Float   // e.g., 0.16
+
+  stateScores   StateDomainScore[]
+  indicators    Indicator[]
+}
+
+model StateDomainScore {
+  id        String  @id @default(uuid())
+  stateId   String
+  domainId  String
+  score     Float   // Score out of 100
+
+  state     State   @relation(fields: [stateId], references: [id])
+  domain    Domain  @relation(fields: [domainId], references: [id])
+
+  @@unique([stateId, domainId])
+}
+
+model Indicator {
+  id        String  @id @default(uuid())
+  domainId  String
+  name      String  // e.g., 'School Proximity'
+
+  domain    Domain  @relation(fields: [domainId], references: [id])
+  subIndicators SubIndicator[]
+  stateScores   StateIndicatorScore[]
+}
+
+model StateIndicatorScore {
+  id          String  @id @default(uuid())
+  stateId     String
+  indicatorId String
+  score       Float   // Score out of 100
+
+  state       State   @relation(fields: [stateId], references: [id])
+  indicator   Indicator @relation(fields: [indicatorId], references: [id])
+
+  @@unique([stateId, indicatorId])
+}
+
+model SubIndicator {
+  id          String  @id @default(uuid())
+  indicatorId String
+  name        String  // e.g., 'Primary school within 1km'
+  maxScore    Float   // Usually 1.0
+
+  indicator   Indicator @relation(fields: [indicatorId], references: [id])
+  stateData   StateSubIndicatorData[]
+}
+
+model StateSubIndicatorData {
+  id             String  @id @default(uuid())
+  stateId        String
+  subIndicatorId String
+  score          Float   // e.g., 1.0, 0.5, 0.0
+  status         String  // Yes, Limited, No
+
+  state          State   @relation(fields: [stateId], references: [id])
+  subIndicator   SubIndicator @relation(fields: [subIndicatorId], references: [id])
+
+  @@unique([stateId, subIndicatorId])
+}
