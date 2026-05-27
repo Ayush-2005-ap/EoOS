@@ -29,7 +29,7 @@ export interface ApiStateProfile extends Omit<ApiStateData, 'scores'> {
   }[];
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:4000/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
 
 export async function fetchStates(): Promise<ApiStateData[]> {
   const res = await fetch(`${API_BASE_URL}/states`);
