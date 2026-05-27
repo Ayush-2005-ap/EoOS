@@ -11,12 +11,36 @@ interface IndiaMapProps {
 
 export default function IndiaMap({ activeDomain, stateScores, onStateHover, onStateClick }: IndiaMapProps) {
   const rankColors = [
-    "#263780", "#2D3E84", "#344689", "#3B4D8D", "#425492",
-    "#495C96", "#50639B", "#576A9F", "#5E72A4", "#6579A8",
-    "#6C80AD", "#7388B1", "#7A8FB6", "#8196BA", "#889EBF",
-    "#8FA5C3", "#96ACC8", "#9DB4CC", "#A4BBD1", "#ABC2D5",
-    "#B2C9DA", "#B9D1DE", "#C0D8E3", "#C7DFE7", "#CEE7EC",
-    "#D5EEF0", "#DCF5F5", "#E3F7F8", "#EAF9FB", "#F1FCFF"
+    "#052BD4",
+    "#0D32D5",
+    "#153AD7",
+    "#1D41D8",
+    "#2549DA",
+    "#2D50DB",
+    "#3558DD",
+    "#3D5FDE",
+    "#4567E0",
+    "#4D6EE1",
+    "#5576E3",
+    "#5D7DE4",
+    "#6585E6",
+    "#6D8CE7",
+    "#7594E9",
+    "#7D9BEA",
+    "#85A3EC",
+    "#8DAAED",
+    "#95B2EF",
+    "#9DB9F0",
+    "#A5C1F2",
+    "#ADC8F3",
+    "#B5D0F5",
+    "#BDD7F6",
+    "#C5DFF8",
+    "#CDE6F9",
+    "#D5EEFB",
+    "#DDF5FC",
+    "#E5FDFE",
+    "#EDFDFE"
   ];
 
   const getColor = (stateId: string) => {

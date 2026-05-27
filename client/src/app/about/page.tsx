@@ -183,13 +183,13 @@ export default function About() {
         {/* Section 4: Methodology Timeline */}
         <section className="py-24 bg-white">
           <div className="max-w-3xl mx-auto px-gutter space-y-12">
-            <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
+            <h2 className="font-plus-jakarta text-3xl font-extrabold text-secondary text-center">
               How Rankings Are Calculated
             </h2>
             <div className="space-y-10">
               {steps.map((step) => (
                 <div key={step.step} className="relative flex gap-6 step-line">
-                  <div className="flex-none w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold z-10 shadow-md">
+                  <div className="flex-none w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold z-10 shadow-md">
                     {step.step}
                   </div>
                   <div className="pb-6">

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { STATES_DATA, DOMAINS, DomainScores } from "@/data/mockData";
-import { Search, Filter, ArrowUpDown, ChevronRight, Download } from "lucide-react";
+import { DOMAINS, DomainScores } from "@/data/mockData";
+import { fetchStates, ApiStateData } from "@/services/api";
+import { Search, Filter, ArrowUpDown, ChevronRight, Download, Loader2 } from "lucide-react";
 
-type SortField = "name" | "baseRank" | "baseScore" | keyof DomainScores;
+type SortField = "name" | "baseRank" | "baseScore" | keyof DomainScores | string;
 type SortOrder = "asc" | "desc";
 
 export default function ExploreRankings() {
@@ -18,6 +19,21 @@ export default function ExploreRankings() {
   const [typeFilter, setTypeFilter] = useState("All");
   const [sortField, setSortField] = useState<SortField>("baseRank");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  
+  const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStates()
+      .then(data => {
+        setStatesData(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
 
   const regions = ["All", "North", "South", "East", "West", "Northeast", "Central"];
 
@@ -32,7 +48,7 @@ export default function ExploreRankings() {
   };
 
   // Filter and Sort dataset
-  const processedStates = [...STATES_DATA]
+  const processedStates = [...statesData]
     .filter((state) => {
       const matchesSearch = state.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesRegion = regionFilter === "All" || state.region === regionFilter;
@@ -55,8 +71,8 @@ export default function ExploreRankings() {
         valB = b.baseScore;
       } else {
         // Domain specific scores
-        valA = a.scores[sortField as keyof DomainScores];
-        valB = b.scores[sortField as keyof DomainScores];
+        valA = a.scores[sortField as string] || 0;
+        valB = b.scores[sortField as string] || 0;
       }
 
       if (sortOrder === "asc") {
@@ -93,6 +109,17 @@ export default function ExploreRankings() {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
+        <div className="flex flex-col items-center gap-4 text-primary">
+          <Loader2 className="animate-spin" size={48} />
+          <p className="font-plus-jakarta font-semibold animate-pulse">Loading Index Data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { STATES_DATA, DOMAINS, DomainScores } from "@/data/mockData";
-import { RefreshCw, ArrowUp, ArrowDown, Minus, Info, Download, Award } from "lucide-react";
+import { DOMAINS, DomainScores } from "@/data/mockData";
+import { fetchStates, ApiStateData } from "@/services/api";
+import { RefreshCw, ArrowUp, ArrowDown, Minus, Info, Download, Award, Loader2 } from "lucide-react";
 
 interface SimulatedState {
   id: string;
@@ -14,7 +15,7 @@ interface SimulatedState {
   simulatedScore: number;
   simulatedRank: number;
   rankChange: number;
-  scores: DomainScores;
+  scores: Record<string, number>;
 }
 
 export default function Simulator() {
@@ -27,10 +28,23 @@ export default function Simulator() {
     Governance: 17,
     Outcomes: 17,
   });
-  
-  const [modifiedOrder, setModifiedOrder] = useState<string[]>([]);
 
+  const [modifiedOrder, setModifiedOrder] = useState<string[]>([]);
   const [simulatedRankings, setSimulatedRankings] = useState<SimulatedState[]>([]);
+  const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStates()
+      .then(data => {
+        setStatesData(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
 
   // Reset to defaults
   const handleReset = () => {
@@ -49,16 +63,16 @@ export default function Simulator() {
   const handleSliderChange = (domainId: string, newValue: number) => {
     const clampedNewValue = Math.max(0, Math.min(100, newValue));
     const delta = weights[domainId] - clampedNewValue;
-    
+
     if (Math.abs(delta) < 0.01) return;
 
     const newOrder = modifiedOrder.filter((id) => id !== domainId);
-    
+
     const newWeights = { ...weights };
     newWeights[domainId] = clampedNewValue;
 
     let deltaToDistribute = delta;
-    
+
     // Start pool with domains that haven't been manually modified yet
     let pool = DOMAINS.map((d) => d.id).filter((id) => id !== domainId && !newOrder.includes(id));
     let orderIndex = newOrder.length - 1; // Start unlocking from the oldest modified if needed
@@ -66,7 +80,7 @@ export default function Simulator() {
     let iterations = 0;
     while (Math.abs(deltaToDistribute) > 0.01 && iterations < 50) {
       iterations++;
-      
+
       if (pool.length === 0) {
         if (orderIndex >= 0) {
           pool.push(newOrder[orderIndex]);
@@ -91,10 +105,10 @@ export default function Simulator() {
 
       let newDelta = 0;
       for (const id of usablePool) {
-        const share = distributeEqually 
-          ? (deltaToDistribute / usablePool.length) 
+        const share = distributeEqually
+          ? (deltaToDistribute / usablePool.length)
           : (deltaToDistribute * (newWeights[id] / poolSum));
-          
+
         const target = newWeights[id] + share;
         if (target < 0) {
           newDelta += (target - 0);
@@ -108,7 +122,7 @@ export default function Simulator() {
       }
 
       deltaToDistribute = newDelta;
-      
+
       if (Math.abs(deltaToDistribute) > 0.01) {
         pool = [];
       }
@@ -129,7 +143,7 @@ export default function Simulator() {
       if (!adjustId) {
         adjustId = DOMAINS.find(d => d.id !== domainId && newWeights[d.id] + diff >= 0 && newWeights[d.id] + diff <= 100)?.id;
       }
-      
+
       if (adjustId) {
         newWeights[adjustId] = Math.round((newWeights[adjustId] + diff) * 10) / 10;
       }
@@ -140,13 +154,14 @@ export default function Simulator() {
     setModifiedOrder(newOrder);
   };
 
-  // Recalculate ranks on weight changes
+  // Recalculate ranks on weight changes or when statesData changes
   useEffect(() => {
-    const rawSimulated = STATES_DATA.map((state) => {
+    if (statesData.length === 0) return;
+
+    const rawSimulated = statesData.map((state) => {
       let score = 0;
       for (const d in weights) {
-        const key = d as keyof DomainScores;
-        score += state.scores[key] * (weights[d] / 100);
+        score += (state.scores[d] || 0) * (weights[d] / 100);
       }
       return {
         id: state.id,
@@ -168,7 +183,7 @@ export default function Simulator() {
     // Assign ranks and compute difference from default
     const finalSimulated: SimulatedState[] = rawSimulated.map((state, index) => {
       const simulatedRank = index + 1;
-      const baseState = STATES_DATA.find((s) => s.id === state.id)!;
+      const baseState = statesData.find((s) => s.id === state.id)!;
       const rankChange = baseState.baseRank - simulatedRank; // positive = rank improved
 
       return {
@@ -179,13 +194,13 @@ export default function Simulator() {
     });
 
     setSimulatedRankings(finalSimulated);
-  }, [weights]);
+  }, [weights, statesData]);
 
   // Export CSV of custom rankings
   const exportSimulatedCSV = () => {
     const headers = ["Simulated Rank", "State Name", "Simulated Score", "Rank Change", "Original Rank"];
     const rows = simulatedRankings.map((s) => {
-      const baseState = STATES_DATA.find((o) => o.id === s.id)!;
+      const baseState = statesData.find((o) => o.id === s.id)!;
       return [
         s.simulatedRank,
         s.name,
@@ -197,7 +212,7 @@ export default function Simulator() {
 
     const csvContent = "data:text/csv;charset=utf-8,"
       + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-      
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -206,6 +221,17 @@ export default function Simulator() {
     link.click();
     document.body.removeChild(link);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
+        <div className="flex flex-col items-center gap-4 text-primary">
+          <Loader2 className="animate-spin" size={48} />
+          <p className="font-plus-jakarta font-semibold animate-pulse">Loading Simulator...</p>
+        </div>
+      </div>
+    );
+  }
 
   const totalWeight = Object.values(weights).reduce((sum, w) => sum + w, 0);
 
@@ -239,7 +265,7 @@ export default function Simulator() {
         {/* Live Simulation Workspace */}
         <section className="max-w-container-max-width mx-auto px-gutter py-10">
           <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* Left Controls: Sliders Panel */}
             <aside className="lg:col-span-5 w-full lg:sticky lg:top-24">
               <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-xl p-8 space-y-8">
@@ -296,7 +322,7 @@ export default function Simulator() {
                     <RefreshCw size={15} />
                     Reset to Default Weights
                   </button>
-                  
+
                   <div className="flex gap-2.5 bg-surface-container-low/60 rounded-xl p-4 border border-outline-variant/20">
                     <Info size={16} className="text-secondary shrink-0 mt-0.5" />
                     <p className="text-[12px] text-on-surface-variant leading-relaxed">
@@ -355,7 +381,7 @@ export default function Simulator() {
                       </thead>
                       <tbody className="divide-y divide-outline-variant/20">
                         {simulatedRankings.map((state) => {
-                          const originalRank = STATES_DATA.find((o) => o.id === state.id)!.baseRank;
+                          const originalRank = statesData.find((o) => o.id === state.id)!.baseRank;
                           const improvement = state.rankChange;
 
                           return (

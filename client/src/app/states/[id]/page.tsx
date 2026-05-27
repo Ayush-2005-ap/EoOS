@@ -1,12 +1,13 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { STATES_DATA, DOMAINS, DomainScores, StateData } from "@/data/mockData";
+import { DOMAINS, DomainScores } from "@/data/mockData";
+import { fetchStates, fetchStateById, ApiStateData, ApiStateProfile } from "@/services/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, RefreshCw, BarChart2, BookOpen, Scale, ChevronRight } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, RefreshCw, BarChart2, BookOpen, Scale, ChevronRight, Loader2 } from "lucide-react";
 
 export default function StateDashboard() {
   const params = useParams();
@@ -17,10 +18,38 @@ export default function StateDashboard() {
   const [expandedDomain, setExpandedDomain] = useState<string | null>("Access");
   const [activeSummaryTab, setActiveSummaryTab] = useState<'schooling' | 'regulatory'>('schooling');
 
-  // Find active state
-  const stateData = STATES_DATA.find((s) => s.id === stateId);
-  
-  if (!stateData) {
+  const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [stateProfile, setStateProfile] = useState<ApiStateProfile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!stateId) return;
+    Promise.all([fetchStates(), fetchStateById(stateId)])
+      .then(([allStates, profile]) => {
+        setStatesData(allStates);
+        setStateProfile(profile);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setError("Failed to load state profile.");
+        setIsLoading(false);
+      });
+  }, [stateId]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
+        <div className="flex flex-col items-center gap-4 text-primary">
+          <Loader2 className="animate-spin" size={48} />
+          <p className="font-plus-jakarta font-semibold animate-pulse">Loading State Profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !stateProfile) {
     return (
       <>
         <Header />
@@ -44,41 +73,37 @@ export default function StateDashboard() {
     );
   }
 
-  const compareState = STATES_DATA.find((s) => s.id === compareStateId);
+  const compareState = statesData.find((s) => s.id === compareStateId);
 
   // Calculate National Averages
   const nationalAverages = (() => {
-    const totalStates = STATES_DATA.length;
-    const sums = { Access: 0, Equity: 0, Quality: 0, Infrastructure: 0, Governance: 0, Outcomes: 0 };
+    const totalStates = statesData.length;
+    const sums: Record<string, number> = {};
+    DOMAINS.forEach(d => sums[d.id] = 0);
     
-    STATES_DATA.forEach((s) => {
-      sums.Access += s.scores.Access;
-      sums.Equity += s.scores.Equity;
-      sums.Quality += s.scores.Quality;
-      sums.Infrastructure += s.scores.Infrastructure;
-      sums.Governance += s.scores.Governance;
-      sums.Outcomes += s.scores.Outcomes;
+    statesData.forEach((s) => {
+      DOMAINS.forEach(d => {
+        sums[d.id] += s.scores[d.id] || 0;
+      });
     });
 
-    return {
-      Access: parseFloat((sums.Access / totalStates).toFixed(1)),
-      Equity: parseFloat((sums.Equity / totalStates).toFixed(1)),
-      Quality: parseFloat((sums.Quality / totalStates).toFixed(1)),
-      Infrastructure: parseFloat((sums.Infrastructure / totalStates).toFixed(1)),
-      Governance: parseFloat((sums.Governance / totalStates).toFixed(1)),
-      Outcomes: parseFloat((sums.Outcomes / totalStates).toFixed(1)),
-    };
+    const avgs: Record<string, number> = {};
+    DOMAINS.forEach(d => {
+      avgs[d.id] = totalStates ? parseFloat((sums[d.id] / totalStates).toFixed(1)) : 0;
+    });
+    return avgs;
   })();
 
   // Recharts formatted data
   const chartData = DOMAINS.map((domain) => ({
     name: domain.name,
-    [stateData.name]: stateData.scores[domain.id as keyof DomainScores],
-    "National Average": nationalAverages[domain.id as keyof DomainScores],
-    ...(compareState ? { [compareState.name]: compareState.scores[domain.id as keyof DomainScores] } : {}),
+    [stateProfile.name]: stateProfile.domains.find(d => d.domainName === domain.id)?.score || 0,
+    "National Average": nationalAverages[domain.id] || 0,
+    ...(compareState ? { [compareState.name]: compareState.scores[domain.id] || 0 } : {}),
   }));
 
-  const availableCompareStates = STATES_DATA.filter((s) => s.id !== stateData.id);
+  const availableCompareStates = statesData.filter((s) => s.id !== stateProfile.id);
+  const activeDomainData = stateProfile.domains.find(d => d.domainName === expandedDomain);
 
   return (
     <>
@@ -101,10 +126,10 @@ export default function StateDashboard() {
                   State Performance Analysis
                 </span>
                 <h1 className="font-plus-jakarta text-4xl sm:text-5xl font-extrabold text-white">
-                  {stateData.name}
+                  {stateProfile.name}
                 </h1>
                 <p className="text-on-primary-container text-[14px] uppercase font-bold tracking-widest">
-                  {stateData.type} • {stateData.region} Region
+                  {stateProfile.type} • {stateProfile.region} Region
                 </p>
               </div>
 
@@ -115,7 +140,7 @@ export default function StateDashboard() {
                     Overall Rank
                   </span>
                   <span className="font-plus-jakarta font-extrabold text-3xl text-secondary-fixed">
-                    #{stateData.baseRank}
+                    #{stateProfile.baseRank}
                   </span>
                 </div>
                 <div className="bg-white/10 backdrop-blur-md border border-white/10 px-6 py-4 rounded-2xl flex flex-col items-center">
@@ -123,7 +148,7 @@ export default function StateDashboard() {
                     Score
                   </span>
                   <span className="font-plus-jakarta font-extrabold text-3xl text-white">
-                    {stateData.baseScore}
+                    {stateProfile.baseScore}
                   </span>
                 </div>
               </div>
@@ -132,7 +157,7 @@ export default function StateDashboard() {
         </section>
 
         {/* Executive Summary Section (if data exists) */}
-        {(stateData.stateOfSchooling || stateData.regulatoryFramework) && (
+        {(stateProfile.stateOfSchooling || stateProfile.regulatoryFramework) && (
           <section className="max-w-container-max-width mx-auto px-gutter pt-10">
             <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col md:flex-row overflow-hidden">
               {/* Tab Navigation Sidebar */}
@@ -141,7 +166,7 @@ export default function StateDashboard() {
                   State Overview
                 </span>
                 
-                {stateData.stateOfSchooling && (
+                {stateProfile.stateOfSchooling && (
                   <button 
                     onClick={() => setActiveSummaryTab('schooling')}
                     className={`text-left px-5 py-4 rounded-xl font-bold text-[14px] transition-all flex items-center justify-between ${
@@ -158,7 +183,7 @@ export default function StateDashboard() {
                   </button>
                 )}
 
-                {stateData.regulatoryFramework && (
+                {stateProfile.regulatoryFramework && (
                   <button 
                     onClick={() => setActiveSummaryTab('regulatory')}
                     className={`text-left px-5 py-4 rounded-xl font-bold text-[14px] transition-all flex items-center justify-between ${
@@ -178,13 +203,13 @@ export default function StateDashboard() {
 
               {/* Tab Content Area */}
               <div className="md:w-2/3 p-8 md:p-10">
-                {activeSummaryTab === 'schooling' && stateData.stateOfSchooling && (
+                {activeSummaryTab === 'schooling' && stateProfile.stateOfSchooling && (
                   <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
                     <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary flex items-center gap-3">
                       State of Schooling
                     </h3>
                     <div className="space-y-5 max-h-[320px] overflow-y-auto custom-scrollbar pr-4 text-[14.5px] text-on-surface-variant leading-relaxed">
-                      {stateData.stateOfSchooling.split('\n\n').map((paragraph, idx) => (
+                      {stateProfile.stateOfSchooling.split('\n\n').map((paragraph, idx) => (
                         <p key={idx} className={idx === 0 ? "font-semibold text-primary text-[15px]" : ""}>
                           {paragraph}
                         </p>
@@ -193,13 +218,13 @@ export default function StateDashboard() {
                   </div>
                 )}
 
-                {activeSummaryTab === 'regulatory' && stateData.regulatoryFramework && (
+                {activeSummaryTab === 'regulatory' && stateProfile.regulatoryFramework && (
                   <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
                     <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary flex items-center gap-3">
                       Regulatory Framework
                     </h3>
                     <div className="space-y-5 max-h-[320px] overflow-y-auto custom-scrollbar pr-4 text-[14.5px] text-on-surface-variant leading-relaxed">
-                      {stateData.regulatoryFramework.split('\n\n').map((paragraph, idx) => (
+                      {stateProfile.regulatoryFramework.split('\n\n').map((paragraph, idx) => (
                         <p key={idx} className="relative pl-4 before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-secondary before:rounded-full">
                           {paragraph}
                         </p>
@@ -249,7 +274,7 @@ export default function StateDashboard() {
                       <YAxis domain={[0, 100]} stroke="#75777e" />
                       <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #c5c6ce" }} />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Bar dataKey={stateData.name} fill="#00071b" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey={stateProfile.name} fill="#00071b" radius={[4, 4, 0, 0]} />
                       <Bar dataKey="National Average" fill="#263780" radius={[4, 4, 0, 0]} />
                       {compareState && (
                         <Bar dataKey={compareState.name} fill="#50639B" radius={[4, 4, 0, 0]} />
@@ -266,7 +291,7 @@ export default function StateDashboard() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {DOMAINS.map((domain) => {
-                    const score = stateData.scores[domain.id as keyof DomainScores];
+                    const score = stateProfile.domains.find(d => d.domainName === domain.id)?.score || 0;
                     const active = expandedDomain === domain.id;
                     return (
                       <div
@@ -283,7 +308,7 @@ export default function StateDashboard() {
                             {domain.name}
                           </span>
                           <span className="text-[12px] font-bold text-on-surface-variant uppercase bg-surface-container px-2 py-0.5 rounded">
-                            Avg: {nationalAverages[domain.id as keyof DomainScores]}
+                            Avg: {nationalAverages[domain.id]}
                           </span>
                         </div>
                         <div className="flex justify-between items-end">
@@ -305,7 +330,7 @@ export default function StateDashboard() {
             {/* Right Panel: Selected Domain Accordion/Deep-Dive */}
             <div className="lg:col-span-5">
               <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-xl p-8 sticky top-24 space-y-6">
-                {expandedDomain ? (
+                {expandedDomain && activeDomainData ? (
                   <div className="space-y-6">
                     <div className="border-b border-outline-variant/20 pb-4">
                       <span className="text-secondary font-bold text-[11px] uppercase tracking-widest">
@@ -315,16 +340,16 @@ export default function StateDashboard() {
                         {expandedDomain} Domain
                       </h3>
                       <p className="text-on-surface-variant text-[13px] leading-relaxed mt-1">
-                        Inspect indicators and sub-indicators scoring for {stateData.name}.
+                        Inspect indicators and sub-indicators scoring for {stateProfile.name}.
                       </p>
                     </div>
 
                     <div className="space-y-6 max-h-[480px] overflow-y-auto custom-scrollbar pr-2">
-                      {stateData.indicators[expandedDomain]?.map((indicator) => (
-                        <div key={indicator.name} className="space-y-3 bg-surface-container-low/50 p-4 rounded-xl border border-outline-variant/20">
+                      {activeDomainData.indicators.map((indicator) => (
+                        <div key={indicator.indicatorName} className="space-y-3 bg-surface-container-low/50 p-4 rounded-xl border border-outline-variant/20">
                           <div className="flex justify-between items-center">
                             <h4 className="font-bold text-primary text-[14px]">
-                              {indicator.name}
+                              {indicator.indicatorName}
                             </h4>
                             <span className="bg-white text-secondary px-2.5 py-0.5 rounded-full text-[12px] font-extrabold shadow-sm border border-outline-variant/20">
                               {indicator.score}%
@@ -332,7 +357,7 @@ export default function StateDashboard() {
                           </div>
 
                           <ul className="space-y-2 border-t border-outline-variant/20 pt-2">
-                            {indicator.indicatorsList.map((sub, index) => (
+                            {indicator.subIndicators.map((sub, index) => (
                               <li key={index} className="flex gap-2.5 items-start text-[13px]">
                                 {sub.score === 1.0 ? (
                                   <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />

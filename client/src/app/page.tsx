@@ -1,47 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import IndiaMap from "@/components/IndiaMap";
-import { STATES_DATA, DOMAINS, DomainScores } from "@/data/mockData";
-import { ArrowRight, Play, BookOpen, AlertCircle, BarChart3, TrendingUp, Award } from "lucide-react";
+import { DOMAINS, DomainScores } from "@/data/mockData";
+import { fetchStates, ApiStateData } from "@/services/api";
+import { ArrowRight, Play, BookOpen, AlertCircle, BarChart3, TrendingUp, Award, Loader2 } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
   const [activeDomain, setActiveDomain] = useState<string>("Overall");
   const [hoveredStateId, setHoveredStateId] = useState<string | null>(null);
+  
+  const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStates()
+      .then(data => {
+        setStatesData(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
 
   // Compute scores and ranks based on selected domain
   const getActiveStateScoresAndRanks = () => {
     if (activeDomain === "Overall") {
-      return STATES_DATA.reduce((acc, s) => {
+      return statesData.reduce((acc, s) => {
         acc[s.id] = { score: s.baseScore, rank: s.baseRank };
         return acc;
       }, {} as { [key: string]: { score: number; rank: number } });
     }
 
-    const key = activeDomain as keyof DomainScores;
-    const sorted = [...STATES_DATA].sort((a, b) => b.scores[key] - a.scores[key]);
+    const key = activeDomain;
+    const sorted = [...statesData].sort((a, b) => (b.scores[key] || 0) - (a.scores[key] || 0));
     return sorted.reduce((acc, s, index) => {
-      acc[s.id] = { score: s.scores[key], rank: index + 1 };
+      acc[s.id] = { score: s.scores[key] || 0, rank: index + 1 };
       return acc;
     }, {} as { [key: string]: { score: number; rank: number } });
   };
 
   const activeScores = getActiveStateScoresAndRanks();
-  const hoveredState = STATES_DATA.find((s) => s.id === hoveredStateId);
+  const hoveredState = statesData.find((s) => s.id === hoveredStateId);
   const hoveredStateScore = hoveredStateId ? activeScores[hoveredStateId] : null;
 
   // Filter top 10 states for the preview table
-  const topTenStates = [...STATES_DATA]
+  const topTenStates = [...statesData]
     .map((s) => ({
       ...s,
-      currentScore: activeScores[s.id].score,
-      currentRank: activeScores[s.id].rank,
+      currentScore: activeScores[s.id]?.score || 0,
+      currentRank: activeScores[s.id]?.rank || 0,
     }))
     .sort((a, b) => a.currentRank - b.currentRank)
     .slice(0, 10);
@@ -49,6 +65,17 @@ export default function Home() {
   const handleStateClick = (stateId: string) => {
     router.push(`/states/${stateId.toLowerCase()}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
+        <div className="flex flex-col items-center gap-4 text-primary">
+          <Loader2 className="animate-spin" size={48} />
+          <p className="font-plus-jakarta font-semibold animate-pulse">Loading Index Data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -203,7 +230,7 @@ export default function Home() {
                     <span>Rank 30+</span>
                   </div>
                   <div className="h-3 w-full rounded-full border border-black/5" style={{
-                    background: `linear-gradient(to right, #263780, #576A9F, #8FA5C3, #C7DFE7, #F1FCFF)`
+                    background: `linear-gradient(to right, #052bd4ff, #0D32D5, #153AD7, #1D41D8, #2549DA, #2D50DB, #3558DD, #3D5FDE, #4567E0, #4D6EE1, #5576E3, #5D7DE4, #6585E6, #6D8CE7, #7594E9, #7D9BEA, #85A3EC, #8DAAED, #95B2EF, #9DB9F0, #A5C1F2, #ADC8F3, #B5D0F5, #BDD7F6, #C5DFF8, #CDE6F9, #D5EEFB, #DDF5FC, #E5FDFE, #EDFDFE)`
                   }} />
                   <div className="flex justify-between text-[11px] font-medium text-on-surface-variant/70">
                     <span>Highest Performance</span>
