@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -106,54 +107,29 @@ export default function Home() {
                     
                     {/* Front Cover (Fitted to translateZ(10px) with backface-hidden) */}
                     <div 
-                      className="absolute inset-0 bg-gradient-to-tr from-primary-container to-secondary-container rounded-r-lg p-6 flex flex-col justify-between border-y border-r border-white/20 select-none backface-hidden"
+                      className="absolute inset-0 rounded-r-lg border-y border-r border-white/20 select-none backface-hidden overflow-hidden bg-white"
                       style={{ transform: "translateZ(10px)" }}
                     >
-                      <div className="space-y-4">
-                        <div className="w-10 h-1 rounded-full bg-secondary" />
-                        <p className="font-plus-jakarta text-[12px] font-bold tracking-widest text-secondary-fixed uppercase">
-                          CCS Report
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="font-plus-jakarta text-[22px] font-extrabold text-white leading-tight">
-                          Education <br />
-                          Out-of-School <br />
-                          Index 2024
-                        </h3>
-                        <p className="text-[11px] text-white/60">
-                          Annual National Comparative Research Analysis
-                        </p>
-                      </div>
-                      <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                        <span className="text-[10px] text-secondary-fixed">CCS Research</span>
-                        <BookOpen size={16} className="text-secondary-fixed" />
-                      </div>
+                      <Image
+                        src="/Cover-01.png"
+                        alt="Education Out-of-School Index 2024 Cover"
+                        fill
+                        className="object-cover"
+                        priority
+                      />
                     </div>
 
                     {/* Back Cover (Fitted to translateZ(-10px) rotateY(180deg) with backface-hidden) */}
                     <div 
-                      className="absolute inset-0 bg-gradient-to-bl from-primary-container to-primary rounded-l-lg p-6 flex flex-col justify-between border-y border-l border-white/20 select-none backface-hidden"
+                      className="absolute inset-0 rounded-l-lg border-y border-l border-white/20 select-none backface-hidden overflow-hidden bg-white"
                       style={{ transform: "translateZ(-10px) rotateY(180deg)" }}
                     >
-                      <div className="space-y-4">
-                        <div className="w-10 h-1 rounded-full bg-secondary" />
-                        <p className="font-plus-jakarta text-[12px] font-bold tracking-widest text-secondary-fixed uppercase">
-                          CCS Research
-                        </p>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="font-plus-jakarta text-[16px] font-extrabold text-white leading-tight">
-                          Centre for Civil Society
-                        </h3>
-                        <p className="text-[10px] text-white/50">
-                          Delhi, India
-                        </p>
-                      </div>
-                      <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[10px] text-secondary-fixed">
-                        <span>© 2024 CCS</span>
-                        <Award size={16} />
-                      </div>
+                      <Image
+                        src="/Cover-01-back.png"
+                        alt="Education Out-of-School Index 2024 Back Cover"
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     
                     {/* Book pages edge layer */}
