@@ -97,13 +97,13 @@ export default function StateDashboard() {
   // Recharts formatted data
   const chartData = DOMAINS.map((domain) => ({
     name: domain.name,
-    [stateProfile.name]: stateProfile.domains.find(d => d.domainName === domain.id)?.score || 0,
+    [stateProfile.name]: stateProfile.domains.find(d => d.domainId === domain.id)?.score || 0,
     "National Average": nationalAverages[domain.id] || 0,
     ...(compareState ? { [compareState.name]: compareState.scores[domain.id] || 0 } : {}),
   }));
 
   const availableCompareStates = statesData.filter((s) => s.id !== stateProfile.id);
-  const activeDomainData = stateProfile.domains.find(d => d.domainName === expandedDomain);
+  const activeDomainData = stateProfile.domains.find(d => d.domainId === expandedDomain);
 
   return (
     <>
@@ -291,7 +291,7 @@ export default function StateDashboard() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {DOMAINS.map((domain) => {
-                    const score = stateProfile.domains.find(d => d.domainName === domain.id)?.score || 0;
+                    const score = stateProfile.domains.find(d => d.domainId === domain.id)?.score || 0;
                     const active = expandedDomain === domain.id;
                     return (
                       <div
