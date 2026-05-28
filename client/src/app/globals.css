@@ -153,7 +153,7 @@ body {
 
 /* From Uiverse.io by Nawsome */ 
 .loader {
-  --background: linear-gradient(135deg, #23C4F8, #275EFE);
+  --background: linear-gradient(135deg, #23C4F8, #192BD4);
   --shadow: rgba(39, 94, 254, 0.28);
   --text: #6C7486;
   --page: rgba(255, 255, 255, 0.36);
