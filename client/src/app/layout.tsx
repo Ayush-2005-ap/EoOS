@@ -14,6 +14,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["600", "700", "800"],
 });
 
+import { Suspense } from "react";
 import PageTransition from "@/components/PageTransition";
 
 export const metadata: Metadata = {
@@ -39,9 +40,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-on-surface font-inter">
-        <PageTransition>
-          {children}
-        </PageTransition>
+        <Suspense fallback={null}>
+          <PageTransition />
+        </Suspense>
+        {children}
       </body>
     </html>
   );
