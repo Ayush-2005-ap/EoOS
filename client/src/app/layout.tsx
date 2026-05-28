@@ -14,6 +14,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["600", "700", "800"],
 });
 
+import PageTransition from "@/components/PageTransition";
+
 export const metadata: Metadata = {
   title: "EoOS Index | India Education Analytics & Ranking Platform",
   description:
@@ -37,7 +39,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-on-surface font-inter">
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </body>
     </html>
   );
