@@ -305,21 +305,32 @@ export default function Home() {
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <div className="bg-surface-container-low/50 rounded-2xl border border-dashed border-outline-variant/80 p-12 text-center flex flex-col items-center justify-center gap-4 min-h-[380px]">
-                    <div className="p-4 bg-white rounded-full shadow-md text-outline">
-                      <AlertCircle size={32} />
+                ) : (() => {
+                  const activeDomainData = DOMAINS.find(d => d.id === activeDomain);
+                  return (
+                    <div className="bg-surface-container-low/50 rounded-2xl border border-dashed border-outline-variant/80 p-12 text-center flex flex-col items-center justify-center gap-6 min-h-[380px] animate-fade-in">
+                      <div className="p-4 bg-white rounded-full shadow-md text-secondary">
+                        <BookOpen size={36} />
+                      </div>
+                      <div className="space-y-3">
+                        <h3 className="font-plus-jakarta text-[22px] font-extrabold text-primary">
+                          {activeDomainData ? activeDomainData.name : "Overall Index"}
+                        </h3>
+                        <p className="text-on-surface-variant text-[15px] max-w-[320px] leading-relaxed mx-auto">
+                          {activeDomainData 
+                            ? activeDomainData.description 
+                            : "The Overall Index aggregates performance across all 6 key domains to provide a comprehensive view of the education landscape."}
+                        </p>
+                      </div>
+                      <div className="pt-4 border-t border-outline-variant/30 w-full max-w-[280px]">
+                        <p className="text-[13px] text-on-surface-variant/70 italic flex items-center justify-center gap-2">
+                          <AlertCircle size={14} />
+                          Hover over any state to see its data
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <h3 className="font-plus-jakarta text-[18px] font-bold text-primary">
-                        No State Selected
-                      </h3>
-                      <p className="text-on-surface-variant text-[14px] max-w-[280px]">
-                        Hover over any state on the map of India to explore its rankings.
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  );
+                })()}
               </div>
             </div>
           </div>

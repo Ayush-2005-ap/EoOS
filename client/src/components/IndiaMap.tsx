@@ -45,7 +45,7 @@ export default function IndiaMap({ activeDomain, stateScores, onStateHover, onSt
 
   const getColor = (stateId: string) => {
     const data = stateScores[stateId];
-    if (!data) return "#eff4ff"; // default surface container low
+    if (!data) return "#ffff"; // default surface container low
     const rank = data.rank;
     // Ensure we don't go out of bounds if there are more than 30 states
     const colorIndex = Math.min(Math.max(0, rank - 1), rankColors.length - 1);

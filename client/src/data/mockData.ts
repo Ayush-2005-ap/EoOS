@@ -27,12 +27,48 @@ export interface StateData {
 }
 
 export const DOMAINS = [
-  { id: "Access", name: "Domain-1", defaultWeight: 16, icon: "gavel" },
-  { id: "Equity", name: "Domain-2", defaultWeight: 17, icon: "groups" },
-  { id: "Quality", name: "Domain-3", defaultWeight: 17, icon: "verified" },
-  { id: "Infrastructure", name: "Domain-4", defaultWeight: 16, icon: "school" },
-  { id: "Governance", name: "Domain-5", defaultWeight: 17, icon: "account_balance" },
-  { id: "Outcomes", name: "Domain-6", defaultWeight: 17, icon: "leaderboard" },
+  { 
+    id: "Access", 
+    name: "Domain-1", 
+    defaultWeight: 16, 
+    icon: "gavel",
+    description: "Evaluates the ease with which students can enter and navigate the school system, focusing on proximity, enrolment procedures, and documentation requirements."
+  },
+  { 
+    id: "Equity", 
+    name: "Domain-2", 
+    defaultWeight: 17, 
+    icon: "groups",
+    description: "Measures the inclusiveness of the education system, highlighting gender parity, social group inclusion, and provisions for marginalized communities."
+  },
+  { 
+    id: "Quality", 
+    name: "Domain-3", 
+    defaultWeight: 17, 
+    icon: "verified",
+    description: "Assesses the standard of education provided, tracking metrics like teacher-pupil ratios, pedagogical effectiveness, and continuous evaluation frameworks."
+  },
+  { 
+    id: "Infrastructure", 
+    name: "Domain-4", 
+    defaultWeight: 16, 
+    icon: "school",
+    description: "Examines the physical facilities of schools, ensuring adequate sanitation, safe classroom conditions, and accessibility for children with special needs."
+  },
+  { 
+    id: "Governance", 
+    name: "Domain-5", 
+    defaultWeight: 17, 
+    icon: "account_balance",
+    description: "Looks at the administrative and financial management of the education system, including fund utilization and policy implementation effectiveness."
+  },
+  { 
+    id: "Outcomes", 
+    name: "Domain-6", 
+    defaultWeight: 17, 
+    icon: "leaderboard",
+    description: "Focuses on the end results of the educational process, such as student retention rates, dropout metrics, and fundamental literacy and numeracy levels."
+  },
 ];
 
 export const STATES_RAW_DATA: Omit<StateData, "baseScore" | "baseRank">[] = [
