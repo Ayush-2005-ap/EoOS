@@ -273,25 +273,49 @@ export default function Home() {
                       {/* Domain performance progress breakdown */}
                       <div className="space-y-3 pt-2">
                         <h4 className="text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">
-                          All Domains
+                          {activeDomain === "Overall" ? "All Domains" : `${activeDomain} Indicators`}
                         </h4>
-                        {DOMAINS.map((domain) => {
-                          const val = hoveredState.scores[domain.id as keyof DomainScores];
-                          return (
-                            <div key={domain.id} className="space-y-1">
-                              <div className="flex justify-between text-[13px]">
-                                <span className="text-on-surface font-medium">{domain.name}</span>
-                                <span className="text-on-surface font-semibold">{val}%</span>
+                        
+                        {activeDomain === "Overall" ? (
+                          DOMAINS.map((domain) => {
+                            const val = hoveredState.scores[domain.id as keyof DomainScores];
+                            return (
+                              <div key={domain.id} className="space-y-1">
+                                <div className="flex justify-between text-[13px]">
+                                  <span className="text-on-surface font-medium">{domain.name}</span>
+                                  <span className="text-on-surface font-semibold">{val}%</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-secondary rounded-full"
+                                    style={{ width: `${val}%` }}
+                                  />
+                                </div>
                               </div>
-                              <div className="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-secondary rounded-full"
-                                  style={{ width: `${val}%` }}
-                                />
+                            );
+                          })
+                        ) : (
+                          (() => {
+                            const activeIndicators = hoveredState.indicators?.[activeDomain];
+                            if (!activeIndicators || activeIndicators.length === 0) {
+                              return <p className="text-[13px] text-on-surface-variant italic">No indicator data available.</p>;
+                            }
+                            return activeIndicators.map((indicator, idx) => (
+                              <div key={idx} className="space-y-1">
+                                <div className="flex justify-between text-[13px]">
+                                  <span className="text-on-surface font-medium truncate pr-2" title={indicator.name}>{indicator.name}</span>
+                                  <span className="text-on-surface font-semibold">{indicator.score}%</span>
+                                </div>
+                                <div className="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-primary rounded-full"
+                                    style={{ width: `${indicator.score}%` }}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            ));
+                          })()
+                        )}
                       </div>
                     </div>
                     
