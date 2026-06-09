@@ -16,6 +16,9 @@ export default function IndicatorDetails() {
   const [showAdd, setShowAdd] = useState(false);
   const [newSub, setNewSub] = useState({ name: "", maxScore: 1.0 });
 
+  // Delete Confirmation Modal State
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
   useEffect(() => {
     fetchIndicator();
   }, [indicatorId]);
@@ -60,10 +63,11 @@ export default function IndicatorDetails() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this sub-indicator? This will delete all raw data for all states tied to it!")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchIndicator();
     } catch (e) {
       console.error(e);
@@ -116,12 +120,39 @@ export default function IndicatorDetails() {
               <h3 className="font-semibold text-slate-800">{sub.name}</h3>
               <p className="text-xs font-bold text-slate-500 mt-1">Max Score: {sub.maxScore}</p>
             </div>
-            <button onClick={() => handleDelete(sub.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
+            <button onClick={() => setDeleteConfirmId(sub.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
               <Trash2 size={18} />
             </button>
           </div>
         ))}
       </div>
+      </div>
+
+      {/* Custom Delete Confirmation Modal to prevent INP issues */}
+      {deleteConfirmId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-primary mb-4">Delete Sub-Indicator?</h3>
+            <p className="text-slate-600 mb-6 leading-relaxed">
+              Are you sure you want to delete this sub-indicator? This will also <span className="font-bold text-error">permanently delete</span> all raw data for all states tied to it. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button 
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-5 py-2.5 font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmDelete}
+                className="px-5 py-2.5 bg-error text-white font-bold rounded-xl hover:bg-red-600 transition-colors shadow-sm"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
