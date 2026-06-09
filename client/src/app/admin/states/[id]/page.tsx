@@ -62,21 +62,23 @@ export default function StateScoreEditor() {
     }
   };
 
-  const handleScoreSave = async (subId: string) => {
+  const handleIndicatorSave = async (indicatorId: string, subIndicators: any[]) => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/scores`, {
+      const payload = subIndicators.map((sub: any) => ({
+        subIndicatorId: sub.id,
+        score: editValues[sub.id] || 0,
+      }));
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/indicators/${indicatorId}/scores`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subIndicatorId: subId,
-          score: editValues[subId] || 0,
-        }),
+        body: JSON.stringify({ subIndicators: payload }),
       });
       await fetchStateScores();
-      alert("Score updated and recalculated bottom-up!");
+      alert("Indicator scores saved and recalculated successfully!");
     } catch (e) {
       console.error(e);
-      alert("Error saving score.");
+      alert("Error saving indicator scores.");
     }
   };
 
@@ -242,17 +244,20 @@ export default function StateScoreEditor() {
                                         value={editValues[sub.id] ?? 0}
                                         onChange={(e) => setEditValues(p => ({ ...p, [sub.id]: parseFloat(e.target.value) }))}
                                       />
-                                      <button 
-                                        onClick={() => handleScoreSave(sub.id)}
-                                        className="bg-primary text-white p-2 rounded-lg hover:bg-primary-container transition-colors shadow-sm"
-                                        title="Save & Recalculate"
-                                      >
-                                        <Save size={16} />
-                                      </button>
                                     </div>
                                   </div>
                                 )
                               })}
+                              
+                              <div className="flex justify-end pt-4 mt-2 border-t border-outline-variant/20">
+                                <button 
+                                  onClick={() => handleIndicatorSave(ind.id, ind.subIndicators)}
+                                  className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-container transition-colors shadow-sm font-bold text-[14px]"
+                                >
+                                  <Save size={16} />
+                                  Save & Recalculate Indicator
+                                </button>
+                              </div>
                             </div>
                           )}
                         </div>
