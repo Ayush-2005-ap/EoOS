@@ -6,6 +6,7 @@ export interface ApiStateData {
   baseScore: number;
   baseRank: number;
   scores: Record<string, number>;
+  indicators?: Record<string, { name: string; score: number }[]>;
 }
 
 export interface ApiStateProfile extends Omit<ApiStateData, 'scores'> {
@@ -29,6 +30,14 @@ export interface ApiStateProfile extends Omit<ApiStateData, 'scores'> {
   }[];
 }
 
+export interface ApiDomain {
+  id: string;
+  name: string;
+  description: string;
+  defaultWeight: number;
+  indicators?: any[];
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
 
 export async function fetchStates(): Promise<ApiStateData[]> {
@@ -45,7 +54,7 @@ export async function fetchStateById(id: string): Promise<ApiStateProfile> {
   return json.data;
 }
 
-export async function fetchDomains(): Promise<any> {
+export async function fetchDomains(): Promise<ApiDomain[]> {
   const res = await fetch(`${API_BASE_URL}/domains`);
   if (!res.ok) throw new Error("Failed to fetch domains");
   const json = await res.json();

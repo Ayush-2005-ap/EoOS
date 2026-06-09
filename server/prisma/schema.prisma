@@ -29,6 +29,7 @@ model State {
 model Domain {
   id            String  @id // e.g., 'Access', 'Equity'
   name          String
+  description   String?
   defaultWeight Float   // e.g., 0.16
 
   stateScores   StateDomainScore[]
@@ -40,6 +41,7 @@ model StateDomainScore {
   stateId   String
   domainId  String
   score     Float   // Score out of 100
+  rank      Int?    // Rank within this domain
 
   state     State   @relation(fields: [stateId], references: [id])
   domain    Domain  @relation(fields: [domainId], references: [id])
@@ -90,4 +92,37 @@ model StateSubIndicatorData {
   subIndicator   SubIndicator @relation(fields: [subIndicatorId], references: [id])
 
   @@unique([stateId, subIndicatorId])
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  title     String
+  pdfPath   String   
+  createdAt DateTime @default(now())
+}
+
+model Voice {
+  id             String   @id @default(uuid())
+  title          String
+  thumbnailPath  String   
+  youtubeUrl     String   
+  createdAt      DateTime @default(now())
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  reviewerName String
+  reviewText   String
+  rating       Float?
+  createdAt    DateTime @default(now())
+}
+
+model Query {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    String   @default("OPEN") // OPEN, CLOSED
+  createdAt DateTime @default(now())
 }

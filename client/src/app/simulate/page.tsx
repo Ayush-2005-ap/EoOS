@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { DOMAINS, DomainScores } from "@/data/mockData";
-import { fetchStates, ApiStateData } from "@/services/api";
+import { fetchStates, fetchDomains, ApiStateData, ApiDomain } from "@/services/api";
 import { RefreshCw, ArrowUp, ArrowDown, Minus, Info, Download, Award, Loader2 } from "lucide-react";
 
 interface SimulatedState {
@@ -19,15 +18,9 @@ interface SimulatedState {
 }
 
 export default function Simulator() {
-  // Initialize weights with defaults
-  const [weights, setWeights] = useState<{ [key: string]: number }>({
-    Access: 16,
-    Equity: 17,
-    Quality: 17,
-    Infrastructure: 16,
-    Governance: 17,
-    Outcomes: 17,
-  });
+  // Initialize weights dynamically
+  const [weights, setWeights] = useState<{ [key: string]: number }>({});
+  const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
 
   const [modifiedOrder, setModifiedOrder] = useState<string[]>([]);
   const [simulatedRankings, setSimulatedRankings] = useState<SimulatedState[]>([]);
@@ -35,9 +28,15 @@ export default function Simulator() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchStates()
-      .then(data => {
-        setStatesData(data);
+    Promise.all([fetchStates(), fetchDomains()])
+      .then(([states, domains]) => {
+        setStatesData(states);
+        setDomainsData(domains);
+        const initialWeights: { [key: string]: number } = {};
+        domains.forEach((d) => {
+          initialWeights[d.id] = d.defaultWeight;
+        });
+        setWeights(initialWeights);
         setIsLoading(false);
       })
       .catch(err => {
@@ -48,14 +47,11 @@ export default function Simulator() {
 
   // Reset to defaults
   const handleReset = () => {
-    setWeights({
-      Access: 16,
-      Equity: 17,
-      Quality: 17,
-      Infrastructure: 16,
-      Governance: 17,
-      Outcomes: 17,
+    const initialWeights: { [key: string]: number } = {};
+    domainsData.forEach((d) => {
+      initialWeights[d.id] = d.defaultWeight;
     });
+    setWeights(initialWeights);
     setModifiedOrder([]);
   };
 
@@ -74,7 +70,7 @@ export default function Simulator() {
     let deltaToDistribute = delta;
 
     // Start pool with domains that haven't been manually modified yet
-    let pool = DOMAINS.map((d) => d.id).filter((id) => id !== domainId && !newOrder.includes(id));
+    let pool = domainsData.map((d) => d.id).filter((id) => id !== domainId && !newOrder.includes(id));
     let orderIndex = newOrder.length - 1; // Start unlocking from the oldest modified if needed
 
     let iterations = 0;
@@ -138,10 +134,10 @@ export default function Simulator() {
     if (Math.abs(finalTotal - 100) > 0.01) {
       const diff = 100 - finalTotal;
       // Prefer unlocked domains to absorb the rounding difference
-      let adjustId = DOMAINS.find(d => d.id !== domainId && !newOrder.includes(d.id) && newWeights[d.id] + diff >= 0 && newWeights[d.id] + diff <= 100)?.id;
+      let adjustId = domainsData.find(d => d.id !== domainId && !newOrder.includes(d.id) && newWeights[d.id] + diff >= 0 && newWeights[d.id] + diff <= 100)?.id;
       // Fallback to any domain if all are locked
       if (!adjustId) {
-        adjustId = DOMAINS.find(d => d.id !== domainId && newWeights[d.id] + diff >= 0 && newWeights[d.id] + diff <= 100)?.id;
+        adjustId = domainsData.find(d => d.id !== domainId && newWeights[d.id] + diff >= 0 && newWeights[d.id] + diff <= 100)?.id;
       }
 
       if (adjustId) {
@@ -285,8 +281,8 @@ export default function Simulator() {
 
                 {/* Slider inputs */}
                 <div className="space-y-6">
-                  {DOMAINS.map((domain) => {
-                    const currentVal = weights[domain.id];
+                  {domainsData.map((domain) => {
+                    const currentVal = weights[domain.id] || 0;
                     return (
                       <div key={domain.id} className="space-y-2">
                         <div className="flex justify-between items-center text-[14px]">
@@ -354,7 +350,7 @@ export default function Simulator() {
                       Domain Weight is Already 100%
                     </h4>
                     <p className="text-on-surface-variant max-w-md">
-                      You need to distribute the weight across all 6 domains to generate a valid ranking. Please ensure no domain has 0% weight.
+                      You need to distribute the weight across all domains to generate a valid ranking. Please ensure no domain has 0% weight.
                     </p>
                   </div>
                 ) : (

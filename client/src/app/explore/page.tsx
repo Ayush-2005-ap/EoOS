@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { DOMAINS, DomainScores } from "@/data/mockData";
-import { fetchStates, ApiStateData } from "@/services/api";
+import { fetchStates, fetchDomains, ApiStateData, ApiDomain } from "@/services/api";
 import { Search, Filter, ArrowUpDown, ChevronRight, Download, Loader2 } from "lucide-react";
 
-type SortField = "name" | "baseRank" | "baseScore" | keyof DomainScores | string;
+type SortField = "name" | "baseRank" | "baseScore" | string;
 type SortOrder = "asc" | "desc";
 
 export default function ExploreRankings() {
@@ -21,12 +20,14 @@ export default function ExploreRankings() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchStates()
-      .then(data => {
-        setStatesData(data);
+    Promise.all([fetchStates(), fetchDomains()])
+      .then(([states, domains]) => {
+        setStatesData(states);
+        setDomainsData(domains);
         setIsLoading(false);
       })
       .catch(err => {
@@ -88,14 +89,14 @@ export default function ExploreRankings() {
 
   // Export CSV helper
   const exportToCSV = () => {
-    const headers = ["Rank", "State Name", "Type", "Region", "Overall Score", ...DOMAINS.map(d => d.name)];
+    const headers = ["Rank", "State Name", "Type", "Region", "Overall Score", ...domainsData.map(d => d.name)];
     const rows = processedStates.map((s) => [
       s.baseRank,
       s.name,
       s.type,
       s.region,
       s.baseScore,
-      ...DOMAINS.map(d => s.scores[d.id as keyof DomainScores])
+      ...domainsData.map(d => s.scores[d.id] || 0)
     ]);
     
     const csvContent = "data:text/csv;charset=utf-8," 
@@ -239,10 +240,10 @@ export default function ExploreRankings() {
                         <ArrowUpDown size={14} className="text-outline" />
                       </div>
                     </th>
-                    {DOMAINS.map((domain) => (
+                    {domainsData.map((domain) => (
                       <th
                         key={domain.id}
-                        onClick={() => handleSort(domain.id as keyof DomainScores)}
+                        onClick={() => handleSort(domain.id)}
                         className="py-4 px-4 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider cursor-pointer hover:text-primary transition-colors text-right w-28"
                       >
                         <div className="flex items-center justify-end gap-1">
@@ -278,8 +279,8 @@ export default function ExploreRankings() {
                       <td className="py-4 px-6 text-right font-plus-jakarta text-[15px] font-bold text-secondary">
                         {state.baseScore}
                       </td>
-                      {DOMAINS.map((domain) => {
-                        const val = state.scores[domain.id as keyof DomainScores];
+                      {domainsData.map((domain) => {
+                        const val = state.scores[domain.id] || 0;
                         return (
                           <td key={domain.id} className="py-4 px-4 text-right font-plus-jakarta text-[14px] font-semibold text-primary/80">
                             {val}

@@ -21,6 +21,9 @@ export async function getAllStates(req: Request, res: Response) {
           include: { domain: true },
           orderBy: { domainId: "asc" },
         },
+        indicatorScores: {
+          include: { indicator: true },
+        },
       },
     });
 
@@ -34,6 +37,12 @@ export async function getAllStates(req: Request, res: Response) {
       scores: Object.fromEntries(
         state.domainScores.map((ds) => [ds.domainId, ds.score])
       ),
+      indicators: state.indicatorScores.reduce((acc, is) => {
+        const domainId = is.indicator.domainId;
+        if (!acc[domainId]) acc[domainId] = [];
+        acc[domainId].push({ name: is.indicator.name, score: is.score });
+        return acc;
+      }, {} as Record<string, { name: string; score: number }[]>),
     }));
 
     return res.json({ data: formatted, count: formatted.length });
@@ -148,7 +157,7 @@ export async function getStateById(req: Request, res: Response) {
       domains: Object.values(domainMap).map((d) => ({
         ...d,
         indicators: Object.values(d.indicators),
-      })),
+      })).sort((a, b) => a.domainName.localeCompare(b.domainName)),
     };
 
     return res.json({ data: result });

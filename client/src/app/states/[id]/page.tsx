@@ -4,8 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { DOMAINS, DomainScores } from "@/data/mockData";
-import { fetchStates, fetchStateById, ApiStateData, ApiStateProfile } from "@/services/api";
+import { fetchStates, fetchStateById, fetchDomains, ApiStateData, ApiStateProfile, ApiDomain } from "@/services/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ArrowLeft, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, RefreshCw, BarChart2, BookOpen, Scale, ChevronRight, Loader2 } from "lucide-react";
 
@@ -19,16 +18,22 @@ export default function StateDashboard() {
   const [activeSummaryTab, setActiveSummaryTab] = useState<'schooling' | 'regulatory'>('schooling');
 
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [stateProfile, setStateProfile] = useState<ApiStateProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!stateId) return;
-    Promise.all([fetchStates(), fetchStateById(stateId)])
-      .then(([allStates, profile]) => {
+    Promise.all([fetchStates(), fetchStateById(stateId), fetchDomains()])
+      .then(([allStates, profile, domains]) => {
         setStatesData(allStates);
         setStateProfile(profile);
+        setDomainsData(domains);
+        // Default expanded domain to the first domain if available
+        if (domains.length > 0) {
+          setExpandedDomain(domains[0].id);
+        }
         setIsLoading(false);
       })
       .catch(err => {
@@ -79,23 +84,23 @@ export default function StateDashboard() {
   const nationalAverages = (() => {
     const totalStates = statesData.length;
     const sums: Record<string, number> = {};
-    DOMAINS.forEach(d => sums[d.id] = 0);
+    domainsData.forEach(d => sums[d.id] = 0);
     
     statesData.forEach((s) => {
-      DOMAINS.forEach(d => {
+      domainsData.forEach(d => {
         sums[d.id] += s.scores[d.id] || 0;
       });
     });
 
     const avgs: Record<string, number> = {};
-    DOMAINS.forEach(d => {
+    domainsData.forEach(d => {
       avgs[d.id] = totalStates ? parseFloat((sums[d.id] / totalStates).toFixed(1)) : 0;
     });
     return avgs;
   })();
 
   // Recharts formatted data
-  const chartData = DOMAINS.map((domain) => ({
+  const chartData = domainsData.map((domain) => ({
     name: domain.name,
     [stateProfile.name]: stateProfile.domains.find(d => d.domainId === domain.id)?.score || 0,
     "National Average": nationalAverages[domain.id] || 0,
@@ -290,7 +295,7 @@ export default function StateDashboard() {
                   Domain Scores Overview
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {DOMAINS.map((domain) => {
+                  {domainsData.map((domain) => {
                     const score = stateProfile.domains.find(d => d.domainId === domain.id)?.score || 0;
                     const active = expandedDomain === domain.id;
                     return (
@@ -337,7 +342,7 @@ export default function StateDashboard() {
                         Indicator Deep-Dive
                       </span>
                       <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary">
-                        {expandedDomain} Domain
+                        {domainsData.find(d => d.id === expandedDomain)?.name || expandedDomain} Domain
                       </h3>
                       <p className="text-on-surface-variant text-[13px] leading-relaxed mt-1">
                         Inspect indicators and sub-indicators scoring for {stateProfile.name}.

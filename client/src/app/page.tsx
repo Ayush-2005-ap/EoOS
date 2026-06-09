@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import IndiaMap from "@/components/IndiaMap";
-import { DOMAINS, DomainScores } from "@/data/mockData";
-import { fetchStates, ApiStateData } from "@/services/api";
+import { fetchStates, fetchDomains, ApiStateData, ApiDomain } from "@/services/api";
 import { ArrowRight, Play, BookOpen, AlertCircle, BarChart3, TrendingUp, Award, Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -17,12 +16,14 @@ export default function Home() {
   const [hoveredStateId, setHoveredStateId] = useState<string | null>(null);
   
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
+  const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchStates()
-      .then(data => {
-        setStatesData(data);
+    Promise.all([fetchStates(), fetchDomains()])
+      .then(([states, domains]) => {
+        setStatesData(states);
+        setDomainsData(domains);
         setIsLoading(false);
       })
       .catch(err => {
@@ -195,7 +196,7 @@ export default function Home() {
                 >
                   Overall Index
                 </button>
-                {DOMAINS.map((domain) => (
+                {domainsData.map((domain) => (
                   <button
                     key={domain.id}
                     onClick={() => setActiveDomain(domain.id)}
@@ -277,8 +278,8 @@ export default function Home() {
                         </h4>
                         
                         {activeDomain === "Overall" ? (
-                          DOMAINS.map((domain) => {
-                            const val = hoveredState.scores[domain.id as keyof DomainScores];
+                          domainsData.map((domain) => {
+                            const val = hoveredState.scores[domain.id];
                             return (
                               <div key={domain.id} className="space-y-1">
                                 <div className="flex justify-between text-[13px]">
@@ -330,7 +331,7 @@ export default function Home() {
                     </div>
                   </div>
                 ) : (() => {
-                  const activeDomainData = DOMAINS.find(d => d.id === activeDomain);
+                  const activeDomainData = domainsData.find(d => d.id === activeDomain);
                   return (
                     <div className="bg-surface-container-low/50 rounded-2xl border border-dashed border-outline-variant/80 p-12 text-center flex flex-col items-center justify-center gap-6 min-h-[380px] animate-fade-in">
                       <div className="p-4 bg-white rounded-full shadow-md text-secondary">
@@ -343,7 +344,7 @@ export default function Home() {
                         <p className="text-on-surface-variant text-[15px] max-w-[320px] leading-relaxed mx-auto">
                           {activeDomainData 
                             ? activeDomainData.description 
-                            : "The Overall Index aggregates performance across all 6 key domains to provide a comprehensive view of the education landscape."}
+                            : "The Overall Index aggregates performance across all key domains to provide a comprehensive view of the education landscape."}
                         </p>
                       </div>
                       <div className="pt-4 border-t border-outline-variant/30 w-full max-w-[280px]">
@@ -472,48 +473,22 @@ export default function Home() {
                 Weight Settings Preview
               </h4>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-[13px] font-semibold text-on-primary-container">
-                    <span>Domain 1 Weight</span>
-                    <span>16%</span>
+                {domainsData.slice(0, 3).map((domain) => (
+                  <div key={domain.id} className="space-y-2">
+                    <div className="flex justify-between text-[13px] font-semibold text-on-primary-container">
+                      <span>{domain.name} Weight</span>
+                      <span>{domain.defaultWeight}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="5"
+                      max="75"
+                      value={domain.defaultWeight}
+                      disabled
+                      className="w-full accent-secondary h-1 bg-white/20 rounded-lg cursor-not-allowed opacity-50"
+                    />
                   </div>
-                  <input
-                    type="range"
-                    min="5"
-                    max="75"
-                    value="16"
-                    disabled
-                    className="w-full accent-secondary h-1 bg-white/20 rounded-lg cursor-not-allowed opacity-50"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-[13px] font-semibold text-on-primary-container">
-                    <span>Domain 2 Weight</span>
-                    <span>17%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="5"
-                    max="75"
-                    value="17"
-                    disabled
-                    className="w-full accent-secondary h-1 bg-white/20 rounded-lg cursor-not-allowed opacity-50"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-[13px] font-semibold text-on-primary-container">
-                    <span>Domain 3 Weight</span>
-                    <span>17%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="5"
-                    max="75"
-                    value="17"
-                    disabled
-                    className="w-full accent-secondary h-1 bg-white/20 rounded-lg cursor-not-allowed opacity-50"
-                  />
-                </div>
+                ))}
               </div>
               <p className="text-[12px] text-white/50 italic text-center pt-2">
                 * Launch the simulator to adjust values and compute results live.
