@@ -20,7 +20,7 @@ export default function VoicesManager() {
   }, []);
 
   const fetchVoices = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`)
       .then(res => res.json())
       .then(json => {
         setVoices(json.data || []);
@@ -38,7 +38,7 @@ export default function VoicesManager() {
     formData.append("thumbnail", file);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`, {
         method: "POST",
         body: formData,
       });
@@ -60,7 +60,7 @@ export default function VoicesManager() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchVoices();
     } catch (e) {

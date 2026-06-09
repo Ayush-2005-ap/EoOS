@@ -306,8 +306,9 @@ async function main() {
     const defaultWeights = { Access: 0.16, Equity: 0.17, Quality: 0.17, Infrastructure: 0.16, Governance: 0.17, Outcomes: 0.17 };
 
     for (const dNum of uniqueDomainNums) {
-      const domainId = DOMAIN_NAMES[dNum];
-      const scores = domainScoreAccum[stateName][domainId];
+      const domainName = DOMAIN_NAMES[dNum];
+      const domainId = `domain-${dNum}`;
+      const scores = domainScoreAccum[stateName][domainName];
       const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
       const domainScore = parseFloat((avg * 100).toFixed(2));
 

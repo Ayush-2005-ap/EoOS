@@ -20,7 +20,7 @@ export default function ReviewsManager() {
   }, []);
 
   const fetchReviews = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`)
       .then(res => res.json())
       .then(json => {
         setReviews(json.data || []);
@@ -33,7 +33,7 @@ export default function ReviewsManager() {
     if (!reviewerName || !reviewText) return alert("Name and Text are required");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reviewerName, reviewText, rating }),
@@ -56,7 +56,7 @@ export default function ReviewsManager() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchReviews();
     } catch (e) {

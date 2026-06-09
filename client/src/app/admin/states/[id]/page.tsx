@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { adminFetch } from "@/utils/api";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight, Save, Activity, ArrowLeft } from "lucide-react";
 
@@ -25,12 +26,12 @@ export default function StateScoreEditor() {
 
   useEffect(() => {
     // Fetch generic hierarchy
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => setHierarchy(json.data || []));
 
     // Fetch this state's generic info
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/states`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/states`)
       .then(res => res.json())
       .then(json => {
         const found = json.data?.find((s: any) => s.id === stateId);
@@ -48,7 +49,7 @@ export default function StateScoreEditor() {
 
   const fetchStateScores = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/scores`);
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/scores`);
       const json = await res.json();
       setStateScores(json.data);
       
@@ -69,7 +70,7 @@ export default function StateScoreEditor() {
         score: editValues[sub.id] || 0,
       }));
 
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/indicators/${indicatorId}/scores`, {
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/indicators/${indicatorId}/scores`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subIndicators: payload }),
@@ -84,7 +85,7 @@ export default function StateScoreEditor() {
 
   const handleProfileSave = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profileData),

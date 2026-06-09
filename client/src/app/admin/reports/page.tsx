@@ -19,7 +19,7 @@ export default function ReportsManager() {
   }, []);
 
   const fetchReports = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`)
       .then(res => res.json())
       .then(json => {
         setReports(json.data || []);
@@ -36,7 +36,7 @@ export default function ReportsManager() {
     formData.append("pdf", file);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`, {
         method: "POST",
         body: formData,
       });
@@ -57,7 +57,7 @@ export default function ReportsManager() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchReports();
     } catch (e) {
