@@ -35,7 +35,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
   try {
     const { status } = req.body; // e.g., "CLOSED"
     const query = await prisma.query.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { status },
     });
     res.json({ data: query });
@@ -47,7 +47,7 @@ router.put("/:id", requireAdmin, async (req, res) => {
 // Admin: Delete a query
 router.delete("/:id", requireAdmin, async (req, res) => {
   try {
-    await prisma.query.delete({ where: { id: req.params.id } });
+    await prisma.query.delete({ where: { id: String(req.params.id) } });
     res.json({ message: "Query deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

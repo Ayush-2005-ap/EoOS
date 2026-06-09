@@ -1,5 +1,5 @@
-import { adminFetch } from "@/utils/api";
 "use client";
+import { adminFetch } from "@/utils/api";
 
 import { useState, useEffect } from "react";
 import { Mail, Trash2, CheckCircle, Clock } from "lucide-react";

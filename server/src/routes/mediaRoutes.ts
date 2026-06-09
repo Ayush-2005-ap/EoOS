@@ -63,14 +63,14 @@ router.post("/reports", requireAdmin, upload.single("pdf"), async (req, res) => 
 router.delete("/reports/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const report = await prisma.report.findUnique({ where: { id } });
+    const report = await prisma.report.findUnique({ where: { id: String(id) } });
     if (!report) return res.status(404).json({ error: "Not found" });
 
     // Try to delete local file
     const fullPath = path.join(__dirname, "../../../public", report.pdfPath);
     if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
 
-    await prisma.report.delete({ where: { id } });
+    await prisma.report.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -108,13 +108,13 @@ router.post("/voices", requireAdmin, upload.single("thumbnail"), async (req, res
 router.delete("/voices/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const voice = await prisma.voice.findUnique({ where: { id } });
+    const voice = await prisma.voice.findUnique({ where: { id: String(id) } });
     if (!voice) return res.status(404).json({ error: "Not found" });
 
     const fullPath = path.join(__dirname, "../../../public", voice.thumbnailPath);
     if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
 
-    await prisma.voice.delete({ where: { id } });
+    await prisma.voice.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -151,7 +151,7 @@ router.post("/reviews", async (req, res) => {
 router.delete("/reviews/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.review.delete({ where: { id } });
+    await prisma.review.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
