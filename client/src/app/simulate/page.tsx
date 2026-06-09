@@ -224,7 +224,8 @@ export default function Simulator() {
   const exportSimulatedCSV = () => {
     const headers = ["Simulated Rank", "State Name", "Simulated Score", "Rank Change", "Original Rank"];
     const rows = simulatedRankings.map((s) => {
-      const originalRank = initialRankings[s.id] || baseState.baseRank;
+      const baseState = statesData.find((sd) => sd.id === s.id)!;
+      const originalRank = initialRankings[s.id] || baseState?.baseRank || 0;
       return [
         s.simulatedRank,
         s.name,

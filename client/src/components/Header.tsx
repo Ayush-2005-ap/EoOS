@@ -34,7 +34,7 @@ export default function Header() {
           <span className="font-plus-jakarta text-2xl font-extrabold text-primary tracking-tight">
             EoOS
           </span>
-          <span className="font-plus-jakarta text-2xl font-extrabold text-secondary tracking-tight">
+          <span className="font-plus-jakarta text-2xl font-extrabold text-[#ffcb05] tracking-tight">
             Index
           </span>
         </Link>
