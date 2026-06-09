@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, MessageSquare, Star } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function ReviewsManager() {
   const [reviews, setReviews] = useState<any[]>([]);
@@ -11,6 +12,8 @@ export default function ReviewsManager() {
   const [reviewerName, setReviewerName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReviews();
@@ -50,10 +53,11 @@ export default function ReviewsManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this review?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchReviews();
     } catch (e) {
       console.error(e);
@@ -125,7 +129,7 @@ export default function ReviewsManager() {
         {loading ? <p>Loading reviews...</p> : reviews.map((review) => (
           <div key={review.id} className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 flex flex-col relative">
             <button 
-              onClick={() => handleDelete(review.id)} 
+              onClick={() => setDeleteConfirmId(review.id)} 
               className="absolute top-4 right-4 p-2 text-slate-400 hover:bg-error/10 hover:text-error rounded-lg transition-colors"
             >
               <Trash2 size={16} />
@@ -147,6 +151,14 @@ export default function ReviewsManager() {
         ))}
         {!loading && reviews.length === 0 && <p className="text-slate-500 col-span-full">No reviews added yet.</p>}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Review?"
+        message="Are you sure you want to delete this review? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

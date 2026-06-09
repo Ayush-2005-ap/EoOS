@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, FileText, Download } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function ReportsManager() {
   const [reports, setReports] = useState<any[]>([]);
@@ -10,6 +11,8 @@ export default function ReportsManager() {
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReports();
@@ -51,10 +54,11 @@ export default function ReportsManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this report?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchReports();
     } catch (e) {
       console.error(e);
@@ -120,13 +124,21 @@ export default function ReportsManager() {
               </a>
             </div>
             
-            <button onClick={() => handleDelete(report.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors ml-4">
+            <button onClick={() => setDeleteConfirmId(report.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors ml-4">
               <Trash2 size={18} />
             </button>
           </div>
         ))}
         {!loading && reports.length === 0 && <p className="text-slate-500">No reports uploaded yet.</p>}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Report?"
+        message="Are you sure you want to delete this report? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

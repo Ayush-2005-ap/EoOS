@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Plus, Trash2, ArrowRight, Edit2 } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function DomainsEngine() {
   const [domains, setDomains] = useState<any[]>([]);
@@ -15,6 +16,8 @@ export default function DomainsEngine() {
   // Edit Domain Form
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null);
   const [editDomainData, setEditDomainData] = useState({ name: "", description: "", defaultWeight: 16 });
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDomains();
@@ -76,10 +79,11 @@ export default function DomainsEngine() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure? This will delete all indicators inside it!")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchDomains();
     } catch (e) {
       console.error(e);
@@ -155,7 +159,7 @@ export default function DomainsEngine() {
                   <button onClick={() => startEditing(domain)} className="p-2 text-slate-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
                     <Edit2 size={18} />
                   </button>
-                  <button onClick={() => handleDelete(domain.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
+                  <button onClick={() => setDeleteConfirmId(domain.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
                     <Trash2 size={18} />
                   </button>
                   <Link href={`/admin/domains/${domain.id}`} className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors ml-2">
@@ -167,6 +171,14 @@ export default function DomainsEngine() {
           </div>
         ))}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Domain?"
+        message="Are you sure? This will delete all indicators inside it! This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

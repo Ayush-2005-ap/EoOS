@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Trash2, ArrowRight, ArrowLeft } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function DomainDetails() {
   const params = useParams();
@@ -16,6 +17,8 @@ export default function DomainDetails() {
   // New Indicator Form
   const [showAdd, setShowAdd] = useState(false);
   const [newName, setNewName] = useState("");
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDomain();
@@ -51,10 +54,11 @@ export default function DomainDetails() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete indicator and all its sub-indicators?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchDomain();
     } catch (e) {
       console.error(e);
@@ -108,7 +112,7 @@ export default function DomainDetails() {
             </div>
             
             <div className="flex items-center gap-3">
-              <button onClick={() => handleDelete(ind.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
+              <button onClick={() => setDeleteConfirmId(ind.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
                 <Trash2 size={18} />
               </button>
               <Link href={`/admin/indicators/${ind.id}`} className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors">
@@ -118,6 +122,14 @@ export default function DomainDetails() {
           </div>
         ))}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Indicator?"
+        message="Are you sure you want to delete this indicator and all its sub-indicators? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

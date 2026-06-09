@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Trophy, Plus, Trash2 } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminDashboard() {
   const [states, setStates] = useState<any[]>([]);
@@ -12,6 +13,8 @@ export default function AdminDashboard() {
   // Add state form
   const [showAdd, setShowAdd] = useState(false);
   const [newState, setNewState] = useState({ id: "", name: "", type: "STATE", region: "North" });
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDomainsAndStates();
@@ -58,10 +61,11 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDeleteState = async (id: string) => {
-    if (!confirm(`Are you sure you want to delete ${id}? This will remove all its score data permanently!`)) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchDomainsAndStates();
     } catch (e) {
       console.error(e);
@@ -163,7 +167,7 @@ export default function AdminDashboard() {
                 })}
                 <td className="p-4 text-right flex items-center justify-end gap-2">
                   <button 
-                    onClick={() => handleDeleteState(state.id)}
+                    onClick={() => setDeleteConfirmId(state.id)}
                     className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                     title="Delete State"
                   >
@@ -175,6 +179,14 @@ export default function AdminDashboard() {
           </tbody>
         </table>
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete State?"
+        message={`Are you sure you want to delete this state? This will remove all its score data permanently!`}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

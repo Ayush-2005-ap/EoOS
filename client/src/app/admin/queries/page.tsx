@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Mail, Trash2, CheckCircle, Clock } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function QueriesManager() {
   const [queries, setQueries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchQueries();
@@ -33,10 +36,11 @@ export default function QueriesManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this query?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchQueries();
     } catch (e) {
       console.error(e);
@@ -98,7 +102,7 @@ export default function QueriesManager() {
             </div>
 
             <div className="mt-4 flex justify-end">
-               <button onClick={() => handleDelete(query.id)} className="p-2 text-slate-400 hover:text-error hover:bg-error/10 rounded-lg transition-colors flex items-center gap-2 text-sm font-bold">
+               <button onClick={() => setDeleteConfirmId(query.id)} className="p-2 text-slate-400 hover:text-error hover:bg-error/10 rounded-lg transition-colors flex items-center gap-2 text-sm font-bold">
                 <Trash2 size={16} /> Delete Query
               </button>
             </div>
@@ -106,6 +110,14 @@ export default function QueriesManager() {
         ))}
         {!loading && queries.length === 0 && <p className="text-slate-500">Inbox is empty. No queries yet.</p>}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Query?"
+        message="Are you sure you want to delete this query? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }

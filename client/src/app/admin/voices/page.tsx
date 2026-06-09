@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Video, ExternalLink } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function VoicesManager() {
   const [voices, setVoices] = useState<any[]>([]);
@@ -11,6 +12,8 @@ export default function VoicesManager() {
   const [title, setTitle] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchVoices();
@@ -54,10 +57,11 @@ export default function VoicesManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this voice/video?")) return;
+  const confirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices/${deleteConfirmId}`, { method: "DELETE" });
+      setDeleteConfirmId(null);
       fetchVoices();
     } catch (e) {
       console.error(e);
@@ -131,7 +135,7 @@ export default function VoicesManager() {
                 className="w-full h-full object-cover"
               />
               <button 
-                onClick={() => handleDelete(voice.id)} 
+                onClick={() => setDeleteConfirmId(voice.id)} 
                 className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-error hover:text-white text-error rounded-lg transition-colors backdrop-blur-sm"
               >
                 <Trash2 size={16} />
@@ -155,6 +159,14 @@ export default function VoicesManager() {
         ))}
         {!loading && voices.length === 0 && <p className="text-slate-500 col-span-full">No videos added yet.</p>}
       </div>
+
+      <ConfirmModal
+        isOpen={!!deleteConfirmId}
+        title="Delete Voice/Video?"
+        message="Are you sure you want to delete this voice/video? This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteConfirmId(null)}
+      />
     </div>
   );
 }
