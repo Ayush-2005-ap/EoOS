@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { requireAdmin } from "../middleware/authMiddleware";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -44,7 +45,7 @@ router.get("/reports", async (req, res) => {
   }
 });
 
-router.post("/reports", upload.single("pdf"), async (req, res) => {
+router.post("/reports", requireAdmin, upload.single("pdf"), async (req, res) => {
   try {
     const { title } = req.body;
     if (!title || !req.file) return res.status(400).json({ error: "Title and PDF file are required" });
@@ -59,7 +60,7 @@ router.post("/reports", upload.single("pdf"), async (req, res) => {
   }
 });
 
-router.delete("/reports/:id", async (req, res) => {
+router.delete("/reports/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const report = await prisma.report.findUnique({ where: { id } });
@@ -89,7 +90,7 @@ router.get("/voices", async (req, res) => {
   }
 });
 
-router.post("/voices", upload.single("thumbnail"), async (req, res) => {
+router.post("/voices", requireAdmin, upload.single("thumbnail"), async (req, res) => {
   try {
     const { title, youtubeUrl } = req.body;
     if (!title || !youtubeUrl || !req.file) return res.status(400).json({ error: "Title, YouTube URL, and Thumbnail image are required" });
@@ -104,7 +105,7 @@ router.post("/voices", upload.single("thumbnail"), async (req, res) => {
   }
 });
 
-router.delete("/voices/:id", async (req, res) => {
+router.delete("/voices/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const voice = await prisma.voice.findUnique({ where: { id } });
@@ -147,7 +148,7 @@ router.post("/reviews", async (req, res) => {
   }
 });
 
-router.delete("/reviews/:id", async (req, res) => {
+router.delete("/reviews/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.review.delete({ where: { id } });

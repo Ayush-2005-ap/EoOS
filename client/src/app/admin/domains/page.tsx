@@ -1,3 +1,4 @@
+import { adminFetch } from "@/utils/api";
 "use client";
 
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ export default function DomainsEngine() {
   }, []);
 
   const fetchDomains = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => {
         setDomains(json.data || []);
@@ -35,7 +36,7 @@ export default function DomainsEngine() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newDomain),
@@ -61,7 +62,7 @@ export default function DomainsEngine() {
         defaultWeight: isNaN(editDomainData.defaultWeight) ? 0 : editDomainData.defaultWeight
       };
       
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${encodeURIComponent(id)}`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${encodeURIComponent(id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -82,7 +83,7 @@ export default function DomainsEngine() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchDomains();
     } catch (e) {

@@ -19,10 +19,12 @@ app.get("/api/health", (_req, res) => {
 import adminRoutes from "./routes/adminRoutes";
 import mediaRoutes from "./routes/mediaRoutes";
 import queryRoutes from "./routes/queryRoutes";
+import authRoutes from "./routes/authRoutes";
 import path from "path";
 
 app.use("/public", express.static(path.join(__dirname, "../../public")));
 
+app.use("/api/auth", authRoutes);
 app.use("/api/states", stateRoutes);
 app.use("/api/domains", domainRoutes);
 app.use("/api/admin", adminRoutes);

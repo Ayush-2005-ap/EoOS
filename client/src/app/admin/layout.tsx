@@ -1,11 +1,34 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Layers, FileText, Video, MessageSquare, LogOut, Mail } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+    if (!token && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    } else {
+      setIsAuthChecking(false);
+    }
+  }, [pathname, router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_token");
+    router.push("/admin/login");
+  };
+
+  if (isAuthChecking) return <div className="h-screen flex items-center justify-center bg-slate-50">Loading...</div>;
+
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
 
   const navItems = [
     { name: "States Dashboard", href: "/admin", icon: <LayoutDashboard size={20} /> },
@@ -41,11 +64,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800 flex flex-col gap-2">
           <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-colors text-slate-400 hover:text-white">
-            <LogOut size={20} />
-            <span className="text-[14px] font-medium">Exit Admin</span>
+            <LayoutDashboard size={20} />
+            <span className="text-[14px] font-medium">Back to Site</span>
           </Link>
+          <button onClick={handleLogout} className="flex items-center w-full gap-3 px-4 py-3 rounded-xl hover:bg-error/20 hover:text-error transition-colors text-slate-400 font-bold">
+            <LogOut size={20} />
+            <span className="text-[14px]">Secure Logout</span>
+          </button>
         </div>
       </aside>
 

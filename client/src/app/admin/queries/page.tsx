@@ -1,3 +1,4 @@
+import { adminFetch } from "@/utils/api";
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,7 +16,7 @@ export default function QueriesManager() {
   }, []);
 
   const fetchQueries = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries`)
       .then(res => res.json())
       .then(json => {
         setQueries(json.data || []);
@@ -25,7 +26,7 @@ export default function QueriesManager() {
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${id}`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
@@ -39,7 +40,7 @@ export default function QueriesManager() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchQueries();
     } catch (e) {

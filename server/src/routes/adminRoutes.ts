@@ -1,8 +1,11 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import { requireAdmin } from "../middleware/authMiddleware";
 
 const router = Router();
 const prisma = new PrismaClient();
+
+router.use(requireAdmin);
 
 // ─── 1. Get Full Structure Hierarchy ─────────────────────────────────────────
 router.get("/hierarchy", async (_req, res) => {
@@ -51,7 +54,23 @@ router.put("/domains/:id", async (req, res) => {
 });
 router.delete("/domains/:id", async (req, res) => {
   try {
-    await prisma.domain.delete({ where: { id: req.params.id } });
+    const domainId = req.params.id;
+
+    const indicators = await prisma.indicator.findMany({ where: { domainId } });
+    const indicatorIds = indicators.map(i => i.id);
+
+    const subs = await prisma.subIndicator.findMany({ where: { indicatorId: { in: indicatorIds } } });
+    const subIds = subs.map(s => s.id);
+
+    await prisma.$transaction([
+      prisma.stateSubIndicatorData.deleteMany({ where: { subIndicatorId: { in: subIds } } }),
+      prisma.stateIndicatorScore.deleteMany({ where: { indicatorId: { in: indicatorIds } } }),
+      prisma.subIndicator.deleteMany({ where: { indicatorId: { in: indicatorIds } } }),
+      prisma.stateDomainScore.deleteMany({ where: { domainId } }),
+      prisma.indicator.deleteMany({ where: { domainId } }),
+      prisma.domain.delete({ where: { id: domainId } })
+    ]);
+
     res.json({ message: "Deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -81,7 +100,18 @@ router.put("/indicators/:id", async (req, res) => {
 });
 router.delete("/indicators/:id", async (req, res) => {
   try {
-    await prisma.indicator.delete({ where: { id: req.params.id } });
+    const indicatorId = req.params.id;
+
+    const subs = await prisma.subIndicator.findMany({ where: { indicatorId } });
+    const subIds = subs.map(s => s.id);
+
+    await prisma.$transaction([
+      prisma.stateSubIndicatorData.deleteMany({ where: { subIndicatorId: { in: subIds } } }),
+      prisma.stateIndicatorScore.deleteMany({ where: { indicatorId } }),
+      prisma.subIndicator.deleteMany({ where: { indicatorId } }),
+      prisma.indicator.delete({ where: { id: indicatorId } })
+    ]);
+
     res.json({ message: "Deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

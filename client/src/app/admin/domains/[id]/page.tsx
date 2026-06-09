@@ -1,3 +1,4 @@
+import { adminFetch } from "@/utils/api";
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,7 +26,7 @@ export default function DomainDetails() {
   }, [domainId]);
 
   const fetchDomain = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => {
         const found = (json.data || []).find((d: any) => d.id === domainId);
@@ -37,7 +38,7 @@ export default function DomainDetails() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ domainId, name: newName }),
@@ -57,7 +58,7 @@ export default function DomainDetails() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/indicators/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchDomain();
     } catch (e) {

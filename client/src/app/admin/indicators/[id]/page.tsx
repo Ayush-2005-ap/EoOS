@@ -1,3 +1,4 @@
+import { adminFetch } from "@/utils/api";
 "use client";
 
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ export default function IndicatorDetails() {
   }, [indicatorId]);
 
   const fetchIndicator = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
+    adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => {
         let foundInd = null;
@@ -46,7 +47,7 @@ export default function IndicatorDetails() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators`, {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ indicatorId, ...newSub }),
@@ -66,7 +67,7 @@ export default function IndicatorDetails() {
   const confirmDelete = async () => {
     if (!deleteConfirmId) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${deleteConfirmId}`, { method: "DELETE" });
+      await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${deleteConfirmId}`, { method: "DELETE" });
       setDeleteConfirmId(null);
       fetchIndicator();
     } catch (e) {
