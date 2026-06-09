@@ -112,9 +112,14 @@ router.put("/sub-indicators/:id", async (req, res) => {
 });
 router.delete("/sub-indicators/:id", async (req, res) => {
   try {
-    await prisma.subIndicator.delete({ where: { id: req.params.id } });
-    res.json({ message: "Deleted" });
+    const { id } = req.params;
+    await prisma.$transaction([
+      prisma.stateSubIndicatorData.deleteMany({ where: { subIndicatorId: id } }),
+      prisma.subIndicator.delete({ where: { id } })
+    ]);
+    res.json({ message: "Deleted successfully" });
   } catch (error: any) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
