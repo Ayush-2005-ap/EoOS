@@ -41,21 +41,21 @@ export interface ApiDomain {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
 
 export async function fetchStates(): Promise<ApiStateData[]> {
-  const res = await fetch(`${API_BASE_URL}/states`);
+  const res = await fetch(`${API_BASE_URL}/states`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to fetch states");
   const json = await res.json();
   return json.data;
 }
 
 export async function fetchStateById(id: string): Promise<ApiStateProfile> {
-  const res = await fetch(`${API_BASE_URL}/states/${id}`);
+  const res = await fetch(`${API_BASE_URL}/states/${id}`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Failed to fetch state ${id}`);
   const json = await res.json();
   return json.data;
 }
 
 export async function fetchDomains(): Promise<ApiDomain[]> {
-  const res = await fetch(`${API_BASE_URL}/domains`);
+  const res = await fetch(`${API_BASE_URL}/domains`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to fetch domains");
   const json = await res.json();
   return json.data;
