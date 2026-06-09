@@ -31,7 +31,7 @@ export default function Header() {
       <div className="flex justify-between items-center h-16 px-gutter max-w-container-max-width mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1">
-          <span className="font-plus-jakarta text-2xl font-extrabold text-primary tracking-tight">
+          <span className="font-plus-jakarta text-2xl font-extrabold text-secondary tracking-tight">
             EoOS
           </span>
           <span className="font-plus-jakarta text-2xl font-extrabold text-[#ffcb05] tracking-tight">
