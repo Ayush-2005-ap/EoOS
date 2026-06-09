@@ -126,7 +126,6 @@ export default function IndicatorDetails() {
           </div>
         ))}
       </div>
-      </div>
 
       {/* Custom Delete Confirmation Modal to prevent INP issues */}
       {deleteConfirmId && (
