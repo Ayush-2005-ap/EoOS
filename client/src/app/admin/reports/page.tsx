@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { adminFetch } from "@/utils/api";
 import { Plus, Trash2, FileText, Download } from "lucide-react";
 import ConfirmModal from "@/components/ConfirmModal";
 
