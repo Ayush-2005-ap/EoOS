@@ -20,8 +20,8 @@ export default function AdminDashboard() {
   const fetchDomainsAndStates = async () => {
     try {
       const [domRes, statRes] = await Promise.all([
-        fetch("http://localhost:4000/api/admin/hierarchy"),
-        fetch("http://localhost:4000/api/states")
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/states`)
       ]);
       const domJson = await domRes.json();
       const statJson = await statRes.json();
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   const handleCreateState = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/api/admin/states", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newState),
@@ -61,7 +61,7 @@ export default function AdminDashboard() {
   const handleDeleteState = async (id: string) => {
     if (!confirm(`Are you sure you want to delete ${id}? This will remove all its score data permanently!`)) return;
     try {
-      await fetch(`http://localhost:4000/api/admin/states/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${id}`, { method: "DELETE" });
       fetchDomainsAndStates();
     } catch (e) {
       console.error(e);

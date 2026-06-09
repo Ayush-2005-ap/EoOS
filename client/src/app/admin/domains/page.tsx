@@ -21,7 +21,7 @@ export default function DomainsEngine() {
   }, []);
 
   const fetchDomains = () => {
-    fetch("http://localhost:4000/api/admin/hierarchy")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => {
         setDomains(json.data || []);
@@ -32,7 +32,7 @@ export default function DomainsEngine() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/api/admin/domains", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newDomain),
@@ -58,7 +58,7 @@ export default function DomainsEngine() {
         defaultWeight: isNaN(editDomainData.defaultWeight) ? 0 : editDomainData.defaultWeight
       };
       
-      const res = await fetch(`http://localhost:4000/api/admin/domains/${encodeURIComponent(id)}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${encodeURIComponent(id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -79,7 +79,7 @@ export default function DomainsEngine() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure? This will delete all indicators inside it!")) return;
     try {
-      await fetch(`http://localhost:4000/api/admin/domains/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/domains/${id}`, { method: "DELETE" });
       fetchDomains();
     } catch (e) {
       console.error(e);

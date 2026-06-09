@@ -17,7 +17,7 @@ export default function VoicesManager() {
   }, []);
 
   const fetchVoices = () => {
-    fetch("http://localhost:4000/api/media/voices")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`)
       .then(res => res.json())
       .then(json => {
         setVoices(json.data || []);
@@ -35,7 +35,7 @@ export default function VoicesManager() {
     formData.append("thumbnail", file);
 
     try {
-      const res = await fetch("http://localhost:4000/api/media/voices", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`, {
         method: "POST",
         body: formData,
       });
@@ -57,7 +57,7 @@ export default function VoicesManager() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this voice/video?")) return;
     try {
-      await fetch(`http://localhost:4000/api/media/voices/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices/${id}`, { method: "DELETE" });
       fetchVoices();
     } catch (e) {
       console.error(e);
@@ -126,7 +126,7 @@ export default function VoicesManager() {
           <div key={voice.id} className="bg-white rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
             <div className="h-40 bg-slate-200 relative">
               <img 
-                src={`http://localhost:4000${voice.thumbnailPath}`} 
+                src={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${voice.thumbnailPath}`} 
                 alt={voice.title} 
                 className="w-full h-full object-cover"
               />

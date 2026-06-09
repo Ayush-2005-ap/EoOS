@@ -12,7 +12,7 @@ export default function QueriesManager() {
   }, []);
 
   const fetchQueries = () => {
-    fetch("http://localhost:4000/api/queries")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries`)
       .then(res => res.json())
       .then(json => {
         setQueries(json.data || []);
@@ -22,7 +22,7 @@ export default function QueriesManager() {
 
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
-      const res = await fetch(`http://localhost:4000/api/queries/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
@@ -36,7 +36,7 @@ export default function QueriesManager() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this query?")) return;
     try {
-      await fetch(`http://localhost:4000/api/queries/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries/${id}`, { method: "DELETE" });
       fetchQueries();
     } catch (e) {
       console.error(e);

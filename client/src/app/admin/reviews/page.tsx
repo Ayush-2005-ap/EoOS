@@ -17,7 +17,7 @@ export default function ReviewsManager() {
   }, []);
 
   const fetchReviews = () => {
-    fetch("http://localhost:4000/api/media/reviews")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`)
       .then(res => res.json())
       .then(json => {
         setReviews(json.data || []);
@@ -30,7 +30,7 @@ export default function ReviewsManager() {
     if (!reviewerName || !reviewText) return alert("Name and Text are required");
 
     try {
-      const res = await fetch("http://localhost:4000/api/media/reviews", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reviewerName, reviewText, rating }),
@@ -53,7 +53,7 @@ export default function ReviewsManager() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     try {
-      await fetch(`http://localhost:4000/api/media/reviews/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews/${id}`, { method: "DELETE" });
       fetchReviews();
     } catch (e) {
       console.error(e);

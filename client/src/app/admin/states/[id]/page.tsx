@@ -25,12 +25,12 @@ export default function StateScoreEditor() {
 
   useEffect(() => {
     // Fetch generic hierarchy
-    fetch("http://localhost:4000/api/admin/hierarchy")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => setHierarchy(json.data || []));
 
     // Fetch this state's generic info
-    fetch(`http://localhost:4000/api/states`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/states`)
       .then(res => res.json())
       .then(json => {
         const found = json.data?.find((s: any) => s.id === stateId);
@@ -48,7 +48,7 @@ export default function StateScoreEditor() {
 
   const fetchStateScores = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/states/${stateId}/scores`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/scores`);
       const json = await res.json();
       setStateScores(json.data);
       
@@ -64,7 +64,7 @@ export default function StateScoreEditor() {
 
   const handleScoreSave = async (subId: string) => {
     try {
-      await fetch(`http://localhost:4000/api/admin/states/${stateId}/scores`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/scores`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -82,7 +82,7 @@ export default function StateScoreEditor() {
 
   const handleProfileSave = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/admin/states/${stateId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profileData),

@@ -21,7 +21,7 @@ export default function IndicatorDetails() {
   }, [indicatorId]);
 
   const fetchIndicator = () => {
-    fetch("http://localhost:4000/api/admin/hierarchy")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/hierarchy`)
       .then(res => res.json())
       .then(json => {
         let foundInd = null;
@@ -43,7 +43,7 @@ export default function IndicatorDetails() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/api/admin/sub-indicators", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ indicatorId, ...newSub }),
@@ -63,7 +63,7 @@ export default function IndicatorDetails() {
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this sub-indicator? This will delete all raw data for all states tied to it!")) return;
     try {
-      await fetch(`http://localhost:4000/api/admin/sub-indicators/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${id}`, { method: "DELETE" });
       fetchIndicator();
     } catch (e) {
       console.error(e);

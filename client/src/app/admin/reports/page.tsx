@@ -16,7 +16,7 @@ export default function ReportsManager() {
   }, []);
 
   const fetchReports = () => {
-    fetch("http://localhost:4000/api/media/reports")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`)
       .then(res => res.json())
       .then(json => {
         setReports(json.data || []);
@@ -33,7 +33,7 @@ export default function ReportsManager() {
     formData.append("pdf", file);
 
     try {
-      const res = await fetch("http://localhost:4000/api/media/reports", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`, {
         method: "POST",
         body: formData,
       });
@@ -54,7 +54,7 @@ export default function ReportsManager() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this report?")) return;
     try {
-      await fetch(`http://localhost:4000/api/media/reports/${id}`, { method: "DELETE" });
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports/${id}`, { method: "DELETE" });
       fetchReports();
     } catch (e) {
       console.error(e);
@@ -111,7 +111,7 @@ export default function ReportsManager() {
               <p className="text-xs text-slate-400 mt-2">Added: {new Date(report.createdAt).toLocaleDateString()}</p>
               
               <a 
-                href={`http://localhost:4000${report.pdfPath}`} 
+                href={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${report.pdfPath}`} 
                 target="_blank" 
                 rel="noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-secondary hover:underline"
