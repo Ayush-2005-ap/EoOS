@@ -24,6 +24,7 @@ export default function Simulator() {
 
   const [modifiedOrder, setModifiedOrder] = useState<string[]>([]);
   const [simulatedRankings, setSimulatedRankings] = useState<SimulatedState[]>([]);
+  const [initialRankings, setInitialRankings] = useState<Record<string, number>>({});
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,6 +38,32 @@ export default function Simulator() {
           initialWeights[d.id] = d.defaultWeight;
         });
         setWeights(initialWeights);
+
+        const rawInitial = states.map((state) => {
+          let score = 0;
+          for (const d in initialWeights) {
+            score += (state.scores[d] || 0) * (initialWeights[d] / 100);
+          }
+          return {
+            id: state.id,
+            name: state.name,
+            simulatedScore: parseFloat(score.toFixed(2)),
+          };
+        });
+
+        rawInitial.sort((a, b) => {
+          if (b.simulatedScore !== a.simulatedScore) {
+            return b.simulatedScore - a.simulatedScore;
+          }
+          return a.name.localeCompare(b.name);
+        });
+
+        const initRanks: Record<string, number> = {};
+        rawInitial.forEach((state, index) => {
+          initRanks[state.id] = index + 1;
+        });
+        setInitialRankings(initRanks);
+
         setIsLoading(false);
       })
       .catch(err => {
@@ -180,7 +207,8 @@ export default function Simulator() {
     const finalSimulated: SimulatedState[] = rawSimulated.map((state, index) => {
       const simulatedRank = index + 1;
       const baseState = statesData.find((s) => s.id === state.id)!;
-      const rankChange = baseState.baseRank - simulatedRank; // positive = rank improved
+      const originalRank = initialRankings[state.id] || baseState.baseRank;
+      const rankChange = originalRank - simulatedRank; // positive = rank improved
 
       return {
         ...state,
@@ -190,19 +218,19 @@ export default function Simulator() {
     });
 
     setSimulatedRankings(finalSimulated);
-  }, [weights, statesData]);
+  }, [weights, statesData, initialRankings]);
 
   // Export CSV of custom rankings
   const exportSimulatedCSV = () => {
     const headers = ["Simulated Rank", "State Name", "Simulated Score", "Rank Change", "Original Rank"];
     const rows = simulatedRankings.map((s) => {
-      const baseState = statesData.find((o) => o.id === s.id)!;
+      const originalRank = initialRankings[s.id] || baseState.baseRank;
       return [
         s.simulatedRank,
         s.name,
         s.simulatedScore,
         s.rankChange > 0 ? `+${s.rankChange}` : s.rankChange,
-        baseState.baseRank
+        originalRank
       ];
     });
 
@@ -377,7 +405,7 @@ export default function Simulator() {
                       </thead>
                       <tbody className="divide-y divide-outline-variant/20">
                         {simulatedRankings.map((state) => {
-                          const originalRank = statesData.find((o) => o.id === state.id)!.baseRank;
+                          const originalRank = initialRankings[state.id] || statesData.find((o) => o.id === state.id)!.baseRank;
                           const improvement = state.rankChange;
 
                           return (
