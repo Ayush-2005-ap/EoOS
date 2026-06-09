@@ -292,8 +292,10 @@ async function main() {
       const scores = group.map((sub) => (sub.stateScores[stateName]?.score ?? 0));
       const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
 
-      await prisma.stateIndicatorScore.create({
-        data: {
+      await prisma.stateIndicatorScore.upsert({
+        where: { stateId_indicatorId: { stateId, indicatorId } },
+        update: { score: parseFloat((avg * 100).toFixed(2)) },
+        create: {
           stateId,
           indicatorId,
           score: parseFloat((avg * 100).toFixed(2)),

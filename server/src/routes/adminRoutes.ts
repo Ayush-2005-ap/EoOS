@@ -286,7 +286,7 @@ router.put("/states/:stateId/scores", async (req, res) => {
           data: { rank: i + 1 },
         });
       }
-    });
+    }, { timeout: 60000, maxWait: 10000 });
 
     res.json({ message: "Score updated and recalculations complete." });
   } catch (error: any) {
@@ -401,7 +401,7 @@ router.put("/states/:stateId/indicators/:indicatorId/scores", async (req, res) =
           data: { rank: i + 1 },
         });
       }
-    });
+    }, { timeout: 60000, maxWait: 10000 });
 
     res.json({ message: "Indicator scores updated and recalculations complete." });
   } catch (error: any) {
