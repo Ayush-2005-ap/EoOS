@@ -153,7 +153,7 @@ export default function Home() {
                       style={{ transform: "translateZ(-10px) rotateY(180deg)" }}
                     >
                       <Image
-                        src="/Cover-01-back.png"
+                        src="/cover-back.png"
                         alt="Education Out-of-School Index 2024 Back Cover"
                         fill
                         className="object-cover"
