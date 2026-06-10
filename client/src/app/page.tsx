@@ -139,7 +139,7 @@ export default function Home() {
                       style={{ transform: "translateZ(10px)" }}
                     >
                       <Image
-                        src="/Cover-01.png"
+                        src="/cover.png"
                         alt="Education Out-of-School Index 2024 Cover"
                         fill
                         className="object-cover"
