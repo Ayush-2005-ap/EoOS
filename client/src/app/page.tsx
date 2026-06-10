@@ -92,18 +92,26 @@ export default function Home() {
             <div className="lg:col-span-7 space-y-8 text-left">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-secondary/20 text-secondary-fixed rounded-full text-[12px] font-bold tracking-wider uppercase border border-secondary/30">
                 <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                CCS Research Edition 2024
+                CCS Research Edition 2026
               </span>
-              <h1 className="font-plus-jakarta text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1]">
-                The State of India's <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary-fixed to-secondary-container">
-                  Out-of-School
-                </span>{" "}
-                Education
-              </h1>
-              <p className="text-on-primary-container text-[16px] sm:text-[18px] leading-relaxed max-w-2xl">
-                A research-grade education intelligence platform tracking state-level performance across India. Evaluate official parameters, explore domain statistics, and test custom policies using the weightage simulator.
-              </p>
+              <div className="font-serif">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-normal leading-[1.15] text-white">
+                  The Ease of<br />
+                  <span className="text-[#FFCC00] block my-1">
+                    OPERATING<br />
+                    SCHOOLS
+                  </span>
+                  Index 2026
+                </h1>
+                
+                <div className="w-64 sm:w-96 h-[1.5px] bg-[#FFCC00] mt-4 mb-5"></div>
+                
+                <p className="text-white text-[17px] sm:text-[20px] leading-[1.4] font-medium tracking-wide">
+                  A Comparative Assement of<br />
+                  School Regulatory Frameworks<br />
+                  Across Indian States
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <Link href="/explore">
                   <button className="w-full sm:w-auto bg-secondary text-white px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-secondary-container transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/25 hover:-translate-y-0.5">
