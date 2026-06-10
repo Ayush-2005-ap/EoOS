@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Menu, X, Search } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchInput.trim()) {
+      router.push(`/explore?q=${encodeURIComponent(searchInput.trim())}`);
+      setMobileMenuOpen(false);
+    }
+  };
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -66,6 +75,9 @@ export default function Header() {
             <input
               type="text"
               placeholder="Search insights..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={handleSearch}
               className="pl-9 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-[13px] focus:outline-none focus:ring-2 focus:ring-secondary/20 w-44 transition-all"
             />
           </div>
@@ -108,6 +120,9 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="Search insights..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleSearch}
                 className="pl-9 pr-4 py-2 bg-surface-container-low border-none rounded-full text-[14px] focus:outline-none focus:ring-2 focus:ring-secondary/20 w-full"
               />
             </div>

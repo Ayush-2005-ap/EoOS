@@ -24,6 +24,13 @@ export default function ExploreRankings() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Pick up search query from URL if navigated from header
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const q = urlParams.get("q");
+      if (q) setSearchQuery(q);
+    }
+
     Promise.all([fetchStates(), fetchDomains()])
       .then(([states, domains]) => {
         setStatesData(states);
