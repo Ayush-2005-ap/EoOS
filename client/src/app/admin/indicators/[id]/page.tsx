@@ -75,6 +75,28 @@ export default function IndicatorDetails() {
     }
   };
 
+  const [editingSubId, setEditingSubId] = useState<string | null>(null);
+  const [editSubName, setEditSubName] = useState("");
+  const [editSubMaxScore, setEditSubMaxScore] = useState(1.0);
+
+  const handleEditSub = async (subId: string) => {
+    try {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/sub-indicators/${subId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: editSubName, maxScore: editSubMaxScore }),
+      });
+      if (res.ok) {
+        setEditingSubId(null);
+        fetchIndicator();
+      } else {
+        alert("Failed to update sub-indicator");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   if (loading) return <div className="p-8">Loading...</div>;
   if (!indicator) return <div className="p-8">Indicator not found.</div>;
 
@@ -117,13 +139,42 @@ export default function IndicatorDetails() {
       <div className="grid grid-cols-1 gap-4">
         {indicator.subIndicators.map((sub: any) => (
           <div key={sub.id} className="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 flex justify-between items-center">
-            <div>
-              <h3 className="font-semibold text-slate-800">{sub.name}</h3>
-              <p className="text-xs font-bold text-slate-500 mt-1">Max Score: {sub.maxScore}</p>
-            </div>
-            <button onClick={() => setDeleteConfirmId(sub.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
-              <Trash2 size={18} />
-            </button>
+            {editingSubId === sub.id ? (
+              <div className="flex-1 mr-4 flex gap-2">
+                <input 
+                  type="text" 
+                  value={editSubName} 
+                  onChange={(e) => setEditSubName(e.target.value)} 
+                  className="flex-1 p-2 border rounded-lg focus:ring-2 focus:ring-secondary/20 outline-none"
+                  autoFocus
+                />
+                <input 
+                  type="number" 
+                  step="0.1"
+                  value={editSubMaxScore} 
+                  onChange={(e) => setEditSubMaxScore(parseFloat(e.target.value))} 
+                  className="w-24 p-2 border rounded-lg focus:ring-2 focus:ring-secondary/20 outline-none"
+                />
+                <button onClick={() => handleEditSub(sub.id)} className="px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm">Save</button>
+                <button onClick={() => setEditingSubId(null)} className="px-4 py-2 text-slate-500 font-bold text-sm">Cancel</button>
+              </div>
+            ) : (
+              <div>
+                <h3 className="font-semibold text-slate-800">{sub.name}</h3>
+                <p className="text-xs font-bold text-slate-500 mt-1">Max Score: {sub.maxScore}</p>
+              </div>
+            )}
+            
+            {editingSubId !== sub.id && (
+              <div className="flex items-center gap-3">
+                <button onClick={() => { setEditingSubId(sub.id); setEditSubName(sub.name); setEditSubMaxScore(sub.maxScore); }} className="p-2 text-secondary hover:bg-secondary/10 rounded-lg transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                </button>
+                <button onClick={() => setDeleteConfirmId(sub.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors">
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
