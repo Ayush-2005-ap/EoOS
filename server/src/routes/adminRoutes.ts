@@ -11,7 +11,7 @@ router.use(requireAdmin);
 // ─── PDF Upload Route ────────────────────────────────────────────────────────
 router.post("/states/:id/pdf", upload.single("pdf"), async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     if (!req.file) {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
