@@ -12,8 +12,9 @@ const prisma_1 = __importDefault(require("../lib/prisma"));
  */
 async function getAllDomains(req, res) {
     try {
+        console.log("HELLO FROM GETALLDOMAINS");
         const domains = await prisma_1.default.domain.findMany({
-            orderBy: { id: "asc" },
+            orderBy: { name: "asc" },
             include: {
                 indicators: {
                     orderBy: { id: "asc" },
@@ -25,6 +26,7 @@ async function getAllDomains(req, res) {
                 },
             },
         });
+        domains.sort((a, b) => a.name.localeCompare(b.name));
         return res.json({ data: domains, count: domains.length });
     }
     catch (error) {

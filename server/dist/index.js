@@ -17,9 +17,18 @@ app.use(express_1.default.json());
 app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
-// ─── Routes ──────────────────────────────────────────────────────────────────
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const mediaRoutes_1 = __importDefault(require("./routes/mediaRoutes"));
+const queryRoutes_1 = __importDefault(require("./routes/queryRoutes"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const path_1 = __importDefault(require("path"));
+app.use("/public", express_1.default.static(path_1.default.join(__dirname, "../../public")));
+app.use("/api/auth", authRoutes_1.default);
 app.use("/api/states", stateRoutes_1.default);
 app.use("/api/domains", domainRoutes_1.default);
+app.use("/api/admin", adminRoutes_1.default);
+app.use("/api/media", mediaRoutes_1.default);
+app.use("/api/queries", queryRoutes_1.default);
 // ─── 404 Catch-all ───────────────────────────────────────────────────────────
 app.use((_req, res) => {
     res.status(404).json({ error: "Route not found." });
