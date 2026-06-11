@@ -364,13 +364,7 @@ export default function StateDashboard() {
                           <ul className="space-y-2 border-t border-outline-variant/20 pt-2">
                             {indicator.subIndicators.map((sub, index) => (
                               <li key={index} className="flex gap-2.5 items-start text-[13px]">
-                                {sub.score === 1.0 ? (
-                                  <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
-                                ) : sub.score === 0.5 ? (
-                                  <RefreshCw size={16} className="text-amber-500 shrink-0 mt-0.5" />
-                                ) : (
-                                  <AlertCircle size={16} className="text-error shrink-0 mt-0.5" />
-                                )}
+                                <div className="w-1.5 h-1.5 rounded-full bg-outline shrink-0 mt-1.5" />
                                 <div className="space-y-0.5">
                                   <p className="text-on-surface font-medium">{sub.name}</p>
                                   <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
