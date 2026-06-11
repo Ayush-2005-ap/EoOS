@@ -367,9 +367,6 @@ export default function StateDashboard() {
                                 <div className="w-1.5 h-1.5 rounded-full bg-outline shrink-0 mt-1.5" />
                                 <div className="space-y-0.5">
                                   <p className="text-on-surface font-medium">{sub.name}</p>
-                                  <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                                    Compliance: {sub.status}
-                                  </p>
                                 </div>
                               </li>
                             ))}
