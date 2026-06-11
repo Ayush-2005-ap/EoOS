@@ -1,12 +1,36 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Download, FileText, Table, BookOpen, ExternalLink, HelpCircle } from "lucide-react";
+import { fetchStates, ApiStateData } from "@/services/api";
+import { Download, FileText, Table, BookOpen, ExternalLink, HelpCircle, Loader2, Search } from "lucide-react";
 
 export default function Resources() {
-  const downloads = [
+  const [states, setStates] = useState<ApiStateData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetchStates()
+      .then((data) => {
+        // Sort states alphabetically
+        const sorted = data.sort((a, b) => a.name.localeCompare(b.name));
+        setStates(sorted);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const filteredStates = states.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const mainDownloads = [
     {
-      title: "CCS Education Out-of-School Index Report 2024",
-      type: "PDF Report",
+      title: "The Ease of Operating Schools Index 2026",
+      type: "Official Report (PDF)",
       size: "14.2 MB",
       desc: "The complete annual report publishing national rankings, domain-wise findings, state profiles, and policy recommendations.",
       icon: BookOpen,
@@ -14,14 +38,14 @@ export default function Resources() {
     },
     {
       title: "Index Methodology Whitepaper",
-      type: "PDF Technical Guide",
+      type: "Technical Guide (PDF)",
       size: "3.8 MB",
       desc: "Detailed academic explanation of the scoring rules, indicator definitions, geometric mean aggregation logic, and normalization formulas.",
       icon: FileText,
       color: "bg-primary/10 text-primary",
     },
     {
-      title: "Complete State-Wise Scores Dataset 2024",
+      title: "Complete State-Wise Scores Dataset 2026",
       type: "Excel Workbook (.xlsx)",
       size: "8.5 MB",
       desc: "Full flat data sheet containing all 80+ sub-indicator raw scores, normalized scores, and domain aggregates for all 36 states and UTs.",
@@ -43,45 +67,100 @@ export default function Resources() {
               Resources & Downloads
             </h1>
             <p className="text-on-surface-variant text-[15px] max-w-xl">
-              Access raw datasets, academic whitepapers, and our annual national reports to verify our research findings.
+              Access raw datasets, academic whitepapers, and our annual national reports. Individual state-wise performance profiles are also available for localized policy analysis.
             </p>
           </div>
         </section>
 
-        <section className="max-w-container-max-width mx-auto px-gutter py-12 space-y-12">
+        <section className="max-w-container-max-width mx-auto px-gutter py-12 space-y-16">
           {/* Main Downloads Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {downloads.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={idx}
-                  className="bg-white rounded-2xl border border-outline-variant/35 shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col justify-between h-80"
-                >
-                  <div className="space-y-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.color}`}>
-                      <Icon size={24} />
+          <div>
+            <h2 className="font-plus-jakarta text-2xl font-extrabold text-primary mb-6">Featured Publications</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {mainDownloads.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-2xl border border-outline-variant/35 shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col justify-between h-80"
+                  >
+                    <div className="space-y-4">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.color}`}>
+                        <Icon size={24} />
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="font-plus-jakarta text-lg font-bold text-primary leading-snug">
+                          {item.title}
+                        </h3>
+                        <span className="inline-block text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
+                          {item.type} • {item.size}
+                        </span>
+                      </div>
+                      <p className="text-on-surface-variant text-[13px] leading-relaxed line-clamp-3">
+                        {item.desc}
+                      </p>
                     </div>
-                    <div className="space-y-1">
-                      <h3 className="font-plus-jakarta text-lg font-bold text-primary leading-snug">
-                        {item.title}
-                      </h3>
-                      <span className="inline-block text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
-                        {item.type} • {item.size}
-                      </span>
-                    </div>
-                    <p className="text-on-surface-variant text-[13px] leading-relaxed line-clamp-3">
-                      {item.desc}
-                    </p>
+                    
+                    <button className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm">
+                      <Download size={14} />
+                      Download File
+                    </button>
                   </div>
-                  
-                  <button className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm">
-                    <Download size={14} />
-                    Download File
-                  </button>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          {/* State Profiles Grid */}
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 className="font-plus-jakarta text-2xl font-extrabold text-primary">State & UT Profiles</h2>
+                <p className="text-on-surface-variant text-[14px]">Download 2-page graphical factsheets summarizing the performance of individual regions.</p>
+              </div>
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search states..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center py-20 gap-4 text-primary bg-white rounded-2xl border border-outline-variant/30">
+                <Loader2 className="animate-spin" size={32} />
+                <p className="font-plus-jakarta font-semibold animate-pulse text-[14px]">Loading state profiles...</p>
+              </div>
+            ) : filteredStates.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-outline-variant/30">
+                <p className="text-on-surface-variant font-medium">No states found matching "{searchQuery}"</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filteredStates.map((state) => (
+                  <div key={state.id} className="bg-white p-4 rounded-xl border border-outline-variant/30 hover:border-secondary/50 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between h-32">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-bold text-primary text-[14px] leading-tight group-hover:text-secondary transition-colors">
+                        {state.name}
+                      </h3>
+                      <FileText size={16} className="text-outline shrink-0 group-hover:text-secondary" />
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <span className="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded uppercase">
+                        {state.type === 'State' ? 'STATE' : 'UT'}
+                      </span>
+                      <button className="text-secondary font-bold text-[12px] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Download size={12} /> PDF
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Academic Transparency / Open Data callout */}
@@ -95,15 +174,6 @@ export default function Resources() {
                 All algorithms, raw source data, and scoring rules for the EoOS Index are public domain. We encourage external researchers, academics, and state education departments to audit our code and methodologies.
               </p>
             </div>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-primary hover:bg-surface-container-low px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shrink-0 shadow-md"
-            >
-              Auditing Github Codebase
-              <ExternalLink size={14} />
-            </a>
           </div>
         </section>
       </main>
