@@ -357,7 +357,7 @@ export default function StateDashboard() {
                               {indicator.indicatorName}
                             </h4>
                             <span className="bg-white text-secondary px-2.5 py-0.5 rounded-full text-[12px] font-extrabold shadow-sm border border-outline-variant/20">
-                              {indicator.score}%
+                              {indicator.score}
                             </span>
                           </div>
 
