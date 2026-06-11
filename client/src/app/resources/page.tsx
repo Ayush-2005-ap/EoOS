@@ -151,7 +151,7 @@ export default function Resources() {
                     </div>
                     <div className="flex items-center justify-between mt-4">
                       <span className="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded uppercase">
-                        {state.type === 'State' ? 'STATE' : 'UT'}
+                        {state.type}
                       </span>
                       <button className="text-secondary font-bold text-[12px] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <Download size={12} /> PDF
