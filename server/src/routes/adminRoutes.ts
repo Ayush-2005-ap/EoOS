@@ -1,11 +1,48 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { requireAdmin } from "../middleware/authMiddleware";
+import { upload, cloudinary } from "../middlewares/upload";
 
 const router = Router();
 const prisma = new PrismaClient();
 
 router.use(requireAdmin);
+
+// ─── PDF Upload Route ────────────────────────────────────────────────────────
+router.post("/states/:id/pdf", upload.single("pdf"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!req.file) {
+      return res.status(400).json({ error: "No PDF file uploaded" });
+    }
+
+    // Upload buffer to Cloudinary via stream
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: "state_profiles", resource_type: "raw" }, // Use "raw" for PDFs if not converting to images, or "image" if using cloudinary PDF features. "raw" is safer for pure download/view.
+      async (error, result) => {
+        if (error || !result) {
+          console.error("Cloudinary upload error:", error);
+          return res.status(500).json({ error: "Failed to upload to Cloudinary" });
+        }
+
+        // Update database
+        const updatedState = await prisma.state.update({
+          where: { id },
+          data: { pdfUrl: result.secure_url },
+        });
+
+        res.json({ message: "PDF uploaded successfully", data: updatedState });
+      }
+    );
+
+    // End stream with buffer
+    uploadStream.end(req.file.buffer);
+
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // ─── 1. Get Full Structure Hierarchy ─────────────────────────────────────────
 router.get("/hierarchy", async (_req, res) => {

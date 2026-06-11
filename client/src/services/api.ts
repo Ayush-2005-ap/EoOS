@@ -5,6 +5,7 @@ export interface ApiStateData {
   region: string;
   baseScore: number;
   baseRank: number;
+  pdfUrl?: string;
   scores: Record<string, number>;
   indicators?: Record<string, { name: string; score: number }[]>;
 }

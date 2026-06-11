@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { adminFetch } from "@/utils/api";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronDown, ChevronRight, Save, Activity, ArrowLeft } from "lucide-react";
+import { ChevronDown, ChevronRight, Save, Activity, ArrowLeft, Upload, FileText } from "lucide-react";
 
 export default function StateScoreEditor() {
   const params = useParams();
@@ -101,6 +101,35 @@ export default function StateScoreEditor() {
     }
   };
 
+  const [isUploadingPDF, setIsUploadingPDF] = useState(false);
+  const handlePDFUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingPDF(true);
+    const formData = new FormData();
+    formData.append("pdf", file);
+
+    try {
+      const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/admin/states/${stateId}/pdf`, {
+        method: "POST",
+        body: formData,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setStateData({ ...stateData, pdfUrl: json.data.pdfUrl });
+        alert("PDF uploaded successfully!");
+      } else {
+        alert("Failed to upload PDF");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while uploading PDF");
+    } finally {
+      setIsUploadingPDF(false);
+    }
+  };
+
   if (!stateScores || !hierarchy.length) return <div className="p-8 text-slate-500 font-medium">Loading Scoring Engine...</div>;
 
   return (
@@ -183,6 +212,35 @@ export default function StateScoreEditor() {
               </div>
             </div>
           )}
+        </div>
+
+        {/* PDF Upload Section */}
+        <div className="mb-8 p-6 bg-blue-50/50 border border-blue-100 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <FileText className="text-blue-600" size={20} />
+              State Profile PDF Report
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">Upload the official PDF report. It will be stored securely on Cloudinary.</p>
+            {stateData?.pdfUrl && (
+              <a href={stateData.pdfUrl} target="_blank" rel="noreferrer" className="text-blue-600 text-[13px] font-bold hover:underline mt-2 inline-block">
+                View Current PDF
+              </a>
+            )}
+          </div>
+          <div className="relative">
+            <input 
+              type="file" 
+              accept=".pdf" 
+              onChange={handlePDFUpload} 
+              disabled={isUploadingPDF}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed" 
+            />
+            <div className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[14px] transition-all shadow-sm ${isUploadingPDF ? 'bg-slate-200 text-slate-500' : 'bg-white border border-outline-variant/50 text-primary hover:border-primary cursor-pointer'}`}>
+              <Upload size={16} className={isUploadingPDF ? 'animate-bounce' : ''} />
+              {isUploadingPDF ? 'Uploading...' : 'Upload PDF'}
+            </div>
+          </div>
         </div>
 
         <div className="space-y-4">

@@ -17,6 +17,7 @@ model State {
   region              String  // North, South, etc.
   stateOfSchooling    String?
   regulatoryFramework String?
+  pdfUrl              String?
   baseScore           Float   // Pre-calculated score
   baseRank            Int     // Pre-calculated rank
   updatedAt           DateTime @default(now()) @updatedAt

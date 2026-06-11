@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
 import { Download, FileText, Table, BookOpen, ExternalLink, HelpCircle, Loader2, Search } from "lucide-react";
+import Link from "next/link";
 
 export default function Resources() {
   const [states, setStates] = useState<ApiStateData[]>([]);
@@ -142,22 +143,24 @@ export default function Resources() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {filteredStates.map((state) => (
-                  <div key={state.id} className="bg-white p-4 rounded-xl border border-outline-variant/30 hover:border-secondary/50 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between h-32">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-bold text-primary text-[14px] leading-tight group-hover:text-secondary transition-colors">
-                        {state.name}
-                      </h3>
-                      <FileText size={16} className="text-outline shrink-0 group-hover:text-secondary" />
+                  <Link key={state.id} href={`/resources/state/${state.id}`} className="block">
+                    <div className="bg-white p-4 rounded-xl border border-outline-variant/30 hover:border-secondary/50 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between h-32">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-bold text-primary text-[14px] leading-tight group-hover:text-secondary transition-colors">
+                          {state.name}
+                        </h3>
+                        <FileText size={16} className="text-outline shrink-0 group-hover:text-secondary" />
+                      </div>
+                      <div className="flex items-center justify-between mt-4">
+                        <span className="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded uppercase">
+                          {state.type}
+                        </span>
+                        <button className="text-secondary font-bold text-[12px] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Download size={12} /> View PDF
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between mt-4">
-                      <span className="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded uppercase">
-                        {state.type}
-                      </span>
-                      <button className="text-secondary font-bold text-[12px] flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Download size={12} /> PDF
-                      </button>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
