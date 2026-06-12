@@ -34,6 +34,7 @@ export async function getAllStates(req: Request, res: Response) {
       region: state.region,
       baseScore: state.baseScore,
       baseRank: state.baseRank,
+      pdfUrl: state.pdfUrl,
       scores: Object.fromEntries(
         state.domainScores.map((ds) => [ds.domainId, ds.score])
       ),
@@ -152,6 +153,7 @@ export async function getStateById(req: Request, res: Response) {
       region: state.region,
       baseScore: state.baseScore,
       baseRank: state.baseRank,
+      pdfUrl: state.pdfUrl,
       stateOfSchooling: state.stateOfSchooling,
       regulatoryFramework: state.regulatoryFramework,
       domains: Object.values(domainMap).map((d) => ({
