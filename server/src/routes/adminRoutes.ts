@@ -18,7 +18,7 @@ router.post("/states/:id/pdf", upload.single("pdf"), async (req, res) => {
 
     // Upload buffer to Cloudinary via stream
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "state_profiles", resource_type: "raw" }, // Use "raw" for PDFs if not converting to images, or "image" if using cloudinary PDF features. "raw" is safer for pure download/view.
+      { folder: "state_profiles", resource_type: "image" }, // Use "image" so PDFs can be rendered inline in an iframe instead of forcing a download
       async (error, result) => {
         if (error || !result) {
           console.error("Cloudinary upload error:", error);
