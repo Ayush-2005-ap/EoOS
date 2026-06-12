@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import { BookOpen, Star, HelpCircle, Users, CheckCircle, Database } from "lucide-react";
+import { BookOpen, Star, HelpCircle, Users, CheckCircle, Database, Linkedin } from "lucide-react";
 
 export default function About() {
   const steps = [
@@ -48,6 +48,8 @@ export default function About() {
       org: "Indian Institute of Policy Studies",
       desc: "Leading expert in education economics with over 20 years of experience in data modeling.",
       avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCGeQmu30QhG5ZWayD5BTlpX6pLL6GgXcLaZlzQxE4-Cn0cLM1_9HF8GKmZecA4VD4hy9rRAfowDDfFRqhO_5BD4LNQHOgfX2pa14B3_kktnE2DH4nP1vW2oIQcFxahsxMxsSTFOz--R6DCaQ9pQ3Eps27VLTwY9HpT_nsxj_qi0Oqxcy49859Dh2DBlQxBLVwVrZLNbIHHUgWKg9wjuE7RVCHQcAMc-GUmda9URk1j1XMnERlfBOOmy7EZY33RpuesNz1tBmXvgc3A",
+      linkedin: "#",
+      orcid: "#",
     },
     {
       name: "Vikram Malhotra",
@@ -55,6 +57,8 @@ export default function About() {
       org: "CCS Research Lab",
       desc: "Specializes in large-scale geospatial data analysis and socioeconomic indicators.",
       avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAgzRIPpJuLDE25qEcXrjyF2QSOehqZeMXe_n1C6SZ_3qEzSAWUDso-bSvBzRG2ejcBPe34gtElpDH-EnYxM-WiwgHR3EZ591CoESrRStEwmef_kLwYvVNOEKyaNkbB0JvT2_x_akhMN7MUCsitXLnurLahnjw_jJKvu6WNibcLT8PItljnnyOewhWy6UKnxwOeBhO_nv5TK-XCzzNHTxbHsz7lA-5a9ncWZWdaRi_e0iwsFlOd7GY-SOOKxIf0QXScOQGN4kgOtwnA",
+      linkedin: "#",
+      orcid: "#",
     },
     {
       name: "Dr. Priya Verma",
@@ -62,6 +66,8 @@ export default function About() {
       org: "Global Education Council",
       desc: "Former education ministry advisor focused on bridge-school frameworks and child rights.",
       avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAuPFulSo_f7gqTqPl4KzkIcK_JAl8nxqHQXWArHALr6cl2lGhzSaAwKFSMGa4zLAktfm-JSASlrCR7QqW4UqGHpNLiMFSGFLL5grMW9bldPsXkq3MQGF6TzuZv9Ly5xKEYc_MZGfPYdjjonUIIuTBZgp4RlUnUWBFuqQDZZ6gl7tjcvQIPzU9_yD2jzq5wQkYWghmsuMs4tNXqflLNRikokrNYRzi6zuZHxkG5M0auCYnQHQKcnWvdL5dcLx84By_nQ0_Ks9M2FbWC",
+      linkedin: "#",
+      orcid: "#",
     },
   ];
 
@@ -254,7 +260,7 @@ export default function About() {
               {researchers.map((person) => (
                 <div
                   key={person.name}
-                  className="bg-surface-container-low/50 p-8 rounded-2xl shadow-sm border border-outline-variant/30 text-center space-y-4"
+                  className="group bg-surface-container-low/50 p-8 rounded-2xl shadow-sm border border-outline-variant/30 text-center space-y-4 relative overflow-hidden"
                 >
                   <div className="w-20 h-20 rounded-full mx-auto overflow-hidden relative shadow-md">
                     <img
@@ -272,9 +278,31 @@ export default function About() {
                       {person.org}
                     </div>
                   </div>
-                  <p className="text-on-surface-variant text-[14px] leading-relaxed">
+                  <p className="text-on-surface-variant text-[14px] leading-relaxed relative z-10 bg-surface-container-low pb-2">
                     {person.desc}
                   </p>
+
+                  {/* Hover Pop-out for Socials */}
+                  <div className="absolute -bottom-16 left-0 right-0 flex justify-center gap-4 p-4 bg-white/95 backdrop-blur-sm transition-all duration-300 group-hover:bottom-0 border-t border-outline-variant/20 z-20">
+                    <a 
+                      href={person.linkedin} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="w-10 h-10 rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors"
+                      title="Connect on LinkedIn"
+                    >
+                      <Linkedin size={18} />
+                    </a>
+                    <a 
+                      href={person.orcid} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="w-10 h-10 rounded-full bg-[#A6CE39]/10 text-[#A6CE39] flex items-center justify-center hover:bg-[#A6CE39] hover:text-white transition-colors"
+                      title="View ORCID Profile"
+                    >
+                      <div className="font-bold font-serif text-[15px] leading-none">iD</div>
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
