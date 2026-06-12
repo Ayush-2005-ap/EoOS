@@ -57,7 +57,7 @@ export default function StateResourceViewer() {
               <div className="p-6 md:p-8 border-b border-outline-variant/20 flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[11px] font-bold text-primary bg-primary-container px-2 py-0.5 rounded uppercase">
+                    <span className="text-[11px] font-bold text-primary bg-cover px-2 py-0.5 rounded uppercase">
                       {stateData.type}
                     </span>
                     <span className="text-[11px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded uppercase">
