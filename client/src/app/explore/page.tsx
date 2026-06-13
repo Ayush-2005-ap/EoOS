@@ -118,21 +118,19 @@ export default function ExploreRankings() {
     document.body.removeChild(link);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-surface-container-lowest">
-        <div className="flex flex-col items-center gap-4 text-primary">
-          <Loader2 className="animate-spin" size={48} />
-          <p className="font-plus-jakarta font-semibold animate-pulse">Loading Index Data...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Header />
       <main className="flex-grow pt-16 bg-surface-container-low/40">
+        {isLoading ? (
+          <div className="min-h-[80vh] flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4 text-primary">
+              <Loader2 className="animate-spin" size={48} />
+              <p className="font-plus-jakarta font-semibold animate-pulse">Loading Index Data...</p>
+            </div>
+          </div>
+        ) : (
+          <>
         <section className="py-12 bg-white border-b border-outline-variant/30">
           <div className="max-w-container-max-width mx-auto px-gutter flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div className="space-y-2">
@@ -311,6 +309,8 @@ export default function ExploreRankings() {
             </div>
           </div>
         </section>
+        </>
+        )}
       </main>
       <Footer />
     </>
