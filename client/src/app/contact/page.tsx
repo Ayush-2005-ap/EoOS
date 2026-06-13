@@ -56,7 +56,7 @@ export default function Contact() {
                     <Mail size={18} className="text-secondary mt-0.5" />
                     <div>
                       <p className="font-bold text-primary">Email Research Queries</p>
-                      <p>research@ccsindia.org</p>
+                      <p>research@ccs.in</p>
                     </div>
                   </div>
 
@@ -64,7 +64,10 @@ export default function Contact() {
                     <Phone size={18} className="text-secondary mt-0.5" />
                     <div>
                       <p className="font-bold text-primary">Phone Inquiries</p>
-                      <p>+91 (11) 2653-7456</p>
+                      <p>+91-11-2653-7456/
+                        <br />
+                        26521882
+                      </p>
                     </div>
                   </div>
 
@@ -79,6 +82,20 @@ export default function Contact() {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="rounded-2xl overflow-hidden border border-outline-variant/30 shadow-sm h-64 relative bg-surface-container-low group">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.8931496152013!2d77.20840437526233!3d28.55329897570809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2134f81ff19%3A0x6053802de1118894!2sCentre%20for%20Civil%20Society!5e1!3m2!1sen!2sin!4v1781337668182!5m2!1sen!2sin" 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0, filter: "grayscale(100%) contrast(120%)" }} 
+                  allowFullScreen={false} 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="transition-all duration-500 group-hover:filter-none"
+                ></iframe>
+                <div className="absolute inset-0 bg-[#004b87]/30 pointer-events-none mix-blend-color transition-opacity duration-500 group-hover:opacity-0"></div>
               </div>
             </div>
 

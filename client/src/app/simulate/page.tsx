@@ -394,7 +394,7 @@ export default function Simulator() {
                             State
                           </th>
                           <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-center w-32">
-                            Original Rank
+                            CCS Rank
                           </th>
                           <th className="py-3.5 px-6 font-plus-jakarta text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right w-24">
                             Score
