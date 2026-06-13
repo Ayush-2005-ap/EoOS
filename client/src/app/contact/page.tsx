@@ -12,14 +12,33 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name && email && message) {
-      setSubmitted(true);
-      setName("");
-      setEmail("");
-      setOrg("");
-      setMessage("");
+      setLoading(true);
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/queries`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, org, subject: "Contact Form Query", message })
+        });
+        if (res.ok) {
+          setSubmitted(true);
+          setName("");
+          setEmail("");
+          setOrg("");
+          setMessage("");
+        } else {
+          alert("Failed to send message. Please try again later.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("An error occurred. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -181,10 +200,11 @@ export default function Contact() {
 
                     <button
                       type="submit"
-                      className="w-full py-3 bg-secondary text-white hover:bg-secondary-container font-bold text-[14px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-secondary/15"
+                      disabled={loading}
+                      className="w-full py-3 bg-secondary text-white hover:bg-secondary-container font-bold text-[14px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-secondary/15 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       <Send size={15} />
-                      Send Message
+                      {loading ? "Sending..." : "Send Message"}
                     </button>
                   </form>
                 )}
