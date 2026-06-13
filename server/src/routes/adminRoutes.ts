@@ -530,14 +530,14 @@ router.post("/authors", upload.single("avatar"), async (req, res) => {
 
     const newAuthor = await prisma.author.create({
       data: {
-        name,
-        role,
-        organization,
-        description,
-        linkedinUrl: linkedinUrl || null,
-        orcidUrl: orcidUrl || null,
+        name: name as string,
+        role: role as string,
+        organization: organization as string,
+        description: description as string,
+        linkedinUrl: (linkedinUrl as string) || null,
+        orcidUrl: (orcidUrl as string) || null,
         avatarUrl,
-        orderIndex: orderIndex ? parseInt(orderIndex) : 0,
+        orderIndex: orderIndex ? parseInt(orderIndex as string) : 0,
       },
     });
 
@@ -568,16 +568,16 @@ router.put("/authors/:id", upload.single("avatar"), async (req, res) => {
     }
 
     const updatedAuthor = await prisma.author.update({
-      where: { id },
+      where: { id: id as string },
       data: {
-        name,
-        role,
-        organization,
-        description,
-        linkedinUrl: linkedinUrl || null,
-        orcidUrl: orcidUrl || null,
+        name: name as string,
+        role: role as string,
+        organization: organization as string,
+        description: description as string,
+        linkedinUrl: (linkedinUrl as string) || null,
+        orcidUrl: (orcidUrl as string) || null,
         ...(avatarUrl !== undefined && { avatarUrl }),
-        orderIndex: orderIndex ? parseInt(orderIndex) : undefined,
+        orderIndex: orderIndex ? parseInt(orderIndex as string) : undefined,
       },
     });
 
