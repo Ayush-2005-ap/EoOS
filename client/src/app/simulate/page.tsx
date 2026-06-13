@@ -331,7 +331,7 @@ export default function Simulator() {
                 Simulated Sandbox
               </span>
               <h1 className="font-plus-jakarta text-3xl sm:text-4xl font-extrabold text-primary">
-                Build Your Own Ranking
+                Build Your Own EoOS Index
               </h1>
               <p className="text-on-surface-variant text-[15px] max-w-xl">
                 {activeView === "OVERALL" 

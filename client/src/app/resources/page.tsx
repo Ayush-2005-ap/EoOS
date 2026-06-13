@@ -46,10 +46,10 @@ export default function Resources() {
       color: "bg-primary/10 text-primary",
     },
     {
-      title: "Complete State-Wise Scores Dataset 2026",
+      title: "Complete State-Wise Laws",
       type: "Excel Workbook (.xlsx)",
       size: "8.5 MB",
-      desc: "Full flat data sheet containing all 80+ sub-indicator raw scores, normalized scores, and domain aggregates for all 36 states and UTs.",
+      desc: "Complete list of laws for each state and UT.",
       icon: Table,
       color: "bg-green-50 text-green-700 border border-green-200",
     },
