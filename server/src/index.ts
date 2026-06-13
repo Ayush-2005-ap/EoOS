@@ -20,6 +20,7 @@ import adminRoutes from "./routes/adminRoutes";
 import mediaRoutes from "./routes/mediaRoutes";
 import queryRoutes from "./routes/queryRoutes";
 import authRoutes from "./routes/authRoutes";
+import authorRoutes from "./routes/authorRoutes";
 import path from "path";
 
 app.use("/public", express.static(path.join(__dirname, "../../public")));
@@ -30,6 +31,7 @@ app.use("/api/domains", domainRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/queries", queryRoutes);
+app.use("/api/authors", authorRoutes);
 
 // ─── 404 Catch-all ───────────────────────────────────────────────────────────
 app.use((_req, res) => {

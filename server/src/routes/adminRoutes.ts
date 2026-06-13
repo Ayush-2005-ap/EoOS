@@ -497,5 +497,104 @@ router.delete("/states/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// ─── Author Management ─────────────────────────────────────────────────────────
+
+router.get("/authors", async (req, res) => {
+  try {
+    const authors = await prisma.author.findMany({
+      orderBy: { orderIndex: "asc" },
+    });
+    res.json({ data: authors });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/authors", upload.single("avatar"), async (req, res) => {
+  try {
+    const { name, role, organization, description, linkedinUrl, orcidUrl, orderIndex } = req.body;
+    let avatarUrl = null;
+
+    if (req.file) {
+      avatarUrl = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "authors", resource_type: "image" },
+          (error, result) => {
+            if (error || !result) reject(error || new Error("Upload failed"));
+            else resolve(result.secure_url);
+          }
+        );
+        stream.end(req.file!.buffer);
+      });
+    }
+
+    const newAuthor = await prisma.author.create({
+      data: {
+        name,
+        role,
+        organization,
+        description,
+        linkedinUrl: linkedinUrl || null,
+        orcidUrl: orcidUrl || null,
+        avatarUrl,
+        orderIndex: orderIndex ? parseInt(orderIndex) : 0,
+      },
+    });
+
+    res.json({ data: newAuthor });
+  } catch (error: any) {
+    console.error("Failed to create author:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.put("/authors/:id", upload.single("avatar"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, role, organization, description, linkedinUrl, orcidUrl, orderIndex } = req.body;
+    let avatarUrl = undefined;
+
+    if (req.file) {
+      avatarUrl = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "authors", resource_type: "image" },
+          (error, result) => {
+            if (error || !result) reject(error || new Error("Upload failed"));
+            else resolve(result.secure_url);
+          }
+        );
+        stream.end(req.file!.buffer);
+      });
+    }
+
+    const updatedAuthor = await prisma.author.update({
+      where: { id },
+      data: {
+        name,
+        role,
+        organization,
+        description,
+        linkedinUrl: linkedinUrl || null,
+        orcidUrl: orcidUrl || null,
+        ...(avatarUrl !== undefined && { avatarUrl }),
+        orderIndex: orderIndex ? parseInt(orderIndex) : undefined,
+      },
+    });
+
+    res.json({ data: updatedAuthor });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete("/authors/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.author.delete({ where: { id } });
+    res.json({ message: "Author deleted successfully" });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 export default router;

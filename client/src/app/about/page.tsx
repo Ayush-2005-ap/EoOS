@@ -11,7 +11,18 @@ const LinkedinIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
-export default function About() {
+export default async function About() {
+  let researchers: any[] = [];
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/authors`, { next: { revalidate: 60 } });
+    if (res.ok) {
+      const json = await res.json();
+      researchers = json.data || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch authors:", error);
+  }
+
   const steps = [
     {
       step: 1,
@@ -49,35 +60,7 @@ export default function About() {
     { id: "06", name: "Ease of Institutional Autonomy", desc: "This domain assesses the ability of schools to accumulate and allocate funds recieved for organizational use and investments." },
   ];
 
-  const researchers = [
-    {
-      name: "Dr. Aruna Singh",
-      role: "Director of Research",
-      org: "Indian Institute of Policy Studies",
-      desc: "Leading expert in education economics with over 20 years of experience in data modeling.",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCGeQmu30QhG5ZWayD5BTlpX6pLL6GgXcLaZlzQxE4-Cn0cLM1_9HF8GKmZecA4VD4hy9rRAfowDDfFRqhO_5BD4LNQHOgfX2pa14B3_kktnE2DH4nP1vW2oIQcFxahsxMxsSTFOz--R6DCaQ9pQ3Eps27VLTwY9HpT_nsxj_qi0Oqxcy49859Dh2DBlQxBLVwVrZLNbIHHUgWKg9wjuE7RVCHQcAMc-GUmda9URk1j1XMnERlfBOOmy7EZY33RpuesNz1tBmXvgc3A",
-      linkedin: "#",
-      orcid: "#",
-    },
-    {
-      name: "Vikram Malhotra",
-      role: "Lead Data Scientist",
-      org: "CCS Research Lab",
-      desc: "Specializes in large-scale geospatial data analysis and socioeconomic indicators.",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAgzRIPpJuLDE25qEcXrjyF2QSOehqZeMXe_n1C6SZ_3qEzSAWUDso-bSvBzRG2ejcBPe34gtElpDH-EnYxM-WiwgHR3EZ591CoESrRStEwmef_kLwYvVNOEKyaNkbB0JvT2_x_akhMN7MUCsitXLnurLahnjw_jJKvu6WNibcLT8PItljnnyOewhWy6UKnxwOeBhO_nv5TK-XCzzNHTxbHsz7lA-5a9ncWZWdaRi_e0iwsFlOd7GY-SOOKxIf0QXScOQGN4kgOtwnA",
-      linkedin: "#",
-      orcid: "#",
-    },
-    {
-      name: "Dr. Priya Verma",
-      role: "Senior Policy Advisor",
-      org: "Global Education Council",
-      desc: "Former education ministry advisor focused on bridge-school frameworks and child rights.",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAuPFulSo_f7gqTqPl4KzkIcK_JAl8nxqHQXWArHALr6cl2lGhzSaAwKFSMGa4zLAktfm-JSASlrCR7QqW4UqGHpNLiMFSGFLL5grMW9bldPsXkq3MQGF6TzuZv9Ly5xKEYc_MZGfPYdjjonUIIuTBZgp4RlUnUWBFuqQDZZ6gl7tjcvQIPzU9_yD2jzq5wQkYWghmsuMs4tNXqflLNRikokrNYRzi6zuZHxkG5M0auCYnQHQKcnWvdL5dcLx84By_nQ0_Ks9M2FbWC",
-      linkedin: "#",
-      orcid: "#",
-    },
-  ];
+
 
   return (
     <>
@@ -270,12 +253,16 @@ export default function About() {
                   key={person.name}
                   className="group bg-surface-container-low/50 p-8 rounded-2xl shadow-sm border border-outline-variant/30 text-center space-y-4 relative overflow-hidden"
                 >
-                  <div className="w-20 h-20 rounded-full mx-auto overflow-hidden relative shadow-md">
-                    <img
-                      src={person.avatar}
-                      alt={person.name}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-20 h-20 rounded-full mx-auto overflow-hidden relative shadow-md bg-surface-container flex items-center justify-center">
+                    {person.avatarUrl ? (
+                      <img
+                        src={person.avatarUrl}
+                        alt={person.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Users size={32} className="text-on-surface-variant" />
+                    )}
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-plus-jakarta text-lg font-bold text-primary">
@@ -283,34 +270,40 @@ export default function About() {
                     </h4>
                     <div className="text-secondary font-semibold text-[13px]">{person.role}</div>
                     <div className="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">
-                      {person.org}
+                      {person.organization}
                     </div>
                   </div>
                   <p className="text-on-surface-variant text-[14px] leading-relaxed relative z-10 bg-surface-container-low pb-2">
-                    {person.desc}
+                    {person.description}
                   </p>
 
                   {/* Hover Pop-out for Socials */}
-                  <div className="absolute -bottom-16 left-0 right-0 flex justify-center gap-4 p-4 bg-white/95 backdrop-blur-sm transition-all duration-300 group-hover:bottom-0 border-t border-outline-variant/20 z-20">
-                    <a 
-                      href={person.linkedin} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="w-10 h-10 rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors"
-                      title="Connect on LinkedIn"
-                    >
-                      <LinkedinIcon size={18} />
-                    </a>
-                    <a 
-                      href={person.orcid} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="w-10 h-10 rounded-full bg-[#A6CE39]/10 text-[#A6CE39] flex items-center justify-center hover:bg-[#A6CE39] hover:text-white transition-colors"
-                      title="View ORCID Profile"
-                    >
-                      <div className="font-bold font-serif text-[15px] leading-none">iD</div>
-                    </a>
-                  </div>
+                  {(person.linkedinUrl || person.orcidUrl) && (
+                    <div className="absolute -bottom-16 left-0 right-0 flex justify-center gap-4 p-4 bg-white/95 backdrop-blur-sm transition-all duration-300 group-hover:bottom-0 border-t border-outline-variant/20 z-20">
+                      {person.linkedinUrl && (
+                        <a 
+                          href={person.linkedinUrl} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="w-10 h-10 rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors"
+                          title="Connect on LinkedIn"
+                        >
+                          <LinkedinIcon size={18} />
+                        </a>
+                      )}
+                      {person.orcidUrl && (
+                        <a 
+                          href={person.orcidUrl} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className="w-10 h-10 rounded-full bg-[#A6CE39]/10 text-[#A6CE39] flex items-center justify-center hover:bg-[#A6CE39] hover:text-white transition-colors"
+                          title="View ORCID Profile"
+                        >
+                          <div className="font-bold font-serif text-[15px] leading-none">iD</div>
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

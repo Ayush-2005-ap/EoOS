@@ -127,3 +127,17 @@ model Query {
   status    String   @default("OPEN") // OPEN, CLOSED
   createdAt DateTime @default(now())
 }
+
+model Author {
+  id           String   @id @default(cuid())
+  name         String
+  role         String
+  organization String
+  description  String
+  avatarUrl    String?
+  linkedinUrl  String?
+  orcidUrl     String?
+  orderIndex   Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
