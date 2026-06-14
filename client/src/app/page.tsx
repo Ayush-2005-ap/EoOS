@@ -122,7 +122,7 @@ export default function Home() {
                 <Link href="/simulate">
                   <button className="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white/10 px-8 py-3.5 rounded-xl font-semibold text-[15px] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5">
                     <Play size={16} fill="white" />
-                    Launch Simulator
+                    Build Your Own EoOS Index
                   </button>
                 </Link>
               </div>
@@ -340,6 +340,76 @@ export default function Home() {
                   </div>
                 ) : (() => {
                   const activeDomainData = domainsData.find(d => d.id === activeDomain);
+                  
+                  if (activeDomain === "Overall" && statesData.length > 0) {
+                    const sortedStates = [...statesData].sort((a, b) => b.baseScore - a.baseScore);
+                    const top3 = sortedStates.slice(0, 3);
+                    const bottom3 = sortedStates.slice(-3).reverse();
+                    const avgScore = (statesData.reduce((acc, s) => acc + s.baseScore, 0) / statesData.length).toFixed(2);
+
+                    return (
+                      <div className="bg-white rounded-2xl border border-outline-variant/30 shadow-xl p-8 space-y-6 animate-fade-in">
+                        <div className="flex justify-between items-start border-b border-outline-variant/20 pb-4">
+                          <div>
+                            <h3 className="font-plus-jakarta text-2xl font-extrabold text-primary">
+                              Overall Index
+                            </h3>
+                            <p className="text-secondary font-bold text-[14px] uppercase tracking-wider">
+                              National Summary
+                            </p>
+                          </div>
+                          <div className="bg-primary text-cover font-plus-jakarta font-extrabold text-xl px-4 py-2 rounded-xl flex flex-col items-center shadow-md">
+                            <span className="text-[10px] uppercase font-bold text-on-primary-container tracking-wider">
+                              Average Score
+                            </span>
+                            {avgScore}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-6 pt-2">
+                          {/* Top 3 */}
+                          <div>
+                            <h4 className="text-[12px] font-bold text-green-600 uppercase tracking-wider mb-3">Top 3 Performing States</h4>
+                            <div className="space-y-2">
+                              {top3.map((s, i) => (
+                                <div key={s.id} className="flex justify-between items-center bg-green-50 px-3 py-2 rounded-lg">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-green-700 font-extrabold text-[14px]">#{i + 1}</span>
+                                    <span className="text-on-surface font-semibold text-[14px]">{s.name}</span>
+                                  </div>
+                                  <span className="font-bold text-green-700">{s.baseScore}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Bottom 3 */}
+                          <div>
+                            <h4 className="text-[12px] font-bold text-red-600 uppercase tracking-wider mb-3">Bottom 3 States</h4>
+                            <div className="space-y-2">
+                              {bottom3.map((s, i) => (
+                                <div key={s.id} className="flex justify-between items-center bg-red-50 px-3 py-2 rounded-lg border border-red-100">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-red-700 font-extrabold text-[14px]">#{statesData.length - i}</span>
+                                    <span className="text-on-surface font-semibold text-[14px]">{s.name}</span>
+                                  </div>
+                                  <span className="font-bold text-red-700">{s.baseScore}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-outline-variant/30 text-center">
+                          <p className="text-[13px] text-on-surface-variant/70 italic flex items-center justify-center gap-2">
+                            <AlertCircle size={14} />
+                            Hover over any state to see its data
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <div className="bg-surface-container-low/50 rounded-2xl border border-dashed border-outline-variant/80 p-12 text-center flex flex-col items-center justify-center gap-6 min-h-[380px] animate-fade-in">
                       <div className="p-4 bg-white rounded-full shadow-md text-secondary">
@@ -382,7 +452,7 @@ export default function Home() {
                 </h2>
               </div>
               <Link href="/explore">
-                <button className="bg-primary text-white hover:bg-primary-container px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shadow-sm">
+                <button className="bg-primary text-cover hover:bg-primary-container px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shadow-sm">
                   View Full Rankings Table
                   <ArrowRight size={16} />
                 </button>

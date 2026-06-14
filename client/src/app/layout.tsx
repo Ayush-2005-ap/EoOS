@@ -16,6 +16,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 import { Suspense } from "react";
 import PageTransition from "@/components/PageTransition";
+import LaunchGuard from "@/components/LaunchGuard";
 
 export const metadata: Metadata = {
   title: "EoOS Index | India Education Analytics & Ranking Platform",
@@ -43,7 +44,9 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <PageTransition />
         </Suspense>
-        {children}
+        <LaunchGuard>
+          {children}
+        </LaunchGuard>
       </body>
     </html>
   );

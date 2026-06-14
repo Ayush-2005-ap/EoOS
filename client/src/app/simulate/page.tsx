@@ -341,7 +341,7 @@ export default function Simulator() {
             </div>
             <button
               onClick={exportSimulatedCSV}
-              className="bg-primary text-white hover:bg-primary-container px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shadow-sm"
+              className="bg-primary text-cover hover:bg-primary-container px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shadow-sm"
             >
               <Download size={16} />
               Export Ranks (.CSV)
