@@ -44,9 +44,11 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <PageTransition />
         </Suspense>
-        <LaunchGuard>
-          {children}
-        </LaunchGuard>
+        <Suspense fallback={<div className="min-h-screen bg-surface-container-lowest" />}>
+          <LaunchGuard>
+            {children}
+          </LaunchGuard>
+        </Suspense>
       </body>
     </html>
   );
