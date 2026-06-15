@@ -132,7 +132,7 @@ export default async function About() {
                     <BookOpen size={24} />
                   </div>
                   <div>
-                    <div className="font-plus-jakarta text-xl font-bold">36 States & UTs</div>
+                    <div className="font-plus-jakarta text-xl font-bold">28 States & 2 UTs</div>
                     <div className="text-[12px] text-on-primary-container font-semibold">Nation-wide Coverage</div>
                   </div>
                 </div>
