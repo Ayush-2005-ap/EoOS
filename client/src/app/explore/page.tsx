@@ -91,7 +91,7 @@ export default function ExploreRankings() {
     });
 
   const handleRowClick = (stateId: string) => {
-    router.push(`/states/${stateId.toLowerCase()}`);
+    router.push(`/states/${stateId.toUpperCase()}`);
   };
 
   // Export CSV helper
