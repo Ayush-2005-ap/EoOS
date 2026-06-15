@@ -88,7 +88,7 @@ export default function Home() {
     .slice(0, 10);
 
   const handleStateClick = (stateId: string) => {
-    router.push(`/states/${stateId.toLowerCase()}`);
+    router.push(`/states/${stateId}`);
   };
 
   if (isLoading) {
