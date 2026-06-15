@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,30 @@ export default function Home() {
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (scrollContainerRef.current) {
+        // If they are scrolling vertically, convert to horizontal
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          scrollContainerRef.current.scrollLeft += e.deltaY;
+        }
+      }
+    };
+
+    const element = scrollContainerRef.current;
+    if (element) {
+      element.addEventListener("wheel", handleWheel, { passive: false });
+    }
+    return () => {
+      if (element) {
+        element.removeEventListener("wheel", handleWheel);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     Promise.all([fetchStates(), fetchDomains()])
@@ -193,7 +217,10 @@ export default function Home() {
 
             {/* Filter Bar */}
             <div className="flex justify-center border-b border-outline-variant/30 pb-4">
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none custom-scrollbar max-w-full">
+              <div 
+                ref={scrollContainerRef}
+                className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar max-w-full"
+              >
                 <button
                   onClick={() => setActiveDomain("Overall")}
                   className={`px-5 py-2 rounded-full font-semibold text-[13px] transition-all whitespace-nowrap ${
