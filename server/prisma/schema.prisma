@@ -146,3 +146,12 @@ model AppConfig {
   key   String @id
   value String
 }
+
+model DatasetSubscriber {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  consentGiven Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}

@@ -11,6 +11,7 @@ export default function Resources() {
   const [states, setStates] = useState<ApiStateData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"publications" | "legal">("publications");
 
   useEffect(() => {
     fetchStates()
@@ -45,14 +46,6 @@ export default function Resources() {
       icon: FileText,
       color: "bg-primary/10 text-primary",
     },
-    {
-      title: "Complete State-Wise Laws",
-      type: "Excel Workbook (.xlsx)",
-      size: "8.5 MB",
-      desc: "Complete list of laws for each state and UT.",
-      icon: Table,
-      color: "bg-green-50 text-green-700 border border-green-200",
-    },
   ];
 
   return (
@@ -70,11 +63,37 @@ export default function Resources() {
             <p className="text-on-surface-variant text-[15px] max-w-xl">
               Access raw datasets, academic whitepapers, and our annual national reports. Individual state-wise performance profiles are also available for localized policy analysis.
             </p>
+            
+            {/* Tabs Navigation */}
+            <div className="flex items-center gap-4 pt-6 mt-4 border-t border-outline-variant/30 overflow-x-auto no-scrollbar">
+              <button
+                onClick={() => setActiveTab("publications")}
+                className={`px-5 py-2.5 rounded-full font-bold text-[14px] whitespace-nowrap transition-all ${
+                  activeTab === "publications"
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-surface-container hover:bg-outline-variant/20 text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                Publications & Data
+              </button>
+              <button
+                onClick={() => setActiveTab("legal")}
+                className={`px-5 py-2.5 rounded-full font-bold text-[14px] whitespace-nowrap transition-all ${
+                  activeTab === "legal"
+                    ? "bg-primary text-white shadow-sm"
+                    : "bg-surface-container hover:bg-outline-variant/20 text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                Legal Repository
+              </button>
+            </div>
           </div>
         </section>
 
         <section className="max-w-container-max-width mx-auto px-gutter py-12 space-y-16">
-          {/* Main Downloads Grid */}
+          {activeTab === "publications" ? (
+            <>
+              {/* Main Downloads Grid */}
           <div>
             <h2 className="font-plus-jakarta text-2xl font-extrabold text-primary mb-6">Featured Publications</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -163,21 +182,43 @@ export default function Resources() {
                   </Link>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Academic Transparency / Open Data callout */}
-          <div className="bg-gradient-to-r from-primary to-primary-container text-white rounded-2xl p-8 shadow-xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-6">
-            <div className="space-y-2 lg:max-w-2xl">
-              <h3 className="font-plus-jakarta text-xl font-extrabold text-white flex items-center gap-2">
-                <HelpCircle size={20} className="text-secondary-fixed" />
-                Commitment to Open Science & Research Transparency
-              </h3>
-              <p className="text-on-primary-container text-[14px] leading-relaxed">
-                All algorithms, raw source data, and scoring rules for the EoOS Index are public domain. We encourage external researchers, academics, and state education departments to audit our code and methodologies.
-              </p>
+              )}
             </div>
-          </div>
+          </>
+          ) : (
+            /* Legal Repository Tab */
+            <div className="min-h-[40vh] flex flex-col items-center justify-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-white rounded-2xl border border-outline-variant/35 shadow-sm p-8 flex flex-col justify-between max-w-sm w-full relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-600 opacity-80" />
+                
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-green-50 text-green-600 border border-green-200">
+                    <Table size={24} />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-plus-jakarta text-xl font-extrabold text-primary leading-snug">
+                      Complete State-Wise Laws
+                    </h3>
+                    <span className="inline-block text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      Coming Soon
+                    </span>
+                  </div>
+                  <p className="text-on-surface-variant text-[14px] leading-relaxed">
+                    A comprehensive, searchable repository containing the complete list of educational laws, acts, and guidelines for every state and UT in India.
+                  </p>
+                </div>
+                
+                <button 
+                  disabled
+                  className="w-full mt-6 py-3 px-4 bg-surface-container text-on-surface-variant font-bold text-[14px] rounded-xl flex items-center justify-center gap-2 cursor-not-allowed border border-outline-variant/30"
+                >
+                  <Download size={16} />
+                  Currently Unavailable
+                </button>
+              </div>
+            </div>
+          )}
+          
         </section>
       </main>
       <Footer />
