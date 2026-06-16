@@ -24,6 +24,8 @@ import authRoutes from "./routes/authRoutes";
 import authorRoutes from "./routes/authorRoutes";
 import configRoutes from "./routes/configRoutes";
 import exportRoutes from "./routes/exportRoutes";
+import voiceRoutes from "./routes/voiceRoutes";
+import testimonialRoutes from "./routes/testimonialRoutes";
 import path from "path";
 
 app.use("/public", express.static(path.join(__dirname, "../../public")));
@@ -37,6 +39,8 @@ app.use("/api/queries", queryRoutes);
 app.use("/api/authors", authorRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/export", exportRoutes);
+app.use("/api/voices", voiceRoutes);
+app.use("/api/testimonials", testimonialRoutes);
 
 // ─── 404 Catch-all ───────────────────────────────────────────────────────────
 app.use((_req, res) => {

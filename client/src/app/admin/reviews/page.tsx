@@ -10,9 +10,12 @@ export default function ReviewsManager() {
   const [loading, setLoading] = useState(true);
 
   const [showAdd, setShowAdd] = useState(false);
-  const [reviewerName, setReviewerName] = useState("");
-  const [reviewText, setReviewText] = useState("");
-  const [rating, setRating] = useState(5);
+  const [author, setAuthor] = useState("");
+  const [role, setRole] = useState("");
+  const [quote, setQuote] = useState("");
+  const [type, setType] = useState("glass");
+  const [initials, setInitials] = useState("");
+  const [avatar, setAvatar] = useState<File | null>(null);
 
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
@@ -31,18 +34,28 @@ export default function ReviewsManager() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reviewerName || !reviewText) return alert("Name and Text are required");
+    if (!author || !quote) return alert("Author and Quote are required");
+
+    const formData = new FormData();
+    formData.append("author", author);
+    formData.append("role", role);
+    formData.append("quote", quote);
+    formData.append("type", type);
+    formData.append("initials", initials);
+    if (avatar) formData.append("avatar", avatar);
 
     try {
       const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reviews`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reviewerName, reviewText, rating }),
+        body: formData,
       });
       if (res.ok) {
-        setReviewerName("");
-        setReviewText("");
-        setRating(5);
+        setAuthor("");
+        setRole("");
+        setQuote("");
+        setType("glass");
+        setInitials("");
+        setAvatar(null);
         setShowAdd(false);
         fetchReviews();
       } else {
@@ -90,33 +103,54 @@ export default function ReviewsManager() {
             <input 
               required 
               type="text" 
-              placeholder="Reviewer Name (e.g. Dr. A. Sharma)" 
+              placeholder="Author Name (e.g. Dr. A. Sharma)" 
               className="p-3 border rounded-lg" 
-              value={reviewerName} 
-              onChange={e => setReviewerName(e.target.value)} 
+              value={author} 
+              onChange={e => setAuthor(e.target.value)} 
             />
-            
-            <div className="flex items-center gap-3 p-3 border rounded-lg bg-slate-50">
-              <span className="text-sm font-bold text-slate-500">Rating:</span>
+            <input 
+              type="text" 
+              placeholder="Role / Title" 
+              className="p-3 border rounded-lg" 
+              value={role} 
+              onChange={e => setRole(e.target.value)} 
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input 
+              type="text" 
+              placeholder="Initials (e.g. AS)" 
+              className="p-3 border rounded-lg" 
+              value={initials} 
+              onChange={e => setInitials(e.target.value)} 
+            />
+            <select 
+              className="p-3 border rounded-lg bg-white"
+              value={type}
+              onChange={e => setType(e.target.value)}
+            >
+              <option value="glass">Glass (Dark)</option>
+              <option value="solid">Solid (Brand)</option>
+              <option value="light">Light (White)</option>
+            </select>
+            <div>
+              <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Avatar Image (Optional)</label>
               <input 
-                type="number" 
-                min="1" 
-                max="5" 
-                step="0.5"
-                className="w-20 p-1 border rounded text-center" 
-                value={rating} 
-                onChange={e => setRating(parseFloat(e.target.value))} 
+                type="file" 
+                accept="image/*"
+                className="w-full text-sm p-1.5 border rounded-lg bg-slate-50" 
+                onChange={e => setAvatar(e.target.files ? e.target.files[0] : null)} 
               />
-              <Star size={16} className="text-amber-400 fill-amber-400" />
             </div>
           </div>
 
           <textarea 
             required 
-            placeholder="Review text..." 
+            placeholder="Testimonial quote..." 
             className="w-full p-3 border rounded-lg min-h-[100px]" 
-            value={reviewText} 
-            onChange={e => setReviewText(e.target.value)} 
+            value={quote} 
+            onChange={e => setQuote(e.target.value)} 
           />
 
           <div className="flex justify-end gap-2 pt-2">
@@ -136,16 +170,24 @@ export default function ReviewsManager() {
               <Trash2 size={16} />
             </button>
             
-            <div className="flex items-center gap-2 mb-4">
-              {[...Array(Math.floor(review.rating || 5))].map((_, i) => (
-                <Star key={i} size={16} className="text-amber-400 fill-amber-400" />
-              ))}
+            <div className="flex items-center gap-3 mb-4">
+              {review.avatarUrl ? (
+                <img src={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${review.avatarUrl}`} alt={review.author} className="w-10 h-10 rounded-full object-cover" />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500">
+                  {review.initials || review.author.charAt(0)}
+                </div>
+              )}
+              <div>
+                <p className="font-bold text-primary text-sm">{review.author}</p>
+                <p className="text-xs text-slate-500">{review.role}</p>
+              </div>
             </div>
             
-            <p className="text-slate-700 italic text-[15px] mb-6 flex-1">"{review.reviewText}"</p>
+            <p className="text-slate-700 italic text-[15px] mb-6 flex-1">"{review.quote}"</p>
             
             <div className="mt-auto border-t border-slate-100 pt-4 flex justify-between items-center">
-              <span className="font-bold text-primary">{review.reviewerName}</span>
+              <span className="text-xs font-bold px-2 py-1 bg-slate-100 rounded-md uppercase">{review.type}</span>
               <span className="text-xs text-slate-400">{new Date(review.createdAt).toLocaleDateString()}</span>
             </div>
           </div>

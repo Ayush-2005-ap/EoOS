@@ -105,16 +105,21 @@ model Report {
 model Voice {
   id             String   @id @default(uuid())
   title          String
-  thumbnailPath  String   
-  youtubeUrl     String   
+  category       String   @default("General")
+  videoUrl       String   @default("")
+  thumbnailPath  String?  
+  youtubeUrl     String?  
   createdAt      DateTime @default(now())
 }
 
-model Review {
+model Testimonial {
   id           String   @id @default(uuid())
-  reviewerName String
-  reviewText   String
-  rating       Float?
+  author       String
+  role         String
+  quote        String
+  avatarUrl    String?
+  initials     String?
+  type         String   @default("glass") // glass, solid, light
   createdAt    DateTime @default(now())
 }
 

@@ -11,16 +11,20 @@ const prisma = new PrismaClient();
 // Ensure directories exist
 const reportsDir = path.join(__dirname, "../../../public/uploads/reports");
 const voicesDir = path.join(__dirname, "../../../public/uploads/voices");
+const avatarsDir = path.join(__dirname, "../../../public/uploads/avatars");
 if (!fs.existsSync(reportsDir)) fs.mkdirSync(reportsDir, { recursive: true });
 if (!fs.existsSync(voicesDir)) fs.mkdirSync(voicesDir, { recursive: true });
+if (!fs.existsSync(avatarsDir)) fs.mkdirSync(avatarsDir, { recursive: true });
 
 // Multer Config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "pdf") {
       cb(null, reportsDir);
-    } else if (file.fieldname === "thumbnail") {
+    } else if (file.fieldname === "thumbnail" || file.fieldname === "video") {
       cb(null, voicesDir);
+    } else if (file.fieldname === "avatar") {
+      cb(null, avatarsDir);
     } else {
       cb(new Error("Invalid fieldname"), "");
     }
@@ -90,14 +94,17 @@ router.get("/voices", async (req, res) => {
   }
 });
 
-router.post("/voices", requireAdmin, upload.single("thumbnail"), async (req, res) => {
+router.post("/voices", requireAdmin, upload.fields([{ name: "thumbnail", maxCount: 1 }, { name: "video", maxCount: 1 }]), async (req, res) => {
   try {
-    const { title, youtubeUrl } = req.body;
-    if (!title || !youtubeUrl || !req.file) return res.status(400).json({ error: "Title, YouTube URL, and Thumbnail image are required" });
+    const { title, youtubeUrl, category } = req.body;
+    if (!title || !youtubeUrl) return res.status(400).json({ error: "Title and YouTube URL are required" });
 
-    const thumbnailPath = `/uploads/voices/${req.file.filename}`;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const thumbnailPath = files?.["thumbnail"] ? `/uploads/voices/${files["thumbnail"][0].filename}` : "";
+    const videoUrl = files?.["video"] ? `/uploads/voices/${files["video"][0].filename}` : "";
+
     const voice = await prisma.voice.create({
-      data: { title, youtubeUrl, thumbnailPath },
+      data: { title, youtubeUrl, thumbnailPath, videoUrl, category: category || "General" },
     });
     res.status(201).json({ data: voice });
   } catch (err: any) {
@@ -122,27 +129,36 @@ router.delete("/voices/:id", requireAdmin, async (req, res) => {
 });
 
 // ============================================================================
-// REVIEWS
+// TESTIMONIALS (Previously Reviews)
 // ============================================================================
 
 router.get("/reviews", async (req, res) => {
   try {
-    const reviews = await prisma.review.findMany({ orderBy: { createdAt: "desc" } });
-    res.json({ data: reviews });
+    const testimonials = await prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } });
+    res.json({ data: testimonials });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
 });
 
-router.post("/reviews", async (req, res) => {
+router.post("/reviews", requireAdmin, upload.single("avatar"), async (req, res) => {
   try {
-    const { reviewerName, reviewText, rating } = req.body;
-    if (!reviewerName || !reviewText) return res.status(400).json({ error: "Name and text required" });
+    const { author, role, quote, type, initials } = req.body;
+    if (!author || !quote) return res.status(400).json({ error: "Author and quote required" });
 
-    const review = await prisma.review.create({
-      data: { reviewerName, reviewText, rating: rating ? parseFloat(rating) : null },
+    const avatarUrl = req.file ? `/uploads/avatars/${req.file.filename}` : null;
+
+    const testimonial = await prisma.testimonial.create({
+      data: { 
+        author, 
+        quote, 
+        role: role || "", 
+        type: type || "glass", 
+        initials: initials || "",
+        avatarUrl
+      },
     });
-    res.status(201).json({ data: review });
+    res.status(201).json({ data: testimonial });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -151,7 +167,15 @@ router.post("/reviews", async (req, res) => {
 router.delete("/reviews/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.review.delete({ where: { id: String(id) } });
+    const testimonial = await prisma.testimonial.findUnique({ where: { id: String(id) } });
+    if (!testimonial) return res.status(404).json({ error: "Not found" });
+
+    if (testimonial.avatarUrl) {
+      const fullPath = path.join(__dirname, "../../../public", testimonial.avatarUrl);
+      if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    }
+
+    await prisma.testimonial.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
   } catch (err: any) {
     res.status(500).json({ error: err.message });

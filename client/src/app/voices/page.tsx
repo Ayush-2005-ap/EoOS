@@ -2,8 +2,8 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Quote, Play, ArrowRight } from "lucide-react";
-import { useRef } from "react";
+import { Quote, Play, ArrowRight, Loader2 } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
 
 const HoverVideoCard = ({ 
   videoUrl, 
@@ -67,65 +67,43 @@ const HoverVideoCard = ({
 };
 
 export default function Voices() {
-  const videoStories = [
-    {
-      category: "Impact Study: Oslo",
-      title: "The Future of Digital Equity",
-      videoUrl: "/videos/sample1.mp4",
-      youtubeUrl: "https://youtube.com/watch?v=dQw4w9WgXcQ"
-    },
-    {
-      category: "Policy Forum",
-      title: "Collaborative Governance Models",
-      videoUrl: "/videos/sample2.mp4",
-      youtubeUrl: "https://youtube.com/watch?v=dQw4w9WgXcQ"
-    },
-    {
-      category: "Teacher Spotlight",
-      title: "Classroom Data Implementation",
-      videoUrl: "/videos/sample1.mp4",
-      youtubeUrl: "https://youtube.com/watch?v=dQw4w9WgXcQ"
-    }
-  ];
+  const [videoStories, setVideoStories] = useState<any[]>([]);
+  const [masonryQuotes, setMasonryQuotes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const masonryQuotes = [
-    {
-      quote: "The Index has fundamentally shifted how we advocate for resource allocation. It's no longer just anecdotal; we have the empirical weight of the CCS Research behind every request.",
-      author: "Dr. Elias Thorne",
-      role: "Director of Policy, North Rhine Education Council",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB2s5LX_XX2jI3p1lOYStRXxosRpIue2LtSEcR7mEL5xkfcfDB_s7m-wCoBxGg3ZCPCqdPBLfPVyz8tKVwb2AlxWdFoxwZ6kb5038l1bV1Dkpj5ZYfo7dGWZS4dKgxXVpHhtFF0-loe7hLFPJF7Nj85iWWJ189gQI94SaXAPg5YqQqKZD2QKMcVg1tkgk-8lVPouUbrdMXgKpIdq4eVyIcfgXhrwLgGZ7n742y6lgstD4AkYEY35s0BbYCCSRBnfzydJXAFxzl1T-M_",
-      type: "glass"
-    },
-    {
-      quote: "Understanding the discrepancy between urban and rural data infrastructure was our biggest challenge. EoOS gave us the roadmap to bridge that gap.",
-      author: "Sarah Jenkins",
-      role: "Infrastructure Lead, EdTech Global",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuC4U-sWMWXh8psf4VmGylGOLl2yYicuAgiQgWCTdvzB2XeyQfErMvc4_3SWh8mM3HI5iOTXTEdwrvHvU-eNwJF2_ahSC703g_1YW4aHoQL_SZZ0rbw8rHzYlsBJS3ujoHQTdO88-9gg3E22TC7bct7-g0myRLIyHfnKP7XOrEHk6Z1VOuKwi8UONcy6zczxlZwb22S1Z70ie608ZKfaoQ9q9-Yu6KQNiF3VfXgGof59MggvYZoiJANpURd2_SSwu_2N0PzF955ZvK63",
-      type: "solid"
-    },
-    {
-      quote: "The transparency of the data methodology is what sets this project apart. As a researcher, I need to know the 'how' as much as the 'what'. CCS delivers on both fronts.",
-      author: "Marcus Vong",
-      role: "Senior Data Analyst, OpenSource Analytics",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB47AdFRCbBH1F7h8HXJHMhAUE7LUBeLlHkl4VYZxnI-TDl6lSO0pGOo5HVaLh2y0_1JbVVTdF8B8KnHojCKjeLKfi2s3BmLvHGFC07YIgw3RCx0oO7NqZvveoFjCbzgqzP5-II_XzUVxQ9o_w58VINGZzvg8xQrZxZ6jNg_mpN9yEYs2XU1HQWED03u-s-e2asm5q6GpxO1DMX0Wubbggmz4przz_PcJ3jmLlNmjhh4iIVGr366MXHn-Sj74jStTVedxNzZZ6RX9Ij",
-      type: "glass"
-    },
-    {
-      quote: "Integrating these findings into our curriculum was the most impactful decision we made this year. The qualitative insights helped us understand the 'why' behind the low engagement scores.",
-      author: "Helena Frost",
-      role: "Head of Faculty, Helsinki Institute",
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDL7ts7AypzO77oh2AqSKaHuN-lomCRGhuhBKOfQ-PnhNUq9LKOBGoPqabzFxnJfPpBWfXQ-n_yXZtxGscet-R2JTbs1dU_0sZWLy-CR9H7lWHt17Zks0CxuA6O-CECZFVc9BvZFLWMTdRult3g82J5bq8qENmXzCufrUUnDnlnt0H9WbLRmiPSB5itHbbhJGNUDMlM4G_pEJdh5Bqb3NxajTPgYaHvcn4kWIQQwU81lKgN3ETxWfDRB0MlMjXWuI6htksQMX-8hUub",
-      type: "glass"
-    },
-    {
-      quote: "A masterclass in presenting complex social data with human empathy. Truly transformative.",
-      author: "James Lowery",
-      role: "Public Policy Advocate",
-      avatar: null,
-      initials: "JL",
-      type: "light"
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
+        const [voicesRes, reviewsRes] = await Promise.all([
+          fetch(`${baseUrl}/media/voices`),
+          fetch(`${baseUrl}/media/reviews`)
+        ]);
+        const voicesData = await voicesRes.json();
+        const reviewsData = await reviewsRes.json();
+
+        setVideoStories(voicesData.data || []);
+        setMasonryQuotes(reviewsData.data || []);
+      } catch (e) {
+        console.error("Failed to fetch voices and testimonials:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="pt-32 pb-16 min-h-screen flex items-center justify-center">
+          <Loader2 className="animate-spin text-primary" size={48} />
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -166,9 +144,10 @@ export default function Voices() {
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {videoStories.map((story, idx) => (
-              <HoverVideoCard key={idx} {...story} />
-            ))}
+            {videoStories.map((story, idx) => {
+              const vidUrl = story.videoUrl ? `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${story.videoUrl}` : "";
+              return <HoverVideoCard key={story.id || idx} videoUrl={vidUrl} youtubeUrl={story.youtubeUrl} category={story.category} title={story.title} />;
+            })}
           </div>
         </section>
 
@@ -194,10 +173,10 @@ export default function Voices() {
                   </p>
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full overflow-hidden flex flex-shrink-0 items-center justify-center ${item.type === "solid" ? "bg-white/20" : "bg-slate-200"}`}>
-                      {item.avatar ? (
-                        <img className="w-full h-full object-cover" src={item.avatar} alt={item.author} />
+                      {item.avatarUrl ? (
+                        <img className="w-full h-full object-cover" src={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.avatarUrl}`} alt={item.author} />
                       ) : (
-                        <span className="font-bold text-primary">{item.initials}</span>
+                        <span className="font-bold text-primary">{item.initials || item.author?.charAt(0)}</span>
                       )}
                     </div>
                     <div>

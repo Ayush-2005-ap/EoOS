@@ -131,7 +131,7 @@ export default function Home() {
                 <div className="w-64 sm:w-96 h-[1.5px] bg-[#FFCC00] mt-4 mb-5"></div>
                 
                 <p className="text-white text-[17px] sm:text-[20px] leading-[1.4] font-medium tracking-wide">
-                  A Comparative Assement of<br />
+                  A Comparative Assessment of<br />
                   School Regulatory Frameworks<br />
                   Across Indian States
                 </p>

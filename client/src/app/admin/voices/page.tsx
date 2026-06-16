@@ -11,8 +11,10 @@ export default function VoicesManager() {
 
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("General");
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(null); // Thumbnail
+  const [videoFile, setVideoFile] = useState<File | null>(null); // Hover Video
 
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
@@ -35,8 +37,10 @@ export default function VoicesManager() {
 
     const formData = new FormData();
     formData.append("title", title);
+    formData.append("category", category);
     formData.append("youtubeUrl", youtubeUrl);
     formData.append("thumbnail", file);
+    if (videoFile) formData.append("video", videoFile);
 
     try {
       const res = await adminFetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/voices`, {
@@ -45,8 +49,10 @@ export default function VoicesManager() {
       });
       if (res.ok) {
         setTitle("");
+        setCategory("General");
         setYoutubeUrl("");
         setFile(null);
+        setVideoFile(null);
         setShowAdd(false);
         fetchVoices();
       } else {
@@ -90,14 +96,24 @@ export default function VoicesManager() {
         <form onSubmit={handleUpload} className="bg-white p-6 rounded-2xl shadow-lg border border-primary/20 space-y-4">
           <h3 className="font-bold text-lg text-primary border-b pb-2">Add New Voice</h3>
           
-          <input 
-            required 
-            type="text" 
-            placeholder="Video Title" 
-            className="w-full p-3 border rounded-lg" 
-            value={title} 
-            onChange={e => setTitle(e.target.value)} 
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input 
+              required 
+              type="text" 
+              placeholder="Video Title" 
+              className="w-full p-3 border rounded-lg" 
+              value={title} 
+              onChange={e => setTitle(e.target.value)} 
+            />
+            <input 
+              required 
+              type="text" 
+              placeholder="Category (e.g. Impact Study: Oslo)" 
+              className="w-full p-3 border rounded-lg" 
+              value={category} 
+              onChange={e => setCategory(e.target.value)} 
+            />
+          </div>
           
           <input 
             required 
@@ -108,15 +124,26 @@ export default function VoicesManager() {
             onChange={e => setYoutubeUrl(e.target.value)} 
           />
           
-          <div>
-            <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Thumbnail Image</label>
-            <input 
-              required 
-              type="file" 
-              accept="image/*"
-              className="w-full p-3 border rounded-lg bg-slate-50" 
-              onChange={e => setFile(e.target.files ? e.target.files[0] : null)} 
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Thumbnail Image *</label>
+              <input 
+                required 
+                type="file" 
+                accept="image/*"
+                className="w-full p-3 border rounded-lg bg-slate-50" 
+                onChange={e => setFile(e.target.files ? e.target.files[0] : null)} 
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Upload Hover Video (.mp4)</label>
+              <input 
+                type="file" 
+                accept="video/mp4"
+                className="w-full p-3 border rounded-lg bg-slate-50" 
+                onChange={e => setVideoFile(e.target.files ? e.target.files[0] : null)} 
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
@@ -144,6 +171,7 @@ export default function VoicesManager() {
             </div>
             
             <div className="p-5 flex-1 flex flex-col">
+              <span className="text-xs font-bold text-primary mb-1 uppercase">{voice.category}</span>
               <h3 className="font-bold text-[15px] text-slate-800 line-clamp-2 mb-4">{voice.title}</h3>
               <div className="mt-auto">
                 <a 
