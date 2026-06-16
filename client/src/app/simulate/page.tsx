@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fetchStates, fetchDomains, ApiStateData, ApiDomain } from "@/services/api";
-import { RefreshCw, ArrowUp, ArrowDown, Minus, Info, Download, Award, Loader2 } from "lucide-react";
+import { RefreshCw, ArrowUp, ArrowDown, Minus, Info, Download, Award, Loader2, X, Send } from "lucide-react";
 
 interface SimulatedState {
   id: string;
@@ -31,6 +31,18 @@ export default function Simulator() {
   const [initialRankings, setInitialRankings] = useState<Record<string, number>>({});
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Email Export Modal State
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
+  const [exportError, setExportError] = useState("");
+  const [exportForm, setExportForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    consent: false,
+  });
 
   useEffect(() => {
     Promise.all([fetchStates(), fetchDomains()])
@@ -273,36 +285,81 @@ export default function Simulator() {
   }, [weights, statesData, initialRankings, activeView, indicatorWeights]);
 
   // Export CSV of custom rankings
-  const exportSimulatedCSV = () => {
-    const headers = ["Simulated Rank", "State Name", "Simulated Score", "Rank Change", "Original Rank"];
-    const rows = simulatedRankings.map((s) => {
-      let originalRank = 0;
-      if (activeView === "OVERALL") {
-        const baseState = statesData.find((sd) => sd.id === s.id)!;
-        originalRank = initialRankings[s.id] || baseState?.baseRank || 0;
-      } else {
-        originalRank = s.simulatedRank + s.rankChange;
+  // Export CSV of custom rankings via email
+  const handleExportSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!exportForm.name || !exportForm.email || !exportForm.consent) {
+      setExportError("Please fill out all required fields and provide consent.");
+      return;
+    }
+    
+    setIsExporting(true);
+    setExportError("");
+
+    try {
+      const escapeCSV = (val: any) => {
+        if (val === null || val === undefined) return "";
+        const str = String(val);
+        if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return str;
+      };
+
+      const headers = ["Simulated Rank", "State Name", "Simulated Score", "Rank Change", "Original Rank"];
+      const rows = simulatedRankings.map((s) => {
+        let originalRank = 0;
+        if (activeView === "OVERALL") {
+          const baseState = statesData.find((sd) => sd.id === s.id)!;
+          originalRank = initialRankings[s.id] || baseState?.baseRank || 0;
+        } else {
+          originalRank = s.simulatedRank + s.rankChange;
+        }
+        return [
+          s.simulatedRank,
+          s.name,
+          s.simulatedScore,
+          s.rankChange > 0 ? `+${s.rankChange}` : s.rankChange,
+          originalRank
+        ];
+      });
+
+      const csvContent = [
+        headers.map(escapeCSV).join(","), 
+        ...rows.map(r => r.map(escapeCSV).join(","))
+      ].join("\n");
+      
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+      const response = await fetch(`${backendUrl}/export/email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: exportForm.name,
+          email: exportForm.email,
+          phone: exportForm.phone,
+          consent: exportForm.consent,
+          csvData: csvContent,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send export email.");
       }
-      return [
-        s.simulatedRank,
-        s.name,
-        s.simulatedScore,
-        s.rankChange > 0 ? `+${s.rankChange}` : s.rankChange,
-        originalRank
-      ];
-    });
 
-    const csvContent = "data:text/csv;charset=utf-8,"
-      + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    const domainName = activeView === "OVERALL" ? "Overall" : domainsData.find(d => d.id === activeView)?.name || activeView;
-    link.setAttribute("download", `Simulated_Rankings_${domainName}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      setExportSuccess(true);
+      setTimeout(() => {
+        setIsExportModalOpen(false);
+        setExportSuccess(false);
+        setExportForm({ name: "", email: "", phone: "", consent: false });
+      }, 3000);
+    } catch (err: any) {
+      console.error(err);
+      setExportError("An error occurred while exporting. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (isLoading) {
@@ -323,6 +380,118 @@ export default function Simulator() {
   return (
     <>
       <Header />
+
+      {/* Export Modal */}
+      {isExportModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden border border-outline-variant/30 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between p-6 border-b border-outline-variant/30 bg-surface-container-low/50">
+              <h2 className="font-plus-jakarta text-xl font-bold text-primary">Export Simulated Rankings</h2>
+              <button 
+                onClick={() => setIsExportModalOpen(false)}
+                className="text-on-surface-variant hover:text-primary transition-colors"
+                disabled={isExporting}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              {exportSuccess ? (
+                <div className="text-center py-8 space-y-4">
+                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
+                    <Send size={32} />
+                  </div>
+                  <h3 className="font-plus-jakarta text-xl font-bold text-primary">Email Sent!</h3>
+                  <p className="text-on-surface-variant text-[15px]">
+                    Your customized simulation report has been emailed to you successfully.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleExportSubmit} className="space-y-5">
+                  <p className="text-on-surface-variant text-[14px]">
+                    Please provide your details below to receive the simulated dataset export via email.
+                  </p>
+                  
+                  {exportError && (
+                    <div className="p-3 bg-red-50 text-red-600 rounded-xl text-[13px] font-semibold">
+                      {exportError}
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[13px] font-bold text-primary mb-1.5 uppercase tracking-wider">Full Name *</label>
+                      <input 
+                        type="text" 
+                        required
+                        value={exportForm.name}
+                        onChange={(e) => setExportForm({...exportForm, name: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all text-[15px]"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-primary mb-1.5 uppercase tracking-wider">Email Address *</label>
+                      <input 
+                        type="email" 
+                        required
+                        value={exportForm.email}
+                        onChange={(e) => setExportForm({...exportForm, email: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all text-[15px]"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-primary mb-1.5 uppercase tracking-wider">Phone Number</label>
+                      <input 
+                        type="tel" 
+                        value={exportForm.phone}
+                        onChange={(e) => setExportForm({...exportForm, phone: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/30 transition-all text-[15px]"
+                        placeholder="+91 98765 43210"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 mt-6 p-4 bg-surface-container-low/50 rounded-xl border border-outline-variant/30">
+                    <input 
+                      type="checkbox" 
+                      id="consent"
+                      required
+                      checked={exportForm.consent}
+                      onChange={(e) => setExportForm({...exportForm, consent: e.target.checked})}
+                      className="mt-1 shrink-0 w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary/30"
+                    />
+                    <label htmlFor="consent" className="text-[12px] text-on-surface-variant leading-relaxed">
+                      I consent to storing my name, email, and phone number in the database to receive updates on upcoming events and news from the Centre for Civil Society.
+                    </label>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={isExporting}
+                    className="w-full bg-primary text-white py-3.5 rounded-xl font-bold text-[15px] hover:bg-primary-container transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isExporting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={18} />
+                        Sending Email...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={18} />
+                        Receive Report via Email
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="flex-grow pt-16 bg-surface-container-low/40">
         <section className="py-12 bg-white border-b border-outline-variant/30">
           <div className="max-w-container-max-width mx-auto px-gutter flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
@@ -340,7 +509,7 @@ export default function Simulator() {
               </p>
             </div>
             <button
-              onClick={exportSimulatedCSV}
+              onClick={() => setIsExportModalOpen(true)}
               className="bg-primary text-cover hover:bg-primary-container px-6 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center gap-2 shadow-sm"
             >
               <Download size={16} />

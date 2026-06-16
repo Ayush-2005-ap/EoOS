@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
-import { Download, FileText, Table, BookOpen, ExternalLink, HelpCircle, Loader2, Search } from "lucide-react";
+import { Download, FileText, Scale, BookOpen, ExternalLink, HelpCircle, Loader2, Search } from "lucide-react";
 import Link from "next/link";
 
 export default function Resources() {
@@ -218,14 +218,14 @@ export default function Resources() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filteredStates.map((state) => (
                     <div key={state.id} className="bg-white rounded-xl border border-outline-variant/35 shadow-sm p-5 flex flex-col justify-between relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-600 opacity-80" />
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary opacity-80" />
                       
                       <div className="space-y-4">
                         <div className="flex items-start justify-between">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-green-50 text-green-600 border border-green-200">
-                            <Table size={18} />
+                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/5 text-primary border border-primary/20">
+                            <Scale size={18} />
                           </div>
-                          <span className="inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          <span className="inline-block text-[10px] font-bold text-secondary bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
                             Coming Soon
                           </span>
                         </div>
