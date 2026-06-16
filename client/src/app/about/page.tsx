@@ -5,14 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { BookOpen, Star, HelpCircle, Users, CheckCircle, Database } from "lucide-react";
-
-const LinkedinIcon = ({ size = 24, className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-    <rect width="4" height="12" x="2" y="9" />
-    <circle cx="4" cy="4" r="2" />
-  </svg>
-);
+import { FaLinkedin } from "react-icons/fa6";
 
 export default function About() {
   const [researchers, setResearchers] = useState<any[]>([]);
@@ -256,13 +249,13 @@ export default function About() {
             <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
               The Research Team
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {researchers.map((person) => (
                 <div
                   key={person.name}
-                  className="group bg-surface-container-low/50 p-8 rounded-2xl shadow-sm border border-outline-variant/30 text-center space-y-4 relative overflow-hidden"
+                  className="bg-white p-6 rounded-2xl shadow-lg shadow-black/5 border border-outline-variant/20 flex flex-col items-center text-center hover:-translate-y-1 transition-transform h-full"
                 >
-                  <div className="w-20 h-20 rounded-full mx-auto overflow-hidden relative shadow-md bg-surface-container flex items-center justify-center">
+                  <div className="w-20 h-20 rounded-full mx-auto overflow-hidden relative shadow-sm bg-surface-container flex items-center justify-center ring-2 ring-secondary/10 mb-4">
                     {person.avatarUrl ? (
                       <img
                         src={person.avatarUrl}
@@ -273,31 +266,35 @@ export default function About() {
                       <Users size={32} className="text-on-surface-variant" />
                     )}
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-plus-jakarta text-lg font-bold text-primary">
+                  
+                  <div className="space-y-1 w-full mb-4">
+                    <h4 className="font-plus-jakarta text-lg font-extrabold text-primary">
                       {person.name}
                     </h4>
-                    <div className="text-secondary font-semibold text-[13px]">{person.role}</div>
-                    <div className="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">
+                    <div className="text-secondary font-bold text-[13px]">{person.role}</div>
+                    <div className="text-on-surface-variant text-[10px] font-semibold uppercase tracking-widest">
                       {person.organization}
                     </div>
                   </div>
-                  <p className="text-on-surface-variant text-[14px] leading-relaxed relative z-10 bg-surface-container-low pb-2">
+                  
+                  <div className="w-10 h-0.5 bg-secondary/20 rounded-full mb-4"></div>
+                  
+                  <p className="text-on-surface-variant text-[13px] leading-relaxed flex-grow text-justify w-full mb-6">
                     {person.description}
                   </p>
 
-                  {/* Hover Pop-out for Socials */}
+                  {/* Static Socials at the bottom */}
                   {(person.linkedinUrl || person.orcidUrl) && (
-                    <div className="absolute -bottom-16 left-0 right-0 flex justify-center gap-4 p-4 bg-white/95 backdrop-blur-sm transition-all duration-300 group-hover:bottom-0 border-t border-outline-variant/20 z-20">
+                    <div className="flex justify-center gap-3 w-full mt-auto">
                       {person.linkedinUrl && (
                         <a 
                           href={person.linkedinUrl} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="w-10 h-10 rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors"
+                          className="w-9 h-9 rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors hover:shadow-sm"
                           title="Connect on LinkedIn"
                         >
-                          <LinkedinIcon size={18} />
+                          <FaLinkedin size={16} />
                         </a>
                       )}
                       {person.orcidUrl && (
@@ -305,10 +302,10 @@ export default function About() {
                           href={person.orcidUrl} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="w-10 h-10 rounded-full bg-[#A6CE39]/10 text-[#A6CE39] flex items-center justify-center hover:bg-[#A6CE39] hover:text-white transition-colors"
+                          className="w-9 h-9 rounded-full bg-[#A6CE39]/10 text-[#A6CE39] flex items-center justify-center hover:bg-[#A6CE39] hover:text-white transition-colors hover:shadow-sm"
                           title="View ORCID Profile"
                         >
-                          <div className="font-bold font-serif text-[15px] leading-none">iD</div>
+                          <div className="font-bold font-serif text-[14px] leading-none">iD</div>
                         </a>
                       )}
                     </div>
