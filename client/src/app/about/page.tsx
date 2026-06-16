@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
@@ -11,17 +14,23 @@ const LinkedinIcon = ({ size = 24, className = "" }) => (
   </svg>
 );
 
-export default async function About() {
-  let researchers: any[] = [];
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/authors`, { next: { revalidate: 60 } });
-    if (res.ok) {
-      const json = await res.json();
-      researchers = json.data || [];
+export default function About() {
+  const [researchers, setResearchers] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchAuthors() {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/authors`);
+        if (res.ok) {
+          const json = await res.json();
+          setResearchers(json.data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch authors:", error);
+      }
     }
-  } catch (error) {
-    console.error("Failed to fetch authors:", error);
-  }
+    fetchAuthors();
+  }, []);
 
   const steps = [
     {
