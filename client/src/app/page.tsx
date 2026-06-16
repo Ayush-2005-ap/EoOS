@@ -159,10 +159,37 @@ export default function Home() {
                 <div className="animate-bobbing transform-style-3d">
                   {/* 3D revolving book container */}
                   <div className="w-[240px] h-[340px] relative transform-style-3d animate-revolve-book shadow-2xl rounded-r-lg">
-                    {/* Spine */}
+                    {/* Spine (Left Edge) */}
                     <div 
                       className="absolute left-0 top-0 w-[20px] h-full bg-gradient-to-r from-secondary to-secondary-container transform-style-3d shadow-inner" 
                       style={{ transform: "translateX(-10px) rotateY(-90deg)" }}
+                    />
+
+                    {/* Pages (Right Edge) */}
+                    <div 
+                      className="absolute right-0 top-[1px] w-[20px] h-[338px] bg-[#f8f9ff] transform-style-3d border-y border-r border-outline-variant/20 shadow-inner"
+                      style={{ 
+                        transform: "translateX(10px) rotateY(90deg)",
+                        backgroundImage: "repeating-linear-gradient(90deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
+                      }}
+                    />
+                    
+                    {/* Pages (Top Edge) */}
+                    <div 
+                      className="absolute left-[1px] top-0 w-[238px] h-[20px] bg-[#f8f9ff] transform-style-3d border-t border-outline-variant/20"
+                      style={{ 
+                        transform: "translateY(-10px) rotateX(90deg)",
+                        backgroundImage: "repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
+                      }}
+                    />
+
+                    {/* Pages (Bottom Edge) */}
+                    <div 
+                      className="absolute left-[1px] bottom-0 w-[238px] h-[20px] bg-[#f8f9ff] transform-style-3d border-b border-outline-variant/20"
+                      style={{ 
+                        transform: "translateY(10px) rotateX(-90deg)",
+                        backgroundImage: "repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
+                      }}
                     />
                     
                     {/* Front Cover (Fitted to translateZ(10px) with backface-hidden) */}
@@ -186,16 +213,11 @@ export default function Home() {
                     >
                       <Image
                         src="/cover-back.png"
-                        alt="Education Out-of-School Index 2024 Back Cover"
+                        alt="Back Cover"
                         fill
-                        className="object-cover"
+                        className="object-cover opacity-90"
                       />
                     </div>
-                    
-                    {/* Book pages edge layer */}
-                    <div 
-                      className="absolute right-0 top-[4px] bottom-[4px] w-[20px] bg-neutral-200 rounded-r-sm transform-style-3d origin-right -rotate-y-90 border-y border-r border-neutral-300"
-                    />
                   </div>
                 </div>
               </div>
