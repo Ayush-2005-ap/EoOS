@@ -12,8 +12,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
-    if (!token && pathname !== "/admin/login") {
-      router.push("/admin/login");
+    const normalizedPath = pathname?.replace(/\/$/, "");
+    if (!token && normalizedPath !== "/admin/login") {
+      router.push("/admin/login/");
     } else {
       setIsAuthChecking(false);
     }
@@ -26,7 +27,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (isAuthChecking) return <div className="h-screen flex items-center justify-center bg-slate-50">Loading...</div>;
 
-  if (pathname === "/admin/login") {
+  const normalizedPath = pathname?.replace(/\/$/, "");
+  if (normalizedPath === "/admin/login") {
     return <>{children}</>;
   }
 

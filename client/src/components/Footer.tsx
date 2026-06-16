@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Share2, Mail, ExternalLink } from "lucide-react";
+import { Mail, ExternalLink } from "lucide-react";
+import { FaYoutube, FaInstagram, FaFacebook, FaXTwitter, FaLinkedin } from "react-icons/fa6";
 
 export default function Footer() {
   return (
@@ -47,8 +48,8 @@ export default function Footer() {
           <h5 className="font-plus-jakarta text-[14px] font-bold text-primary">Quick Links</h5>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-on-surface-variant hover:text-primary transition-opacity text-[14px] inline-flex items-center gap-1">
-                Data Portal <ExternalLink size={12} />
+              <a href="https://ccs.in/" className="text-on-surface-variant hover:text-primary transition-opacity text-[14px] inline-flex items-center gap-1">
+                Centre For Civil Society
               </a>
             </li>
             <li>
@@ -69,7 +70,7 @@ export default function Footer() {
           <h5 className="font-plus-jakarta text-[14px] font-bold text-primary">Contact</h5>
           <ul className="space-y-2">
             <li className="text-on-surface-variant text-[14px]">
-              research@ccsindia.org
+              research@ccs.in
             </li>
             <li>
               <Link href="/contact" className="text-on-surface-variant hover:text-primary transition-opacity text-[14px]">
@@ -85,16 +86,44 @@ export default function Footer() {
         <div className="text-[13px] text-on-surface-variant">
           © {new Date().getFullYear()} Centre for Civil Society (CCS) Research. All rights reserved.
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <a
-            href="#"
-            className="text-on-surface-variant hover:text-primary p-2 bg-surface-container-low rounded-full transition-all"
-            aria-label="Share platform"
+            href="https://www.youtube.com/c/ccsindiatv"
+            className="text-on-surface-variant hover:text-[#FF0000] p-2 bg-surface-container-low rounded-full transition-all"
+            aria-label="YouTube"
           >
-            <Share2 size={16} />
+            <FaYoutube size={16} />
           </a>
           <a
-            href="mailto:research@ccsindia.org"
+            href="https://www.instagram.com/ccsindia/"
+            className="text-on-surface-variant hover:text-[#E1306C] p-2 bg-surface-container-low rounded-full transition-all"
+            aria-label="Instagram"
+          >
+            <FaInstagram size={16} />
+          </a>
+          <a
+            href="https://www.facebook.com/ccsindia"
+            className="text-on-surface-variant hover:text-[#1877F2] p-2 bg-surface-container-low rounded-full transition-all"
+            aria-label="Facebook"
+          >
+            <FaFacebook size={16} />
+          </a>
+          <a
+            href="https://twitter.com/ccsindia"
+            className="text-on-surface-variant hover:text-black p-2 bg-surface-container-low rounded-full transition-all"
+            aria-label="X"
+          >
+            <FaXTwitter size={16} />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/ccsindia/"
+            className="text-on-surface-variant hover:text-[#0A66C2] p-2 bg-surface-container-low rounded-full transition-all"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin size={16} />
+          </a>
+          <a
+            href="mailto:research@ccs.in"
             className="text-on-surface-variant hover:text-primary p-2 bg-surface-container-low rounded-full transition-all"
             aria-label="Email support"
           >
