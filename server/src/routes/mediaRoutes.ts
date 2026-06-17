@@ -118,8 +118,10 @@ router.delete("/voices/:id", requireAdmin, async (req, res) => {
     const voice = await prisma.voice.findUnique({ where: { id: String(id) } });
     if (!voice) return res.status(404).json({ error: "Not found" });
 
-    const fullPath = path.join(__dirname, "../../../public", voice.thumbnailPath);
-    if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    if (voice.thumbnailPath) {
+      const fullPath = path.join(__dirname, "../../../public", voice.thumbnailPath);
+      if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    }
 
     await prisma.voice.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
@@ -149,11 +151,11 @@ router.post("/reviews", requireAdmin, upload.single("avatar"), async (req, res) 
     const avatarUrl = req.file ? `/uploads/avatars/${req.file.filename}` : null;
 
     const testimonial = await prisma.testimonial.create({
-      data: { 
-        author, 
-        quote, 
-        role: role || "", 
-        type: type || "glass", 
+      data: {
+        author,
+        quote,
+        role: role || "",
+        type: type || "glass",
         initials: initials || "",
         avatarUrl
       },

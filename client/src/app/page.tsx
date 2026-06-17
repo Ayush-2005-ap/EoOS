@@ -14,11 +14,11 @@ export default function Home() {
   const router = useRouter();
   const [activeDomain, setActiveDomain] = useState<string>("Overall");
   const [hoveredStateId, setHoveredStateId] = useState<string | null>(null);
-  
+
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export default function Home() {
         <section className="relative overflow-hidden bg-gradient-to-b from-primary-container via-primary to-primary-container text-white py-24 md:py-32">
           {/* Subtle background overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-secondary/15 via-transparent to-transparent opacity-50" />
-          
+
           <div className="relative max-w-container-max-width mx-auto px-gutter grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: CTAs and Title */}
             <div className="lg:col-span-7 space-y-8 text-left">
@@ -127,9 +127,9 @@ export default function Home() {
                   </span>
                   Index 2026
                 </h1>
-                
+
                 <div className="w-64 sm:w-96 h-[1.5px] bg-[#FFCC00] mt-4 mb-5"></div>
-                
+
                 <p className="text-white text-[17px] sm:text-[20px] leading-[1.4] font-medium tracking-wide">
                   A Comparative Assessment of<br />
                   School Regulatory Frameworks<br />
@@ -160,40 +160,40 @@ export default function Home() {
                   {/* 3D revolving book container */}
                   <div className="w-[240px] h-[340px] relative transform-style-3d animate-revolve-book shadow-2xl rounded-r-lg">
                     {/* Spine (Left Edge) */}
-                    <div 
-                      className="absolute left-0 top-0 w-[20px] h-full bg-gradient-to-r from-secondary to-secondary-container transform-style-3d shadow-inner" 
+                    <div
+                      className="absolute left-0 top-0 w-[20px] h-full bg-gradient-to-r from-secondary to-secondary-container transform-style-3d shadow-inner"
                       style={{ transform: "translateX(-10px) rotateY(-90deg)" }}
                     />
 
                     {/* Pages (Right Edge) */}
-                    <div 
+                    <div
                       className="absolute right-0 top-[1px] w-[20px] h-[338px] bg-[#f8f9ff] transform-style-3d border-y border-r border-outline-variant/20 shadow-inner"
-                      style={{ 
+                      style={{
                         transform: "translateX(10px) rotateY(90deg)",
                         backgroundImage: "repeating-linear-gradient(90deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
                       }}
                     />
-                    
+
                     {/* Pages (Top Edge) */}
-                    <div 
+                    <div
                       className="absolute left-[1px] top-0 w-[238px] h-[20px] bg-[#f8f9ff] transform-style-3d border-t border-outline-variant/20"
-                      style={{ 
+                      style={{
                         transform: "translateY(-10px) rotateX(90deg)",
                         backgroundImage: "repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
                       }}
                     />
 
                     {/* Pages (Bottom Edge) */}
-                    <div 
+                    <div
                       className="absolute left-[1px] bottom-0 w-[238px] h-[20px] bg-[#f8f9ff] transform-style-3d border-b border-outline-variant/20"
-                      style={{ 
+                      style={{
                         transform: "translateY(10px) rotateX(-90deg)",
                         backgroundImage: "repeating-linear-gradient(0deg, #ffffff 0px, #ffffff 2px, #d3e4fe 3px)"
                       }}
                     />
-                    
+
                     {/* Front Cover (Fitted to translateZ(10px) with backface-hidden) */}
-                    <div 
+                    <div
                       className="absolute inset-0 rounded-r-lg border-y border-r border-white/20 select-none backface-hidden overflow-hidden bg-white"
                       style={{ transform: "translateZ(10px)" }}
                     >
@@ -207,7 +207,7 @@ export default function Home() {
                     </div>
 
                     {/* Back Cover (Fitted to translateZ(-10px) rotateY(180deg) with backface-hidden) */}
-                    <div 
+                    <div
                       className="absolute inset-0 rounded-l-lg border-y border-l border-white/20 select-none backface-hidden overflow-hidden bg-white"
                       style={{ transform: "translateZ(-10px) rotateY(180deg)" }}
                     >
@@ -239,17 +239,16 @@ export default function Home() {
 
             {/* Filter Bar */}
             <div className="flex justify-center border-b border-outline-variant/30 pb-4">
-              <div 
+              <div
                 ref={scrollContainerRef}
                 className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar max-w-full"
               >
                 <button
                   onClick={() => setActiveDomain("Overall")}
-                  className={`px-5 py-2 rounded-full font-semibold text-[13px] transition-all whitespace-nowrap ${
-                    activeDomain === "Overall"
+                  className={`px-5 py-2 rounded-full font-semibold text-[13px] transition-all whitespace-nowrap ${activeDomain === "Overall"
                       ? "bg-secondary text-white shadow-sm"
                       : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high"
-                  }`}
+                    }`}
                 >
                   Overall Index
                 </button>
@@ -257,11 +256,10 @@ export default function Home() {
                   <button
                     key={domain.id}
                     onClick={() => setActiveDomain(domain.id)}
-                    className={`px-5 py-2 rounded-full font-semibold text-[13px] transition-all whitespace-nowrap ${
-                      activeDomain === domain.id
+                    className={`px-5 py-2 rounded-full font-semibold text-[13px] transition-all whitespace-nowrap ${activeDomain === domain.id
                         ? "bg-secondary text-white shadow-sm"
                         : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high"
-                    }`}
+                      }`}
                   >
                     {domain.name}
                   </button>
@@ -327,13 +325,13 @@ export default function Home() {
                           {hoveredStateScore.score}
                         </span>
                       </div>
-                      
+
                       {/* Domain performance progress breakdown */}
                       <div className="space-y-3 pt-2">
                         <h4 className="text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">
                           {activeDomain === "Overall" ? "All Domains" : `${activeDomain} Indicators`}
                         </h4>
-                        
+
                         {activeDomain === "Overall" ? (
                           domainsData.map((domain) => {
                             const val = hoveredState.scores[domain.id];
@@ -376,9 +374,9 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="pt-2">
-                      <button 
+                      <button
                         onClick={() => handleStateClick(hoveredState.id)}
                         className="w-full bg-surface-container-low text-primary hover:bg-primary hover:text-white px-5 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center justify-center gap-2 border border-outline-variant/30"
                       >
@@ -389,7 +387,7 @@ export default function Home() {
                   </div>
                 ) : (() => {
                   const activeDomainData = domainsData.find(d => d.id === activeDomain);
-                  
+
                   if (activeDomain === "Overall" && statesData.length > 0) {
                     const sortedStates = [...statesData].sort((a, b) => b.baseScore - a.baseScore);
                     const top3 = sortedStates.slice(0, 3);
@@ -414,7 +412,7 @@ export default function Home() {
                             {avgScore}
                           </div>
                         </div>
-                        
+
                         <div className="space-y-6 pt-2">
                           {/* Top 3 */}
                           <div>
@@ -469,8 +467,8 @@ export default function Home() {
                           {activeDomainData ? activeDomainData.name : "Overall Index"}
                         </h3>
                         <p className="text-on-surface-variant text-[15px] max-w-[320px] leading-relaxed mx-auto">
-                          {activeDomainData 
-                            ? activeDomainData.description 
+                          {activeDomainData
+                            ? activeDomainData.description
                             : "The Overall Index aggregates performance across all key domains to provide a comprehensive view of the education landscape."}
                         </p>
                       </div>
@@ -572,7 +570,7 @@ export default function Home() {
         {/* Section 4: Simulator Teaser */}
         <section className="py-24 bg-gradient-to-r from-primary to-primary-container text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_var(--tw-gradient-stops))] from-secondary/15 via-transparent to-transparent opacity-60" />
-          
+
           <div className="relative max-w-container-max-width mx-auto px-gutter grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <span className="text-secondary-fixed font-bold text-[12px] uppercase tracking-widest">

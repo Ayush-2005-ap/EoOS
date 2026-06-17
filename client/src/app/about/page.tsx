@@ -78,7 +78,7 @@ export default function About() {
               Understanding the EoOS Index
             </h1>
             <p className="text-[16px] sm:text-[18px] leading-relaxed text-on-surface-variant max-w-4xl mx-auto">
-              The Education Out-of-School (EoOS) Index is India’s first comprehensive framework designed to measure and rank states based on their progress in ensuring every child has access to quality education. Through data-driven insights, we aim to bridge the gap between policy intent and ground-level outcomes.
+              The Ease of Operating Schools Index is India’s first comprehensive framework designed to measure and rank states based on their progress in ensuring every child has access to quality education. Through data-driven insights, we aim to bridge the gap between policy intent and ground-level outcomes.
             </p>
           </div>
         </section>
@@ -88,7 +88,7 @@ export default function About() {
           <div className="max-w-container-max-width mx-auto px-gutter flex flex-col lg:flex-row gap-16 items-start">
             <div className="lg:w-[60%] space-y-6">
               <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary">
-                What is the Education Out-of-School Index?
+                What is the Ease of Operating Schools Index ?
               </h2>
               <div className="space-y-4 text-on-surface-variant text-[15px] leading-relaxed">
                 <p>

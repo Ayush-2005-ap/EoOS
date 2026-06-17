@@ -11,7 +11,7 @@ export default function LaunchGuard({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const forceLaunched = searchParams.get("launched") === "true";
-  
+
   const [isLaunched, setIsLaunched] = useState(forceLaunched);
   const [isChecking, setIsChecking] = useState(!forceLaunched);
 
@@ -62,9 +62,8 @@ export default function LaunchGuard({ children }: { children: React.ReactNode })
     <>
       {/* The actual app */}
       <div
-        className={`transition-opacity duration-1000 ${
-          isLaunched ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none h-0 overflow-hidden"
-        }`}
+        className={`transition-opacity duration-1000 ${isLaunched ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none h-0 overflow-hidden"
+          }`}
       >
         {children}
       </div>
