@@ -29,7 +29,7 @@ export async function updateVoice(req: Request, res: Response) {
     const { id } = req.params;
     const { title, category, videoUrl, thumbnailPath, youtubeUrl } = req.body;
     const voice = await prisma.voice.update({
-      where: { id },
+      where: { id: String(id) },
       data: { title, category, videoUrl, thumbnailPath, youtubeUrl }
     });
     return res.json({ data: voice });
@@ -42,7 +42,7 @@ export async function updateVoice(req: Request, res: Response) {
 export async function deleteVoice(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    await prisma.voice.delete({ where: { id } });
+    await prisma.voice.delete({ where: { id: String(id) } });
     return res.json({ message: "Voice deleted successfully." });
   } catch (error) {
     console.error("[DELETE /api/voices/:id]", error);

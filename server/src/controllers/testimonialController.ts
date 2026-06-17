@@ -29,7 +29,7 @@ export async function updateTestimonial(req: Request, res: Response) {
     const { id } = req.params;
     const { author, role, quote, avatarUrl, initials, type } = req.body;
     const testimonial = await prisma.testimonial.update({
-      where: { id },
+      where: { id: String(id) },
       data: { author, role, quote, avatarUrl, initials, type }
     });
     return res.json({ data: testimonial });
@@ -42,7 +42,7 @@ export async function updateTestimonial(req: Request, res: Response) {
 export async function deleteTestimonial(req: Request, res: Response) {
   try {
     const { id } = req.params;
-    await prisma.testimonial.delete({ where: { id } });
+    await prisma.testimonial.delete({ where: { id: String(id) } });
     return res.json({ message: "Testimonial deleted successfully." });
   } catch (error) {
     console.error("[DELETE /api/testimonials/:id]", error);
