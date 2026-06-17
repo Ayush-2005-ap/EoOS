@@ -96,10 +96,13 @@ model StateSubIndicatorData {
 }
 
 model Report {
-  id        String   @id @default(uuid())
-  title     String
-  pdfPath   String   
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  title       String
+  type        String   @default("Official Report (PDF)")
+  size        String   @default("0 MB")
+  description String   @default("")
+  pdfPath     String   
+  createdAt   DateTime @default(now())
 }
 
 model Voice {

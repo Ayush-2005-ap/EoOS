@@ -52,10 +52,10 @@ export default function Contact() {
               Get in Touch
             </span>
             <h1 className="font-plus-jakarta text-3xl sm:text-4xl font-extrabold text-primary">
-              Contact Our Research Team
+              Contact Us
             </h1>
             <p className="text-on-surface-variant text-[15px] max-w-xl">
-              Have questions about our data aggregation logic, state rankings, or want to collaborate? Send us a message.
+              Have questions about our Report or want to collaborate? Send us a message.
             </p>
           </div>
         </section>

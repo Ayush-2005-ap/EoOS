@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { requireAdmin } from "../middleware/authMiddleware";
+import { upload as cloudUpload, cloudinary } from "../middlewares/upload";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -49,16 +50,35 @@ router.get("/reports", async (req, res) => {
   }
 });
 
-router.post("/reports", requireAdmin, upload.single("pdf"), async (req, res) => {
+router.post("/reports", requireAdmin, cloudUpload.single("pdf"), async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, type, size, description } = req.body;
     if (!title || !req.file) return res.status(400).json({ error: "Title and PDF file are required" });
 
-    const pdfPath = `/uploads/reports/${req.file.filename}`;
-    const report = await prisma.report.create({
-      data: { title, pdfPath },
-    });
-    res.status(201).json({ data: report });
+    // Upload buffer to Cloudinary via stream
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: "reports", resource_type: "image" }, // Using "image" to allow inline preview
+      async (error, result) => {
+        if (error || !result) {
+          console.error("Cloudinary upload error:", error);
+          return res.status(500).json({ error: "Failed to upload to Cloudinary" });
+        }
+
+        const report = await prisma.report.create({
+          data: { 
+            title, 
+            type: type || "Official Report (PDF)",
+            size: size || "0 MB",
+            description: description || "",
+            pdfPath: result.secure_url 
+          },
+        });
+        res.status(201).json({ data: report });
+      }
+    );
+
+    uploadStream.end(req.file.buffer);
+
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

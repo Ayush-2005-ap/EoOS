@@ -9,16 +9,20 @@ import Link from "next/link";
 
 export default function Resources() {
   const [states, setStates] = useState<ApiStateData[]>([]);
+  const [reports, setReports] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"publications" | "legal">("publications");
 
   useEffect(() => {
-    fetchStates()
-      .then((data) => {
-        // Sort states alphabetically
-        const sorted = data.sort((a, b) => a.name.localeCompare(b.name));
+    Promise.all([
+      fetchStates(),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/media/reports`).then(res => res.json())
+    ])
+      .then(([statesData, reportsJson]) => {
+        const sorted = statesData.sort((a, b) => a.name.localeCompare(b.name));
         setStates(sorted);
+        setReports(reportsJson.data || []);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -29,24 +33,6 @@ export default function Resources() {
 
   const filteredStates = states.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  const mainDownloads = [
-    {
-      title: "The Ease of Operating Schools Index 2026",
-      type: "Official Report (PDF)",
-      size: "14.2 MB",
-      desc: "The complete annual report publishing national rankings, domain-wise findings, state profiles, and policy recommendations.",
-      icon: BookOpen,
-      color: "bg-secondary/10 text-secondary",
-    },
-    {
-      title: "Index Methodology",
-      type: "Technical Guide (PDF)",
-      size: "3.8 MB",
-      desc: "Detailed academic explanation of the scoring rules, indicator definitions, geometric mean aggregation logic, and normalization formulas.",
-      icon: FileText,
-      color: "bg-primary/10 text-primary",
-    },
-  ];
 
   return (
     <>
@@ -60,9 +46,7 @@ export default function Resources() {
             <h1 className="font-plus-jakarta text-3xl sm:text-4xl font-extrabold text-primary">
               Resources & Downloads
             </h1>
-            <p className="text-on-surface-variant text-[15px] max-w-xl">
-              Access raw datasets, academic whitepapers, and our annual national reports. Individual state-wise performance profiles are also available for localized policy analysis.
-            </p>
+            
             
             {/* Tabs Navigation */}
             <div className="flex items-center gap-4 pt-6 mt-4 border-t border-outline-variant/30 overflow-x-auto no-scrollbar">
@@ -97,15 +81,16 @@ export default function Resources() {
           <div>
             <h2 className="font-plus-jakarta text-2xl font-extrabold text-primary mb-6">Featured Publications</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {mainDownloads.map((item, idx) => {
-                const Icon = item.icon;
+              {reports.length > 0 ? reports.map((item, idx) => {
+                const Icon = idx % 2 === 0 ? BookOpen : FileText;
+                const color = idx % 2 === 0 ? "bg-secondary/10 text-secondary" : "bg-primary/10 text-primary";
                 return (
                   <div
                     key={idx}
                     className="bg-white rounded-2xl border border-outline-variant/35 shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col justify-between h-80"
                   >
                     <div className="space-y-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.color}`}>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${color}`}>
                         <Icon size={24} />
                       </div>
                       <div className="space-y-1">
@@ -117,17 +102,24 @@ export default function Resources() {
                         </span>
                       </div>
                       <p className="text-on-surface-variant text-[13px] leading-relaxed line-clamp-3">
-                        {item.desc}
+                        {item.description}
                       </p>
                     </div>
                     
-                    <button className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm">
+                    <a 
+                      href={item.pdfPath.startsWith("http") ? item.pdfPath : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                    >
                       <Download size={14} />
                       Download File
-                    </button>
+                    </a>
                   </div>
                 );
-              })}
+              }) : (
+                <p className="col-span-3 text-slate-500 py-12 text-center">No featured publications available.</p>
+              )}
             </div>
           </div>
 

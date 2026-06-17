@@ -11,6 +11,9 @@ export default function ReportsManager() {
 
   const [showAdd, setShowAdd] = useState(false);
   const [title, setTitle] = useState("");
+  const [type, setType] = useState("Official Report (PDF)");
+  const [size, setSize] = useState("14.2 MB");
+  const [description, setDescription] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
@@ -34,6 +37,9 @@ export default function ReportsManager() {
 
     const formData = new FormData();
     formData.append("title", title);
+    formData.append("type", type);
+    formData.append("size", size);
+    formData.append("description", description);
     formData.append("pdf", file);
 
     try {
@@ -43,6 +49,9 @@ export default function ReportsManager() {
       });
       if (res.ok) {
         setTitle("");
+        setType("Official Report (PDF)");
+        setSize("14.2 MB");
+        setDescription("");
         setFile(null);
         setShowAdd(false);
         fetchReports();
@@ -93,6 +102,31 @@ export default function ReportsManager() {
             className="w-full p-3 border rounded-lg" 
             value={title} 
             onChange={e => setTitle(e.target.value)} 
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <input 
+              required 
+              type="text" 
+              placeholder="Type (e.g. Official Report (PDF))" 
+              className="w-full p-3 border rounded-lg" 
+              value={type} 
+              onChange={e => setType(e.target.value)} 
+            />
+            <input 
+              required 
+              type="text" 
+              placeholder="File Size (e.g. 14.2 MB)" 
+              className="w-full p-3 border rounded-lg" 
+              value={size} 
+              onChange={e => setSize(e.target.value)} 
+            />
+          </div>
+          <textarea
+            required
+            placeholder="Description (e.g. The complete annual report...)"
+            className="w-full p-3 border rounded-lg h-24 resize-none"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
           />
           <input 
             required 
