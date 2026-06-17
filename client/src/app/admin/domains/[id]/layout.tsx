@@ -1,9 +1,14 @@
 import React from "react";
+import { fetchDomains } from "@/services/api";
 
 export async function generateStaticParams() {
-  // Return a dummy ID so Next.js static export succeeds.
-  // Note: True dynamic rendering of unknown IDs requires a Node.js server.
-  return [{ id: "default" }];
+  try {
+    const domains = await fetchDomains();
+    return domains.map((domain) => ({ id: domain.id }));
+  } catch (error) {
+    console.error(error);
+    return [{ id: "default" }];
+  }
 }
 
 export default function AdminDomainLayout({ children }: { children: React.ReactNode }) {

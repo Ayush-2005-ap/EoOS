@@ -39,7 +39,7 @@ export default function Resources() {
       color: "bg-secondary/10 text-secondary",
     },
     {
-      title: "Index Methodology Whitepaper",
+      title: "Index Methodology",
       type: "Technical Guide (PDF)",
       size: "3.8 MB",
       desc: "Detailed academic explanation of the scoring rules, indicator definitions, geometric mean aggregation logic, and normalization formulas.",

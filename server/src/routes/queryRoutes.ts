@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
       },
     });
 
-    const mailOptions = {
+    const adminMailOptions = {
       from: `"${name}" <${email}>`,
       to: "research@ccs.in",
       replyTo: email,
@@ -33,11 +33,20 @@ router.post("/", async (req, res) => {
       text: `Name: ${name}\nEmail: ${email}\nOrganization: ${org || 'N/A'}\nSubject: ${subject || 'N/A'}\n\nMessage:\n${message}`,
     };
 
+    const userMailOptions = {
+      from: `"EoOS Research Team" <${process.env.SMTP_USER || "research@ccs.in"}>`,
+      to: email,
+      subject: `We have received your query: ${subject || 'No Subject'}`,
+      text: `Dear ${name},\n\nThank you for reaching out to the Centre for Civil Society regarding the Ease of Operating Schools Index [EoOS] 2026.\n\nWe have received your query. Our research team will review it and get back to you soon. Please note that response times may vary depending on the nature and volume of requests received.\n\nWe appreciate your interest in our research and thank you for your patience.\n\nWarm regards,\n\nResearch Team\nCentre for Civil Society`,
+    };
+
     if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-      await transporter.sendMail(mailOptions);
+      await transporter.sendMail(adminMailOptions);
+      await transporter.sendMail(userMailOptions);
     } else {
-      console.log("No SMTP credentials provided in .env. Skipping actual email send. Email would be:");
-      console.log(mailOptions);
+      console.log("No SMTP credentials provided in .env. Skipping actual email send. Emails would be:");
+      console.log("Admin Email:", adminMailOptions);
+      console.log("User Email:", userMailOptions);
     }
 
     res.status(201).json({ data: query, message: "Query submitted successfully" });

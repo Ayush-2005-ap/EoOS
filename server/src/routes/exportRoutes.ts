@@ -44,7 +44,7 @@ router.post("/email", async (req, res) => {
       from: `"EoOS Index Data Portal" <${process.env.SMTP_USER || "no-reply@ethereal.email"}>`,
       to: email,
       subject: "Your EoOS Index Rankings Export",
-      text: `Hi ${name},\n\nThank you for exporting the State Rankings from the EoOS Index Data Portal.\n\nPlease find your CSV dataset attached to this email.\n\nBest Regards,\nThe EoOS Team`,
+      text: `Dear ${name},\n\nThank you for downloading the Ease of Operating Schools (EoOS) Index 2026. Please find your requested CSV dataset attached to this email.\n\nWe appreciate your interest in our research work and hope the report serves as a useful resource for understanding the regulatory framework governing unaided private schools across India. The Index aims to contribute to informed discussions on the governance of private school education and to support evidence-based policy reform.\n\nWe would be delighted to hear your feedback, comments, or suggestions on the report. Your insights will help us strengthen future editions and improve the quality of our research.\n\nFor any feedback or queries, please feel free to write to us at research@ccs.in\n\nThank you for your support and engagement.\n\nWarm regards,\n\nCentre for Civil Society`,
       attachments: [
         {
           filename: "EoOS_Index_Rankings.csv",

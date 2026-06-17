@@ -40,7 +40,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-on-surface font-inter">
+      <body className="min-h-full flex flex-col bg-background text-on-surface font-inter" suppressHydrationWarning>
         <Suspense fallback={null}>
           <PageTransition />
         </Suspense>

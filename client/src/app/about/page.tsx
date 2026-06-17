@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import { BookOpen, Star, HelpCircle, Users, CheckCircle, Database } from "lucide-react";
+import { BookOpen, Star, HelpCircle, Users, CheckCircle, Database, FileText, Target } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa6";
 
 export default function About() {
@@ -54,12 +54,12 @@ export default function About() {
   ];
 
   const domains = [
-    { id: "01", name: "Ease of Regulatory Clarity,Predictability & Accessibility ", desc: "This domain assesses the extent to which school regulations are publicly available and accessible, particularly through the official State Education Department websites and related digital platforms. It also covers the extent to which laws are clear, stable, and rule-based, and supported by well-defined timelines, approving authorities and procedures." },
-    { id: "02", name: "Ease of Regulatory Compliance ", desc: "This domain examines the procedural and administrative burden placed on private schools in order to comply with regulatory requirements." },
-    { id: "03", name: "Ease of Operations without Arbitary Regulatory Action", desc: "This domain evaluates the extent to which school operations are protected from discretionary regulatory action through the presence of objectives safeguards and accountability mechanisms." },
-    { id: "04", name: "Ease of Financial Mobiliation", desc: "This domain assess the degree of operational and managerial flexibility available to schools within the existing legal framework." },
-    { id: "05", name: "Ease of School Lifecycle Operations", desc: "This domain evaluatres the regulatory requiremnts governing the establishment of new schools, expansion of existing institutions, and closure or exit of schools." },
-    { id: "06", name: "Ease of Institutional Autonomy", desc: "This domain assesses the ability of schools to accumulate and allocate funds recieved for organizational use and investments." },
+    { id: "01", name: "Regulatory Clarity,Predictability & Accessibility ", desc: "This domain assesses the extent to which school regulations are publicly available and accessible, particularly through the official State Education Department websites and related digital platforms. It also covers the extent to which laws are clear, stable, and rule-based, and supported by well-defined timelines, approving authorities and procedures." },
+    { id: "02", name: "Regulatory Compliance ", desc: "This domain examines the procedural and administrative burden placed on private schools in order to comply with regulatory requirements." },
+    { id: "03", name: "Operations without Arbitary Regulatory Action", desc: "This domain evaluates the extent to which school operations are protected from discretionary regulatory action through the presence of objectives safeguards and accountability mechanisms." },
+    { id: "04", name: "Financial Mobiliation", desc: "This domain assess the degree of operational and managerial flexibility available to schools within the existing legal framework." },
+    { id: "05", name: "School Lifecycle Operations", desc: "This domain evaluatres the regulatory requiremnts governing the establishment of new schools, expansion of existing institutions, and closure or exit of schools." },
+    { id: "06", name: "Institutional Autonomy", desc: "This domain assesses the ability of schools to accumulate and allocate funds recieved for organizational use and investments." },
   ];
 
 
@@ -78,7 +78,7 @@ export default function About() {
               Understanding the EoOS Index
             </h1>
             <p className="text-[16px] sm:text-[18px] leading-relaxed text-on-surface-variant max-w-4xl mx-auto">
-              The Ease of Operating Schools Index is India’s first comprehensive framework designed to measure and rank states based on their progress in ensuring every child has access to quality education. Through data-driven insights, we aim to bridge the gap between policy intent and ground-level outcomes.
+              Understanding the EOOS Index - A comprehensive index that examines the regulatory frameworks governing private schools across 28 states and 2 union territories in India.
             </p>
           </div>
         </section>
@@ -92,13 +92,13 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-on-surface-variant text-[15px] leading-relaxed">
                 <p>
-                  The EoOS Index serves as a critical diagnostic tool for the Indian education ecosystem. By moving beyond simple enrollment numbers, the index captures the nuanced realities of student retention, socioeconomic barriers, and systemic gaps that lead to children falling out of the formal schooling system.
+                  The Ease of Operating Schools (EoOS) Index 2026 is India's first comprehensive comparative assessment of the regulatory environment governing private schools across states and union territories. Developed by the Centre for Civil Society (CCS), the index evaluates how state-level laws, rules, and administrative frameworks enable or constrain the functioning of schools.
                 </p>
                 <p>
-                  Our methodology combines rigorous academic research with real-world policy application. We utilize primary data from national surveys and administrative records to create a multi-dimensional view of educational health across diverse geographies, from urban centers to remote rural districts.
+                 The index adopts a de jure approach, assessing laws rather than their implementation. The timeline for assessment is up to December 2025.
                 </p>
                 <p>
-                  Ultimately, the Index is not just a ranking; it is a roadmap for reform. It provides state governments with the evidence needed to allocate resources more effectively and implement interventions that are tailored to their specific educational challenges.
+                  Ultimately, the Index is not just a ranking; it is a roadmap for reform. By identifying regulatory strengths, exposing bottlenecks, and highlighting best practices across states, the EoOS Index provides policymakers with a practical framework for improving school governance. It encourages evidence-based decision-making and promotes a constructive form of competitive federalism in which states can learn from one another to create more transparent, predictable, and enabling regulatory environments for schools.
                 </p>
               </div>
               <div className="inline-flex items-center gap-3 bg-secondary/5 text-secondary px-5 py-3 rounded-xl border border-secondary/20">
@@ -125,7 +125,16 @@ export default function About() {
                     <HelpCircle size={24} />
                   </div>
                   <div>
-                    <div className="font-plus-jakarta text-xl font-bold">80+ Indicators</div>
+                    <div className="font-plus-jakarta text-xl font-bold">23 Indicators</div>
+                    <div className="text-[12px] text-on-primary-container font-semibold">Assessment Criteria</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-secondary-fixed">
+                    <Target size={24} />
+                  </div>
+                  <div>
+                    <div className="font-plus-jakarta text-xl font-bold">164 Sub-Indicators</div>
                     <div className="text-[12px] text-on-primary-container font-semibold">Granular Data Points</div>
                   </div>
                 </div>
@@ -140,10 +149,19 @@ export default function About() {
                 </div>
                 <div className="flex items-center gap-6">
                   <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-secondary-fixed">
-                    <Users size={24} />
+                    <FileText size={24} />
                   </div>
                   <div>
-                    <div className="font-plus-jakarta text-xl font-bold">Annual Edition</div>
+                    <div className="font-plus-jakarta text-xl font-bold">180+ Laws</div>
+                    <div className="text-[12px] text-on-primary-container font-semibold">Comprehensive Assessment</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-secondary-fixed">
+                    <Star size={24} />
+                  </div>
+                  <div>
+                    <div className="font-plus-jakarta text-xl font-bold">2026 Edition</div>
                     <div className="text-[12px] text-on-primary-container font-semibold">Consistent Monitoring</div>
                   </div>
                 </div>
@@ -156,7 +174,7 @@ export default function About() {
         <section className="bg-surface-container-low py-24 border-t border-outline-variant/20">
           <div className="max-w-container-max-width mx-auto px-gutter space-y-12">
             <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary text-center">
-              The Six Evaluation Domains
+              The Six Domains of the Index
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {domains.map((domain) => (
