@@ -57,7 +57,7 @@ router.post("/reports", requireAdmin, cloudUpload.single("pdf"), async (req, res
 
     // Upload buffer to Cloudinary via stream
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "reports", resource_type: "image" }, // Using "image" to allow inline preview
+      { folder: "reports", resource_type: "raw" }, // Using "raw" to ensure PDFs are downloadable and viewable without image processing
       async (error, result) => {
         if (error || !result) {
           console.error("Cloudinary upload error:", error);
