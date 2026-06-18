@@ -163,3 +163,10 @@ model DatasetSubscriber {
   consentGiven Boolean  @default(true)
   createdAt    DateTime @default(now())
 }
+
+model Dataset {
+  id        String   @id @default(uuid())
+  filename  String
+  data      Json
+  createdAt DateTime @default(now())
+}

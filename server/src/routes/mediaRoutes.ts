@@ -204,4 +204,42 @@ router.delete("/reviews/:id", requireAdmin, async (req, res) => {
   }
 });
 
+// ============================================================================
+// DATASET (Excel to JSON)
+// ============================================================================
+import * as xlsx from "xlsx";
+
+const memoryUpload = multer({ storage: multer.memoryStorage() });
+
+router.get("/dataset", async (req, res) => {
+  try {
+    const dataset = await prisma.dataset.findFirst({ orderBy: { createdAt: "desc" } });
+    res.json({ data: dataset ? dataset.data : [] });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/dataset", requireAdmin, memoryUpload.single("excel"), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "Excel file required" });
+
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = xlsx.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+
+    const dataset = await prisma.dataset.create({
+      data: {
+        filename: req.file.originalname,
+        data: data as any,
+      },
+    });
+
+    res.status(201).json({ message: "Dataset uploaded and parsed successfully" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
-import { Download, FileText, Scale, BookOpen, ExternalLink, HelpCircle, Loader2, Search } from "lucide-react";
+import { Download, Search, FileText, ExternalLink, Loader2, BookOpen, Scale, Database, Lock } from "lucide-react";
 import Link from "next/link";
 
 export default function Resources() {
@@ -121,6 +121,33 @@ export default function Resources() {
               }) : (
                 <p className="col-span-3 text-slate-500 py-12 text-center">No featured publications available.</p>
               )}
+            </div>
+          </div>
+
+          {/* Raw Dataset Link Box */}
+          <div className="mb-12">
+            <div className="bg-white rounded-2xl border border-outline-variant/35 shadow-sm hover:shadow-md transition-shadow p-8 flex flex-col justify-between h-auto max-w-sm">
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-secondary/10 text-secondary">
+                  <Database size={24} />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-plus-jakarta text-lg font-bold text-primary leading-snug">
+                    Field Research Dataset
+                  </h3>
+                </div>
+                <p className="text-on-surface-variant text-[13px] leading-relaxed line-clamp-3">
+                  Comprehensive breakdown of raw scoring data and rules across all 30 evaluated states and union territories.
+                </p>
+              </div>
+              
+              <Link 
+                href="/resources/dataset"
+                className="w-full mt-6 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+              >
+                <Database size={14} />
+                View Full Dataset
+              </Link>
             </div>
           </div>
 

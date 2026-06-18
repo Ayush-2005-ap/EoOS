@@ -161,9 +161,16 @@ export default function Home() {
                   <div className="w-[240px] h-[340px] relative transform-style-3d animate-revolve-book shadow-2xl rounded-r-lg">
                     {/* Spine (Left Edge) */}
                     <div
-                      className="absolute left-0 top-0 w-[20px] h-full bg-gradient-to-r from-secondary to-secondary-container transform-style-3d shadow-inner"
+                      className="absolute left-0 top-0 w-[20px] h-full bg-gradient-to-r from-secondary to-secondary-container transform-style-3d shadow-inner overflow-hidden border-y border-outline-variant/20"
                       style={{ transform: "translateX(-10px) rotateY(-90deg)" }}
-                    />
+                    >
+                      <Image
+                        src="/spine.jpg"
+                        alt="Book Spine"
+                        fill
+                        className="object-fill"
+                      />
+                    </div>
 
                     {/* Pages (Right Edge) */}
                     <div
@@ -391,7 +398,7 @@ export default function Home() {
                   if (activeDomain === "Overall" && statesData.length > 0) {
                     const sortedStates = [...statesData].sort((a, b) => b.baseScore - a.baseScore);
                     const top3 = sortedStates.slice(0, 3);
-                    const bottom3 = sortedStates.slice(-3).reverse();
+                    const bottom3 = sortedStates.slice(-3);
                     const avgScore = (statesData.reduce((acc, s) => acc + s.baseScore, 0) / statesData.length).toFixed(2);
 
                     return (
@@ -437,7 +444,7 @@ export default function Home() {
                               {bottom3.map((s, i) => (
                                 <div key={s.id} className="flex justify-between items-center bg-red-50 px-3 py-2 rounded-lg border border-red-100">
                                   <div className="flex items-center gap-3">
-                                    <span className="text-red-700 font-extrabold text-[14px]">#{statesData.length - i}</span>
+                                    <span className="text-red-700 font-extrabold text-[14px]">#{statesData.length - 2 + i}</span>
                                     <span className="text-on-surface font-semibold text-[14px]">{s.name}</span>
                                   </div>
                                   <span className="font-bold text-red-700">{s.baseScore}</span>
