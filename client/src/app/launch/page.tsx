@@ -127,7 +127,7 @@ export default function LaunchExperience() {
       {/* Sequence 0: Quote */}
       <div className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ${sequence === 0 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
         <p className="text-3xl sm:text-5xl font-plus-jakarta font-medium tracking-wide text-white/90 italic">
-          "Every ranking tells a story."
+          "Every INDEX tells a story."
         </p>
       </div>
 
