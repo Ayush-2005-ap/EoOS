@@ -45,14 +45,21 @@ export async function fetchStates(): Promise<ApiStateData[]> {
   const res = await fetch(`${API_BASE_URL}/states`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to fetch states");
   const json = await res.json();
-  return json.data;
+  return json.data.map((state: any) => ({
+    ...state,
+    pdfUrl: state.pdfUrl?.replace("ras.cloudinary.com", "res.cloudinary.com")
+  }));
 }
 
 export async function fetchStateById(id: string): Promise<ApiStateProfile> {
   const res = await fetch(`${API_BASE_URL}/states/${id}`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Failed to fetch state ${id}`);
   const json = await res.json();
-  return json.data;
+  const state = json.data;
+  if (state.pdfUrl) {
+    state.pdfUrl = state.pdfUrl.replace("ras.cloudinary.com", "res.cloudinary.com");
+  }
+  return state;
 }
 
 export async function fetchDomains(): Promise<ApiDomain[]> {

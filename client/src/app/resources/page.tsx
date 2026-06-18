@@ -22,7 +22,11 @@ export default function Resources() {
       .then(([statesData, reportsJson]) => {
         const sorted = statesData.sort((a, b) => a.name.localeCompare(b.name));
         setStates(sorted);
-        setReports(reportsJson.data || []);
+        const reportsData = (reportsJson.data || []).map((report: any) => ({
+          ...report,
+          pdfPath: report.pdfPath?.replace("ras.cloudinary.com", "res.cloudinary.com")
+        }));
+        setReports(reportsData);
         setIsLoading(false);
       })
       .catch((err) => {
