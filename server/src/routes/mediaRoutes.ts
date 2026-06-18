@@ -55,8 +55,8 @@ router.post("/reports", requireAdmin, cloudUpload.single("pdf"), async (req, res
     const { title, type, size, description } = req.body;
     if (!title || !req.file) return res.status(400).json({ error: "Title and PDF file are required" });
 
-    // Upload buffer to Cloudinary via stream
-    const uploadStream = cloudinary.uploader.upload_stream(
+    // Upload buffer to Cloudinary via chunked stream
+    const uploadStream = cloudinary.uploader.upload_chunked_stream(
       { folder: "reports", resource_type: "raw" }, // Using "raw" to ensure PDFs are downloadable and viewable without image processing
       async (error, result) => {
         if (error || !result) {
