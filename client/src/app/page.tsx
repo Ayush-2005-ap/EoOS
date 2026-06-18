@@ -219,7 +219,7 @@ export default function Home() {
                       style={{ transform: "translateZ(-10px) rotateY(180deg)" }}
                     >
                       <Image
-                        src="/cover-back.png"
+                        src="/Cover-back.png"
                         alt="Back Cover"
                         fill
                         className="object-cover opacity-90"
