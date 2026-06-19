@@ -82,9 +82,22 @@ export default function Footer() {
       </div>
 
       {/* Copyright Bar */}
-      <div className="max-w-container-max-width mx-auto px-gutter mt-12 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="text-[13px] text-on-surface-variant">
-          © {new Date().getFullYear()} Centre for Civil Society (CCS) Research. All rights reserved.
+      <div className="max-w-container-max-width mx-auto px-gutter mt-12 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+        <div className="flex flex-col gap-1 items-center md:items-start text-center md:text-left">
+          <div className="text-[13px] text-on-surface-variant">
+            © {new Date().getFullYear()} Centre for Civil Society (CCS) Research. All rights reserved.
+          </div>
+          <div className="text-[13px] text-on-surface-variant">
+            Designed & Developed by{' '}
+            <a
+              href="https://www.linkedin.com/in/ayushpandey20/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline hover:text-primary transition-all"
+            >
+              Ayush Pandey
+            </a>
+          </div>
         </div>
         <div className="flex gap-3">
           <a
