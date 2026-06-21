@@ -170,3 +170,11 @@ model Dataset {
   data      Json
   createdAt DateTime @default(now())
 }
+
+model GalleryImage {
+  id        String   @id @default(uuid())
+  title     String?
+  imageUrl  String
+  publicId  String?
+  createdAt DateTime @default(now())
+}

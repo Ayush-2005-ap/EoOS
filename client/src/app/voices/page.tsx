@@ -69,21 +69,25 @@ const HoverVideoCard = ({
 export default function Voices() {
   const [videoStories, setVideoStories] = useState<any[]>([]);
   const [masonryQuotes, setMasonryQuotes] = useState<any[]>([]);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
-        const [voicesRes, reviewsRes] = await Promise.all([
+        const [voicesRes, reviewsRes, galleryRes] = await Promise.all([
           fetch(`${baseUrl}/media/voices`),
-          fetch(`${baseUrl}/media/reviews`)
+          fetch(`${baseUrl}/media/reviews`),
+          fetch(`${baseUrl}/media/gallery`)
         ]);
         const voicesData = await voicesRes.json();
         const reviewsData = await reviewsRes.json();
+        const galleryData = await galleryRes.json();
 
         setVideoStories(voicesData.data || []);
         setMasonryQuotes(reviewsData.data || []);
+        setGalleryImages(galleryData.data || []);
       } catch (e) {
         console.error("Failed to fetch voices and testimonials:", e);
       } finally {
@@ -189,6 +193,25 @@ export default function Voices() {
             })}
           </div>
         </section>
+
+        {/* Gallery Masonry */}
+        {galleryImages.length > 0 && (
+          <section className="mt-20">
+            <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-8">Event Gallery</h2>
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+              {galleryImages.map((img) => (
+                <div key={img.id} className="break-inside-avoid relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <img src={img.imageUrl} alt={img.title || "Event Image"} className="w-full h-auto object-cover rounded-xl" />
+                  {img.title && (
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p className="text-white font-medium text-sm">{img.title}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
       </main>
       <Footer />

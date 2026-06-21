@@ -242,4 +242,65 @@ router.post("/dataset", requireAdmin, memoryUpload.single("excel"), async (req, 
   }
 });
 
+// ============================================================================
+// GALLERY IMAGES
+// ============================================================================
+
+router.get("/gallery", async (req, res) => {
+  try {
+    const images = await prisma.galleryImage.findMany({ orderBy: { createdAt: "desc" } });
+    res.json({ data: images });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/gallery", requireAdmin, cloudUpload.single("image"), async (req, res) => {
+  try {
+    const { title } = req.body;
+    if (!req.file) return res.status(400).json({ error: "Image file is required" });
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: "gallery" },
+      async (error, result) => {
+        if (error || !result) {
+          console.error("Cloudinary upload error:", error);
+          return res.status(500).json({ error: "Failed to upload to Cloudinary" });
+        }
+
+        const galleryImage = await prisma.galleryImage.create({
+          data: { 
+            title: title || "", 
+            imageUrl: result.secure_url,
+            publicId: result.public_id
+          },
+        });
+        res.status(201).json({ data: galleryImage });
+      }
+    );
+
+    uploadStream.end(req.file.buffer);
+
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/gallery/:id", requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const galleryImage = await prisma.galleryImage.findUnique({ where: { id: String(id) } });
+    if (!galleryImage) return res.status(404).json({ error: "Not found" });
+
+    if (galleryImage.publicId) {
+      await cloudinary.uploader.destroy(galleryImage.publicId);
+    }
+
+    await prisma.galleryImage.delete({ where: { id: String(id) } });
+    res.json({ message: "Deleted successfully" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;
