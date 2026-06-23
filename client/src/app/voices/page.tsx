@@ -2,8 +2,9 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Quote, Play, ArrowRight, Loader2 } from "lucide-react";
+import { Quote, Play, ArrowRight, Loader2, X } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const HoverVideoCard = ({ 
   videoUrl, 
@@ -71,6 +72,7 @@ export default function Voices() {
   const [masonryQuotes, setMasonryQuotes] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,6 +123,23 @@ export default function Voices() {
         .dark .glass-card {
             background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-scroll {
+          animation: scroll 40s linear infinite;
+        }
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}} />
       <main className="pt-32 pb-16 max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8">
@@ -194,26 +213,78 @@ export default function Voices() {
           </div>
         </section>
 
-        {/* Gallery Masonry */}
+        {/* Gallery Infinite Marquee */}
         {galleryImages.length > 0 && (
-          <section className="mt-20">
+          <section className="mt-20 overflow-hidden">
             <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-8">Event Gallery</h2>
-            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-              {galleryImages.map((img) => (
-                <div key={img.id} className="break-inside-avoid relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <img src={img.imageUrl} alt={img.title || "Event Image"} className="w-full h-auto object-cover rounded-xl" />
-                  {img.title && (
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <p className="text-white font-medium text-sm">{img.title}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
+            <div className="relative w-full hide-scrollbar overflow-hidden flex items-center py-4">
+              <div className="flex gap-6 animate-scroll w-max pr-6">
+                {[...galleryImages, ...galleryImages].map((img, idx) => (
+                  <motion.div 
+                    key={`${img.id}-${idx}`} 
+                    onClick={() => setSelectedImage(img)}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="relative group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer w-[280px] md:w-[350px] aspect-[4/3] flex-shrink-0"
+                  >
+                    <img 
+                      src={img.imageUrl} 
+                      alt={img.title || "Event Image"} 
+                      className="w-full h-full object-cover rounded-xl transform transition-transform duration-700 ease-out group-hover:scale-110" 
+                    />
+                    {img.title && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                        <p className="text-white font-semibold text-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                          {img.title}
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </section>
         )}
 
       </main>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 md:p-8 backdrop-blur-sm"
+          >
+            <button 
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors z-[110]"
+            >
+              <X size={32} />
+            </button>
+            <motion.img 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              src={selectedImage.imageUrl} 
+              alt={selectedImage.title || "Gallery Image"} 
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl z-[105]"
+              onClick={(e) => e.stopPropagation()}
+            />
+            {selectedImage.title && (
+              <div className="absolute bottom-6 left-0 right-0 text-center z-[110]">
+                <p className="text-white text-xl font-medium drop-shadow-lg">{selectedImage.title}</p>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Footer />
     </>
   );
