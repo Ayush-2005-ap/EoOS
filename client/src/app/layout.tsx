@@ -17,6 +17,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 import { Suspense } from "react";
 import PageTransition from "@/components/PageTransition";
 import LaunchGuard from "@/components/LaunchGuard";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const metadata: Metadata = {
   title: "EoOS Index | India Education Analytics & Ranking Platform",
@@ -39,6 +40,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
+        <GoogleAnalytics ga_id={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID as string} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-on-surface font-inter" suppressHydrationWarning>
         <Suspense fallback={null}>

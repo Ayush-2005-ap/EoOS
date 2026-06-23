@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { requireAdmin } from "../middleware/authMiddleware";
-import { upload, cloudinary } from "../middlewares/upload";
+import { upload, supabaseStorage } from "../middlewares/upload";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -16,27 +16,16 @@ router.post("/states/:id/pdf", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
 
-    // Upload buffer to Cloudinary via stream
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "state_profiles", resource_type: "image" }, // Use "image" so PDFs can be rendered inline in an iframe instead of forcing a download
-      async (error, result) => {
-        if (error || !result) {
-          console.error("Cloudinary upload error:", error);
-          return res.status(500).json({ error: "Failed to upload to Cloudinary" });
-        }
+    const fileName = `state_profiles/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
+    const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
 
-        // Update database
-        const updatedState = await prisma.state.update({
-          where: { id },
-          data: { pdfUrl: result.secure_url },
-        });
+    // Update database
+    const updatedState = await prisma.state.update({
+      where: { id },
+      data: { pdfUrl: result.publicUrl },
+    });
 
-        res.json({ message: "PDF uploaded successfully", data: updatedState });
-      }
-    );
-
-    // End stream with buffer
-    uploadStream.end(req.file.buffer);
+    res.json({ message: "PDF uploaded successfully", data: updatedState });
 
   } catch (error: any) {
     console.error(error);
@@ -486,6 +475,16 @@ router.delete("/states/:id", async (req, res) => {
     // Delete cascading references first if necessary, or just rely on Prisma cascade
     // We will do a transaction to delete all dependent data
     const id = req.params.id;
+    
+    // Attempt to delete pdfUrl from Supabase if it exists
+    const state = await prisma.state.findUnique({ where: { id } });
+    if (state?.pdfUrl?.includes("supabase.co")) {
+      const pathParts = state.pdfUrl.split("eoos-media/");
+      if (pathParts.length > 1) {
+        await supabaseStorage.remove(pathParts[1]);
+      }
+    }
+
     await prisma.$transaction([
       prisma.stateSubIndicatorData.deleteMany({ where: { stateId: id } }),
       prisma.stateIndicatorScore.deleteMany({ where: { stateId: id } }),
@@ -516,16 +515,9 @@ router.post("/authors", upload.single("avatar"), async (req, res) => {
     let avatarUrl = null;
 
     if (req.file) {
-      avatarUrl = await new Promise<string>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "authors", resource_type: "image" },
-          (error, result) => {
-            if (error || !result) reject(error || new Error("Upload failed"));
-            else resolve(result.secure_url);
-          }
-        );
-        stream.end(req.file!.buffer);
-      });
+      const fileName = `avatars/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
+      const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+      avatarUrl = result.publicUrl;
     }
 
     const newAuthor = await prisma.author.create({
@@ -555,16 +547,9 @@ router.put("/authors/:id", upload.single("avatar"), async (req, res) => {
     let avatarUrl = undefined;
 
     if (req.file) {
-      avatarUrl = await new Promise<string>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "authors", resource_type: "image" },
-          (error, result) => {
-            if (error || !result) reject(error || new Error("Upload failed"));
-            else resolve(result.secure_url);
-          }
-        );
-        stream.end(req.file!.buffer);
-      });
+      const fileName = `avatars/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
+      const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+      avatarUrl = result.publicUrl;
     }
 
     const updatedAuthor = await prisma.author.update({
@@ -590,6 +575,15 @@ router.put("/authors/:id", upload.single("avatar"), async (req, res) => {
 router.delete("/authors/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const author = await prisma.author.findUnique({ where: { id } });
+    
+    if (author?.avatarUrl?.includes("supabase.co")) {
+      const pathParts = author.avatarUrl.split("eoos-media/");
+      if (pathParts.length > 1) {
+        await supabaseStorage.remove(pathParts[1]);
+      }
+    }
+
     await prisma.author.delete({ where: { id } });
     res.json({ message: "Author deleted successfully" });
   } catch (error: any) {
