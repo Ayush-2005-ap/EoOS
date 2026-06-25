@@ -26,6 +26,7 @@ import configRoutes from "./routes/configRoutes";
 import exportRoutes from "./routes/exportRoutes";
 import voiceRoutes from "./routes/voiceRoutes";
 import testimonialRoutes from "./routes/testimonialRoutes";
+import legalRoutes from "./routes/legalRoutes";
 import path from "path";
 
 app.use("/public", express.static(path.join(__dirname, "../../public")));
@@ -41,6 +42,7 @@ app.use("/api/config", configRoutes);
 app.use("/api/export", exportRoutes);
 app.use("/api/voices", voiceRoutes);
 app.use("/api/testimonials", testimonialRoutes);
+app.use("/api/legal", legalRoutes);
 
 // ─── 404 Catch-all ───────────────────────────────────────────────────────────
 app.use((_req, res) => {

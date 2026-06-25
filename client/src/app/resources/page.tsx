@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
-import { Download, Search, FileText, ExternalLink, Loader2, BookOpen, Scale, Database, Lock } from "lucide-react";
+import { Download, Search, FileText, ExternalLink, Loader2, BookOpen, Scale, Database, Lock, Folder } from "lucide-react";
 import Link from "next/link";
 
 export default function Resources() {
@@ -13,6 +13,11 @@ export default function Resources() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"publications" | "legal">("publications");
+  const [legalTab, setLegalTab] = useState<"CENTRAL" | "STATE">("CENTRAL");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [expandedStateId, setExpandedStateId] = useState<string | null>(null);
+  const [expandedCentralTabId, setExpandedCentralTabId] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -27,6 +32,17 @@ export default function Resources() {
           pdfPath: report.pdfPath?.replace("ras.cloudinary.com", "res.cloudinary.com")
         }));
         setReports(reportsData);
+
+        // Fetch Legal Repository Data
+        Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/legal/categories`).then(res => res.json()),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api"}/legal/documents`).then(res => res.json())
+        ]).then(([cats, docs]) => {
+          setCategories(cats.data || []);
+          setDocuments(docs.data || []);
+          if (cats.data && cats.data.length > 0) setExpandedCentralTabId(cats.data[0].id);
+        }).catch(err => console.error("Error fetching legal data", err));
+
         setIsLoading(false);
       })
       .catch((err) => {
@@ -211,68 +227,172 @@ export default function Resources() {
           </>
           ) : (
             /* Legal Repository Tab */
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div>
-                  <h2 className="font-plus-jakarta text-2xl font-extrabold text-primary">State-Wise Legal Repositories</h2>
-                  <p className="text-on-surface-variant text-[14px]">Download the complete list of educational laws, acts, and guidelines for individual states and UTs.</p>
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-outline-variant/30 text-center max-w-3xl mx-auto">
+                <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Scale size={32} />
                 </div>
-                <div className="relative w-full sm:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder="Search states..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all shadow-sm"
-                  />
+                <h2 className="font-plus-jakarta text-3xl font-extrabold text-primary mb-3">Legal Repository</h2>
+                <p className="text-on-surface-variant text-[15px] leading-relaxed">
+                  Access a comprehensive collection of educational laws, acts, and guidelines categorized at both the Central and State levels.
+                </p>
+                <div className="flex justify-center gap-2 mt-6">
+                  <button 
+                    onClick={() => setLegalTab("CENTRAL")}
+                    className={`px-6 py-2.5 rounded-full font-bold text-[14px] transition-all ${legalTab === "CENTRAL" ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-surface-container hover:bg-slate-200 text-slate-600"}`}
+                  >
+                    Central Laws
+                  </button>
+                  <button 
+                    onClick={() => setLegalTab("STATE")}
+                    className={`px-6 py-2.5 rounded-full font-bold text-[14px] transition-all ${legalTab === "STATE" ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-surface-container hover:bg-slate-200 text-slate-600"}`}
+                  >
+                    State Laws
+                  </button>
                 </div>
               </div>
 
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-4 text-primary bg-white rounded-2xl border border-outline-variant/30">
-                  <Loader2 className="animate-spin" size={32} />
-                  <p className="font-plus-jakarta font-semibold animate-pulse text-[14px]">Loading states...</p>
-                </div>
-              ) : filteredStates.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-2xl border border-outline-variant/30">
-                  <p className="text-on-surface-variant font-medium">No states found matching "{searchQuery}"</p>
+              {legalTab === "CENTRAL" ? (
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="md:col-span-1 space-y-2">
+                    {categories.length === 0 ? (
+                      <p className="text-slate-400 text-sm italic p-4 text-center">No central law tabs available.</p>
+                    ) : categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        onClick={() => setExpandedCentralTabId(cat.id)}
+                        className={`w-full text-left px-4 py-3 rounded-xl font-bold text-[14px] transition-all border ${expandedCentralTabId === cat.id ? "bg-primary/5 border-primary/20 text-primary" : "bg-white border-transparent text-slate-600 hover:bg-slate-50"}`}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="md:col-span-3">
+                    <div className="bg-white rounded-2xl shadow-sm border border-outline-variant/30 p-6 min-h-[400px]">
+                      {expandedCentralTabId ? (
+                        <div className="space-y-4">
+                          <h3 className="text-xl font-bold text-primary mb-6 flex items-center gap-2 border-b pb-4">
+                            <Folder className="text-secondary" /> 
+                            {categories.find(c => c.id === expandedCentralTabId)?.name} Documents
+                          </h3>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).length === 0 ? (
+                              <p className="text-slate-400 text-sm col-span-full">No documents in this tab yet.</p>
+                            ) : documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).map(doc => (
+                              <a key={doc.id} href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex flex-col justify-between bg-slate-50 border border-slate-200 p-4 rounded-xl hover:border-secondary hover:shadow-md transition-all group">
+                                <div>
+                                  <div className="flex items-start justify-between mb-2">
+                                    <FileText className="text-primary opacity-50 group-hover:text-secondary transition-colors" size={20} />
+                                    <span className="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded shadow-sm">{doc.size}</span>
+                                  </div>
+                                  <h4 className="font-bold text-[14px] text-slate-800 line-clamp-3 leading-snug">{doc.title}</h4>
+                                </div>
+                                <div className="mt-4 flex items-center text-secondary text-[12px] font-bold opacity-0 group-hover:opacity-100 transition-opacity gap-1">
+                                  <Download size={14} /> Download PDF
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                          <Folder size={48} className="opacity-20 mb-4" />
+                          <p>Select a tab from the left to view documents</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredStates.map((state) => (
-                    <div key={state.id} className="bg-white rounded-xl border border-outline-variant/35 shadow-sm p-5 flex flex-col justify-between relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary opacity-80" />
+                <div className="space-y-6">
+                  <div className="relative w-full sm:w-72 mx-auto sm:mx-0">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-outline w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search states..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2.5 bg-white border border-outline-variant/30 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-secondary/20 transition-all shadow-sm"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredStates.length === 0 ? (
+                      <p className="text-center py-12 text-slate-400 col-span-full">No states found matching "{searchQuery}"</p>
+                    ) : filteredStates.map(state => {
+                      const stateDocs = documents.filter(d => d.lawType === "STATE" && d.stateId === state.id);
+                      const generalDocs = stateDocs.filter(d => !d.isRule);
+                      const ruleDocs = stateDocs.filter(d => d.isRule);
+                      const isExpanded = expandedStateId === state.id;
                       
-                      <div className="space-y-4">
-                        <div className="flex items-start justify-between">
-                          <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-primary/5 text-primary border border-primary/20">
-                            <Scale size={18} />
-                          </div>
-                          <span className="inline-block text-[10px] font-bold text-secondary bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                            Coming Soon
-                          </span>
+                      return (
+                        <div key={state.id} className="bg-white rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden flex flex-col transition-all">
+                          <button 
+                            onClick={() => setExpandedStateId(isExpanded ? null : state.id)}
+                            className={`p-5 flex items-center justify-between text-left transition-colors ${isExpanded ? "bg-primary text-white" : "hover:bg-slate-50"}`}
+                          >
+                            <div>
+                              <h3 className={`font-bold text-[16px] ${isExpanded ? "text-white" : "text-primary"}`}>{state.name}</h3>
+                              <p className={`text-[12px] font-medium mt-0.5 ${isExpanded ? "text-primary-container" : "text-slate-400"}`}>
+                                {stateDocs.length} Document{stateDocs.length !== 1 ? 's' : ''} available
+                              </p>
+                            </div>
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isExpanded ? "bg-white/20 rotate-180" : "bg-slate-100"}`}>
+                              <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1.41 0.589844L6 5.16984L10.59 0.589844L12 1.99984L6 7.99984L0 1.99984L1.41 0.589844Z" fill="currentColor"/>
+                              </svg>
+                            </div>
+                          </button>
+                          
+                          {isExpanded && (
+                            <div className="p-5 bg-slate-50/50 flex-1 border-t border-outline-variant/20">
+                              <div className="mb-6">
+                                <h4 className="text-[13px] font-extrabold text-slate-400 uppercase tracking-wider mb-3">General Laws & Guidelines</h4>
+                                {generalDocs.length === 0 ? (
+                                  <p className="text-[13px] text-slate-400 italic">No general documents available.</p>
+                                ) : (
+                                  <ul className="space-y-2">
+                                    {generalDocs.map(doc => (
+                                      <li key={doc.id}>
+                                        <a href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group">
+                                          <FileText className="text-primary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
+                                          <div>
+                                            <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
+                                            <p className="text-[11px] text-slate-400 mt-1">{doc.size}</p>
+                                          </div>
+                                        </a>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                              
+                              <div>
+                                <h4 className="text-[13px] font-extrabold text-slate-400 uppercase tracking-wider mb-3">Rules & Regulations</h4>
+                                {ruleDocs.length === 0 ? (
+                                  <p className="text-[13px] text-slate-400 italic">No rules available.</p>
+                                ) : (
+                                  <ul className="space-y-2">
+                                    {ruleDocs.map(doc => (
+                                      <li key={doc.id}>
+                                        <a href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group">
+                                          <Scale className="text-secondary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
+                                          <div>
+                                            <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
+                                            <p className="text-[11px] text-slate-400 mt-1">{doc.size}</p>
+                                          </div>
+                                        </a>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        
-                        <div>
-                          <h3 className="font-plus-jakarta text-[15px] font-bold text-primary leading-tight">
-                            {state.name} Laws
-                          </h3>
-                          <span className="text-[11px] font-semibold text-on-surface-variant uppercase mt-1 block">
-                            {state.type}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <button 
-                        disabled
-                        className="w-full mt-5 py-2 px-3 bg-surface-container/50 text-on-surface-variant/70 font-bold text-[12px] rounded-lg flex items-center justify-center gap-1.5 cursor-not-allowed border border-outline-variant/30"
-                      >
-                        <Download size={14} />
-                        Unavailable
-                      </button>
-                    </div>
-                  ))}
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>

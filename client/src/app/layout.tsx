@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description:
     "Explore official state-wise education rankings across India, customize indicator weightages in real-time, and analyze state profiles.",
 };
-
+  
 export default function RootLayout({
   children,
 }: Readonly<{

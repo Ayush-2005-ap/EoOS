@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Layers, FileText, Video, MessageSquare, LogOut, Mail, Users, Database, Image } from "lucide-react";
+import { LayoutDashboard, Layers, FileText, Video, MessageSquare, LogOut, Mail, Users, Database, Image, Scale } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -41,6 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: "Reviews", href: "/admin/reviews", icon: <MessageSquare size={20} /> },
     { name: "Authors", href: "/admin/authors", icon: <Users size={20} /> },
     { name: "Raw Dataset", href: "/admin/dataset", icon: <Database size={20} /> },
+    { name: "Legal Repository", href: "/admin/legal", icon: <Scale size={20} /> },
     { name: "Gallery Images", href: "/admin/gallery", icon: <Image size={20} /> },
   ];
 
