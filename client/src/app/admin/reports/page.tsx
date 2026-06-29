@@ -150,10 +150,10 @@ export default function ReportsManager() {
               <p className="text-xs text-slate-400 mt-2">Added: {new Date(report.createdAt).toLocaleDateString()}</p>
               
               <a 
-                href={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${report.pdfPath}`}
+                href={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${report.pdfPath}?download=EoOS_2026.pdf`}
                 target="_blank" 
                 rel="noreferrer"
-                download
+                download="EoOS_2026.pdf"
                 className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-secondary hover:underline"
               >
                 <Download size={16} /> View PDF

@@ -75,10 +75,10 @@ export default function StateResourceViewer() {
                 
                 {stateData.pdfUrl && (
                   <a 
-                    href={stateData.pdfUrl}
+                    href={`${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`}
                     target="_blank"
                     rel="noreferrer"
-                    download
+                    download={`EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`}
                     className="flex items-center justify-center gap-2 bg-secondary text-white px-6 py-3 rounded-xl font-bold hover:bg-[#E6B800] transition-colors shadow-md shrink-0"
                   >
                     <Download size={18} />

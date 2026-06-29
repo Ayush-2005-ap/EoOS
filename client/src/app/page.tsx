@@ -137,12 +137,17 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <Link href="/explore">
+                <a 
+                  href="https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1782209514880-qigjz6ruu1ab0zdbqn1k.pdf?download=EoOS_2026.pdf"
+                  download="EoOS_2026.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <button className="w-full sm:w-auto bg-secondary text-white px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-secondary-container transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/25 hover:-translate-y-0.5">
-                    Explore Rankings
+                    Download Report
                     <ArrowRight size={18} />
                   </button>
-                </Link>
+                </a>
                 <Link href="/simulate">
                   <button className="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white/10 px-8 py-3.5 rounded-xl font-semibold text-[15px] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5">
                     <Play size={16} fill="white" />

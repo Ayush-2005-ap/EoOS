@@ -15,8 +15,8 @@ export interface ApiStateProfile extends Omit<ApiStateData, 'scores'> {
   regulatoryFramework: string | null;
   domains: {
     domainId: string;
-    domainName: string;
-    score: number;
+    domainName: string;            
+    score: number;    
     indicators: {
       indicatorId: string;
       indicatorName: string;

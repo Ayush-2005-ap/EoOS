@@ -127,10 +127,10 @@ export default function Resources() {
                     </div>
                     
                     <a 
-                      href={item.pdfPath.startsWith("http") ? item.pdfPath : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`}
+                      href={`${item.pdfPath.startsWith("http") ? item.pdfPath : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`}?download=EoOS_2026.pdf`}
                       target="_blank"
                       rel="noreferrer"
-                      download
+                      download="EoOS_2026.pdf"
                       className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
                     >
                       <Download size={14} />
