@@ -143,7 +143,7 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <button className="w-full sm:w-auto bg-secondary text-white px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-secondary-container transition-all flex items-center justify-center gap-2 shadow-lg shadow-secondary/25 hover:-translate-y-0.5">
+                  <button className="w-full sm:w-auto bg-cover text-black px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-cover-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-cover/25 hover:-translate-y-0.5">
                     Download Report
                     <ArrowRight size={18} />
                   </button>
