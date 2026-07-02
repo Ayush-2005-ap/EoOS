@@ -7,6 +7,23 @@ import { fetchStates, ApiStateData } from "@/services/api";
 import { Download, Search, FileText, ExternalLink, Loader2, BookOpen, Scale, Database, Lock, Folder } from "lucide-react";
 import Link from "next/link";
 
+async function forceDownload(url: string, filename: string) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    window.open(url, "_blank");
+  }
+}
+
 export default function Resources() {
   const [states, setStates] = useState<ApiStateData[]>([]);
   const [reports, setReports] = useState<any[]>([]);
@@ -126,16 +143,19 @@ export default function Resources() {
                       </p>
                     </div>
                     
-                    <a 
-                      href={`${item.pdfPath.startsWith("http") ? item.pdfPath : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`}?download=EoOS_2026.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                      download="EoOS_2026.pdf"
+                    <button
+                      onClick={() => {
+                        const url = item.pdfPath.startsWith("http")
+                          ? item.pdfPath
+                          : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`;
+                        const filename = item.title ? `${item.title.replace(/\s+/g, "_")}.pdf` : "EoOS_report.pdf";
+                        forceDownload(url, filename);
+                      }}
                       className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
                     >
                       <Download size={14} />
                       Download File
-                    </a>
+                    </button>
                   </div>
                 );
               }) : (
@@ -279,7 +299,7 @@ export default function Resources() {
                             {documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).length === 0 ? (
                               <p className="text-slate-400 text-sm col-span-full">No documents in this tab yet.</p>
                             ) : documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).map(doc => (
-                              <a key={doc.id} href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex flex-col justify-between bg-slate-50 border border-slate-200 p-4 rounded-xl hover:border-secondary hover:shadow-md transition-all group">
+                              <button key={doc.id} onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex flex-col justify-between bg-slate-50 border border-slate-200 p-4 rounded-xl hover:border-secondary hover:shadow-md transition-all group text-left w-full">
                                 <div>
                                   <div className="flex items-start justify-between mb-2">
                                     <FileText className="text-primary opacity-50 group-hover:text-secondary transition-colors" size={20} />
@@ -290,7 +310,7 @@ export default function Resources() {
                                 <div className="mt-4 flex items-center text-secondary text-[12px] font-bold opacity-0 group-hover:opacity-100 transition-opacity gap-1">
                                   <Download size={14} /> Download PDF
                                 </div>
-                              </a>
+                              </button>
                             ))}
                           </div>
                         </div>
@@ -354,13 +374,13 @@ export default function Resources() {
                                   <ul className="space-y-2">
                                     {generalDocs.map(doc => (
                                       <li key={doc.id}>
-                                        <a href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group">
+                                        <button onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
                                           <FileText className="text-primary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
                                           <div>
                                             <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
                                             <p className="text-[11px] text-slate-400 mt-1">{doc.size}</p>
                                           </div>
-                                        </a>
+                                        </button>
                                       </li>
                                     ))}
                                   </ul>
@@ -375,14 +395,14 @@ export default function Resources() {
                                   <ul className="space-y-2">
                                     {ruleDocs.map(doc => (
                                       <li key={doc.id}>
-                                        <a href={doc.pdfUrl} target="_blank" rel="noreferrer" className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group">
+                                        <button onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
                                           <Scale className="text-secondary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
                                           <div>
                                             <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
                                             <p className="text-[11px] text-slate-400 mt-1">{doc.size}</p>
                                           </div>
-                                        </a>
-                                      </li>
+                                        </button>
+                                       </li>
                                     ))}
                                   </ul>
                                 )}
