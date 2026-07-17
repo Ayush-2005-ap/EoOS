@@ -230,7 +230,7 @@ export default function Voices() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.8 }}
                     className="relative group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer w-[280px] md:w-[350px] aspect-[4/3] flex-shrink-0"
                   >
                     <img 
