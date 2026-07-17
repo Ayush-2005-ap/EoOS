@@ -216,7 +216,11 @@ export default function Voices() {
         {/* Gallery Infinite Marquee */}
         {galleryImages.length > 0 && (
           <section className="mt-20 overflow-hidden">
-            <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-8">Event Gallery</h2>
+            <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-4">Event Gallery</h2>
+            <p className="text-base font-semibold text-gray-800 mb-1">
+              EoOS Index 2026 launched at Reforming India&apos;s School Education (RISE) for Viksit Bharat event
+            </p>
+            <p className="text-sm text-gray-500 mb-6">19 June 2026 | IIC New Delhi</p>
             <div className="relative w-full hide-scrollbar overflow-hidden flex items-center py-4">
               <div className="flex gap-6 animate-scroll w-max pr-6">
                 {[...galleryImages, ...galleryImages].map((img, idx) => (

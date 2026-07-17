@@ -138,7 +138,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
                 <a 
-                  href="https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1782814572946-EoOS_2026.pdf"
+                  href="https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1783922480735-Ease of Operating Schools Index 2026_CCS.pdf"
                   download="EoOS_2026.pdf"
                   target="_blank"
                   rel="noreferrer"
