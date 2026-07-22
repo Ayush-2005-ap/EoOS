@@ -7,9 +7,10 @@ interface IndiaMapProps {
   stateScores: { [stateId: string]: { score: number; rank: number } };
   onStateHover: (stateId: string | null) => void;
   onStateClick: (stateId: string) => void;
+  selectedStateId?: string | null;
 }
 
-export default function IndiaMap({ activeDomain, stateScores, onStateHover, onStateClick }: IndiaMapProps) {
+export default function IndiaMap({ activeDomain, stateScores, onStateHover, onStateClick, selectedStateId }: IndiaMapProps) {
   const rankColors = [
     "#052BD4",
     "#0D32D5",
@@ -44,6 +45,7 @@ export default function IndiaMap({ activeDomain, stateScores, onStateHover, onSt
   ];
 
   const getColor = (stateId: string) => {
+    if (stateId === selectedStateId) return "url(#selected-pattern)";
     const data = stateScores[stateId];
     if (!data) return "#ffff"; // default surface container low
     const rank = data.rank;
@@ -54,6 +56,12 @@ export default function IndiaMap({ activeDomain, stateScores, onStateHover, onSt
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="-114 -50.4 611.9 695.7" className="w-full h-auto drop-shadow-md">
+      <defs>
+        <pattern id="selected-pattern" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+          <rect width="8" height="8" fill="#FFCC00" />
+          <line x1="0" y1="0" x2="0" y2="8" stroke={rankColors[0]} strokeWidth="2.5" />
+        </pattern>
+      </defs>
       <g id="states-group">
         <path
           id="IN-AN"

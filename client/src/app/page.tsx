@@ -13,7 +13,7 @@ import { ArrowRight, Play, BookOpen, AlertCircle, BarChart3, TrendingUp, Award, 
 export default function Home() {
   const router = useRouter();
   const [activeDomain, setActiveDomain] = useState<string>("Overall");
-  const [hoveredStateId, setHoveredStateId] = useState<string | null>(null);
+  const [selectedStateId, setSelectedStateId] = useState<string | null>(null);
 
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
@@ -74,8 +74,8 @@ export default function Home() {
   };
 
   const activeScores = getActiveStateScoresAndRanks();
-  const hoveredState = statesData.find((s) => s.id === hoveredStateId);
-  const hoveredStateScore = hoveredStateId ? activeScores[hoveredStateId] : null;
+  const hoveredState = statesData.find((s) => s.id === selectedStateId);
+  const hoveredStateScore = selectedStateId ? activeScores[selectedStateId] : null;
 
   // Filter top 10 states for the preview table
   const topTenStates = [...statesData]
@@ -88,6 +88,10 @@ export default function Home() {
     .slice(0, 10);
 
   const handleStateClick = (stateId: string) => {
+    setSelectedStateId(stateId);
+  };
+
+  const handleFullProfileClick = (stateId: string) => {
     router.push(`/states/${stateId}`);
   };
 
@@ -287,7 +291,8 @@ export default function Home() {
                   <IndiaMap
                     activeDomain={activeDomain}
                     stateScores={activeScores}
-                    onStateHover={setHoveredStateId}
+                    selectedStateId={selectedStateId}
+                    onStateHover={() => {}}
                     onStateClick={handleStateClick}
                   />
                 </div>
@@ -389,7 +394,7 @@ export default function Home() {
 
                     <div className="pt-2">
                       <button
-                        onClick={() => handleStateClick(hoveredState.id)}
+                        onClick={() => handleFullProfileClick(hoveredState.id)}
                         className="w-full bg-surface-container-low text-primary hover:bg-primary hover:text-white px-5 py-3 rounded-xl font-bold text-[14px] transition-all flex items-center justify-center gap-2 border border-outline-variant/30"
                       >
                         View Full State Profile
@@ -462,7 +467,7 @@ export default function Home() {
                         <div className="pt-4 border-t border-outline-variant/30 text-center">
                           <p className="text-[13px] text-on-surface-variant/70 italic flex items-center justify-center gap-2">
                             <AlertCircle size={14} />
-                            Hover over any state to see its data
+                            Click on any state to see its data
                           </p>
                         </div>
                       </div>
@@ -487,7 +492,7 @@ export default function Home() {
                       <div className="pt-4 border-t border-outline-variant/30 w-full max-w-[280px]">
                         <p className="text-[13px] text-on-surface-variant/70 italic flex items-center justify-center gap-2">
                           <AlertCircle size={14} />
-                          Hover over any state to see its data
+                          Click on any state to see its data
                         </p>
                       </div>
                     </div>
@@ -544,7 +549,7 @@ export default function Home() {
                     {topTenStates.map((state) => (
                       <tr
                         key={state.id}
-                        onClick={() => handleStateClick(state.id)}
+                        onClick={() => handleFullProfileClick(state.id)}
                         className="hover:bg-surface-container-low/40 cursor-pointer transition-colors group"
                       >
                         <td className="py-4 px-6 font-plus-jakarta text-[16px] font-extrabold text-primary">
