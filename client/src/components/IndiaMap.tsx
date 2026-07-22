@@ -303,10 +303,6 @@ export default function IndiaMap({ activeDomain, stateScores, onStateHover, onSt
           fill={getColor("LA")}
           stroke="#000000"
           strokeWidth="0.8"
-          className="cursor-pointer transition-all duration-200 hover:opacity-80 hover:stroke-[1.5px] hover:stroke-[#00071b]"
-          onMouseEnter={() => onStateHover("LA")}
-          onMouseLeave={() => onStateHover(null)}
-          onClick={() => onStateClick("LA")}
         >
           <title>Ladakh</title>
         </path>
