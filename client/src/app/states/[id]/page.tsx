@@ -271,21 +271,24 @@ export default function StateDashboard() {
                   </select>
                 </div>
 
-                <div className="w-full h-80 text-[12px] font-semibold">
+                <div className="w-full h-[32rem] text-[12px] font-semibold">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                      <XAxis dataKey="name" stroke="#75777e" />
-                      <YAxis domain={[0, 100]} stroke="#75777e" />
+                    <BarChart layout="vertical" data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#f0f0f0" />
+                      <XAxis type="number" domain={[0, 60]} stroke="#75777e" />
+                      <YAxis type="category" dataKey="name" stroke="#75777e" width={220} interval={0} tick={{ fontSize: 11, fill: '#75777e' }} />
                       <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #c5c6ce" }} />
                       <Legend verticalAlign="top" height={36} iconType="circle" />
-                      <Bar dataKey={stateProfile.name} fill="#00071b" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="National Average" fill="#263780" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="National Average" fill="#EBAB00" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey={stateProfile.name} fill="#00071b" radius={[0, 4, 4, 0]} />
                       {compareState && (
-                        <Bar dataKey={compareState.name} fill="#50639B" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey={compareState.name} fill="#50639B" radius={[0, 4, 4, 0]} />
                       )}
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="text-[#75777e] text-[12px] mt-1 pb-2 flex justify-center pl-[220px]">
+                  <span><span className="font-bold">Score</span> (out of 100)</span>
                 </div>
               </div>
 

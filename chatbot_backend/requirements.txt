@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-dotenv
+supabase==2.31.0
+langchain-core
+langchain-community
+langchain-openai
+pydantic
+openai
+pydantic-settings

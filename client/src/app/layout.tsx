@@ -18,6 +18,7 @@ import { Suspense } from "react";
 import PageTransition from "@/components/PageTransition";
 import LaunchGuard from "@/components/LaunchGuard";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import Chatbot from "@/components/Chatbot";
 
 export const metadata: Metadata = {
   title: "EoOS Index | India Education Analytics & Ranking Platform",
@@ -51,6 +52,7 @@ export default function RootLayout({
             {children}
           </LaunchGuard>
         </Suspense>
+        <Chatbot />
       </body>
     </html>
   );
