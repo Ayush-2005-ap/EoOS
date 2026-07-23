@@ -8,7 +8,9 @@ services:
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
-        value: "file:./dev.db"
+        sync: false
+      - key: DIRECT_URL
+        sync: false
       - key: PORT
         value: "4000"
 
