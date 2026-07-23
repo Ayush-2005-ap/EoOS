@@ -11,3 +11,18 @@ services:
         value: "file:./dev.db"
       - key: PORT
         value: "4000"
+
+  - type: web
+    name: eoos-chatbot-backend
+    env: python
+    plan: free
+    rootDir: chatbot_backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
