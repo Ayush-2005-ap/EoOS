@@ -52,7 +52,7 @@ export default function RootLayout({
             {children}
           </LaunchGuard>
         </Suspense>
-        <Chatbot />
+        {/* <Chatbot /> */}
       </body>
     </html>
   );
