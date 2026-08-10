@@ -158,7 +158,7 @@ export default function VoicesManager() {
           <div key={voice.id} className="bg-white rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden flex flex-col">
             <div className="h-40 bg-slate-200 relative">
               <img 
-                src={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${voice.thumbnailPath}`} 
+                src={voice.thumbnailPath.startsWith("http") ? voice.thumbnailPath : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${voice.thumbnailPath}`} 
                 alt={voice.title} 
                 className="w-full h-full object-cover"
               />

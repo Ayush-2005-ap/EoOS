@@ -168,7 +168,9 @@ export default function Voices() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {videoStories.map((story, idx) => {
-              const vidUrl = story.videoUrl ? `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${story.videoUrl}` : "";
+              const vidUrl = story.videoUrl 
+                ? (story.videoUrl.startsWith("http") ? story.videoUrl : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${story.videoUrl}`) 
+                : "";
               return <HoverVideoCard key={story.id || idx} videoUrl={vidUrl} youtubeUrl={story.youtubeUrl} category={story.category} title={story.title} />;
             })}
           </div>
@@ -197,7 +199,7 @@ export default function Voices() {
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full overflow-hidden flex flex-shrink-0 items-center justify-center ${item.type === "solid" ? "bg-white/20" : "bg-slate-200"}`}>
                       {item.avatarUrl ? (
-                        <img className="w-full h-full object-cover" src={`${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.avatarUrl}`} alt={item.author} />
+                        <img className="w-full h-full object-cover" src={item.avatarUrl.startsWith("http") ? item.avatarUrl : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.avatarUrl}`} alt={item.author} />
                       ) : (
                         <span className="font-bold text-primary">{item.initials || item.author?.charAt(0)}</span>
                       )}
