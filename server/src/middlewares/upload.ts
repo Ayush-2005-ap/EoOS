@@ -11,8 +11,13 @@ export const supabaseStorage = {
   upload: async (fileName: string, input: Buffer | string, mimeType: string) => {
     const url = `${supabaseUrl}/storage/v1/object/eoos-media/${fileName}`;
     
-    // Read file if input is a string (path)
-    const bodyData = typeof input === 'string' ? fs.readFileSync(input) : input;
+    let bodyData: any;
+    if (typeof input === 'string') {
+      const stream = fs.createReadStream(input);
+      bodyData = Readable.toWeb(stream);
+    } else {
+      bodyData = input;
+    }
 
     const res = await fetch(url, {
       method: 'POST',
@@ -20,8 +25,9 @@ export const supabaseStorage = {
         'Authorization': `Bearer ${supabaseKey}`,
         'Content-Type': mimeType,
       },
-      body: bodyData as any
-    });
+      body: bodyData,
+      duplex: 'half'
+    } as any);
 
     if (typeof input === 'string') {
       try { fs.unlinkSync(input); } catch (e) {} // cleanup temp file
