@@ -94,7 +94,7 @@ export const uploadDocument = async (req: Request, res: Response): Promise<void>
     // Upload to Supabase Storage
     // Generate unique filename
     const uniqueFileName = `legal_${Date.now()}_${req.file.originalname.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-    const uploadResult = await supabaseStorage.upload(uniqueFileName, req.file.buffer, req.file.mimetype);
+    const uploadResult = await supabaseStorage.upload(uniqueFileName, req.file.buffer || req.file.path, req.file.mimetype);
 
     // Save to DB
     const document = await prisma.legalDocument.create({

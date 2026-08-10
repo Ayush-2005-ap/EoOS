@@ -28,7 +28,7 @@ router.post("/reports", requireAdmin, cloudUpload.single("pdf"), async (req, res
     if (!title || !req.file) return res.status(400).json({ error: "Title and PDF file are required" });
 
     const fileName = `reports/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-    const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+    const result = await supabaseStorage.upload(fileName, req.file.buffer || req.file.path, req.file.mimetype);
 
     const report = await prisma.report.create({
       data: { 
@@ -95,14 +95,14 @@ router.post("/voices", requireAdmin, cloudUpload.fields([{ name: "thumbnail", ma
     if (files?.["thumbnail"]) {
       const thumbFile = files["thumbnail"][0];
       const thumbName = `voices/${Date.now()}-thumb-${thumbFile.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(thumbName, thumbFile.buffer, thumbFile.mimetype);
+      const result = await supabaseStorage.upload(thumbName, thumbFile.buffer || thumbFile.path, thumbFile.mimetype);
       thumbnailPath = result.publicUrl;
     }
 
     if (files?.["video"]) {
       const videoFile = files["video"][0];
       const vidName = `voices/${Date.now()}-video-${videoFile.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(vidName, videoFile.buffer, videoFile.mimetype);
+      const result = await supabaseStorage.upload(vidName, videoFile.buffer || videoFile.path, videoFile.mimetype);
       videoUrl = result.publicUrl;
     }
 
@@ -158,7 +158,7 @@ router.post("/reviews", requireAdmin, cloudUpload.single("avatar"), async (req, 
     let avatarUrl = null;
     if (req.file) {
       const avatarName = `avatars/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(avatarName, req.file.buffer, req.file.mimetype);
+      const result = await supabaseStorage.upload(avatarName, req.file.buffer || req.file.path, req.file.mimetype);
       avatarUrl = result.publicUrl;
     }
 
@@ -219,7 +219,7 @@ router.post("/dataset", requireAdmin, memoryUpload.single("excel"), async (req, 
   try {
     if (!req.file) return res.status(400).json({ error: "Excel file required" });
 
-    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+    const workbook = xlsx.read(req.file.buffer || req.file.path, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet, { header: 1, defval: "" });
@@ -256,7 +256,7 @@ router.post("/gallery", requireAdmin, cloudUpload.single("image"), async (req, r
     if (!req.file) return res.status(400).json({ error: "Image file is required" });
 
     const fileName = `gallery/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-    const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+    const result = await supabaseStorage.upload(fileName, req.file.buffer || req.file.path, req.file.mimetype);
 
     const galleryImage = await prisma.galleryImage.create({
       data: { 

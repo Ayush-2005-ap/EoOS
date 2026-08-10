@@ -17,7 +17,7 @@ router.post("/states/:id/pdf", upload.single("pdf"), async (req, res) => {
     }
 
     const fileName = `state_profiles/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-    const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+    const result = await supabaseStorage.upload(fileName, req.file.buffer || req.file.path, req.file.mimetype);
 
     // Update database
     const updatedState = await prisma.state.update({
@@ -516,7 +516,7 @@ router.post("/authors", upload.single("avatar"), async (req, res) => {
 
     if (req.file) {
       const fileName = `avatars/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+      const result = await supabaseStorage.upload(fileName, req.file.buffer || req.file.path, req.file.mimetype);
       avatarUrl = result.publicUrl;
     }
 
@@ -548,7 +548,7 @@ router.put("/authors/:id", upload.single("avatar"), async (req, res) => {
 
     if (req.file) {
       const fileName = `avatars/${Date.now()}-${req.file.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(fileName, req.file.buffer, req.file.mimetype);
+      const result = await supabaseStorage.upload(fileName, req.file.buffer || req.file.path, req.file.mimetype);
       avatarUrl = result.publicUrl;
     }
 
