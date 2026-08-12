@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
 import { Download, Search, FileText, ExternalLink, Loader2, BookOpen, Scale, Database, Lock, Folder } from "lucide-react";
 import Link from "next/link";
+import DownloadConsentModal from "@/components/DownloadConsentModal";
 
 async function forceDownload(url: string, filename: string) {
   try {
@@ -35,6 +36,11 @@ export default function Resources() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [expandedStateId, setExpandedStateId] = useState<string | null>(null);
   const [expandedCentralTabId, setExpandedCentralTabId] = useState<string | null>(null);
+  const [activeDownload, setActiveDownload] = useState<{url: string, filename: string} | null>(null);
+
+  const handleDownloadClick = (url: string, filename: string) => {
+    setActiveDownload({ url, filename });
+  };
 
   useEffect(() => {
     Promise.all([
@@ -149,7 +155,7 @@ export default function Resources() {
                           ? item.pdfPath
                           : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.pdfPath}`;
                         const filename = item.title ? `${item.title.replace(/\s+/g, "_")}.pdf` : "EoOS_report.pdf";
-                        forceDownload(url, filename);
+                        handleDownloadClick(url, filename);
                       }}
                       className="w-full mt-4 py-2.5 px-4 bg-primary text-white hover:bg-primary-container font-bold text-[13px] rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
                     >
@@ -299,7 +305,7 @@ export default function Resources() {
                             {documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).length === 0 ? (
                               <p className="text-slate-400 text-sm col-span-full">No documents in this tab yet.</p>
                             ) : documents.filter(d => d.lawType === "CENTRAL" && d.categoryId === expandedCentralTabId).map(doc => (
-                              <button key={doc.id} onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex flex-col justify-between bg-slate-50 border border-slate-200 p-4 rounded-xl hover:border-secondary hover:shadow-md transition-all group text-left w-full">
+                              <button key={doc.id} onClick={() => handleDownloadClick(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex flex-col justify-between bg-slate-50 border border-slate-200 p-4 rounded-xl hover:border-secondary hover:shadow-md transition-all group text-left w-full">
                                 <div>
                                   <div className="flex items-start justify-between mb-2">
                                     <FileText className="text-primary opacity-50 group-hover:text-secondary transition-colors" size={20} />
@@ -374,7 +380,7 @@ export default function Resources() {
                                   <ul className="space-y-2">
                                     {generalDocs.map(doc => (
                                       <li key={doc.id}>
-                                        <button onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
+                                        <button onClick={() => handleDownloadClick(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
                                           <FileText className="text-primary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
                                           <div>
                                             <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
@@ -395,7 +401,7 @@ export default function Resources() {
                                   <ul className="space-y-2">
                                     {ruleDocs.map(doc => (
                                       <li key={doc.id}>
-                                        <button onClick={() => forceDownload(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
+                                        <button onClick={() => handleDownloadClick(doc.pdfUrl, `${doc.title?.replace(/\s+/g, "_") || "document"}.pdf`)} className="flex items-start gap-2 p-3 bg-white border border-slate-200 rounded-lg hover:border-secondary hover:shadow-sm transition-all group w-full text-left">
                                           <Scale className="text-secondary/40 shrink-0 mt-0.5 group-hover:text-secondary transition-colors" size={16} />
                                           <div>
                                             <p className="text-[13px] font-bold text-slate-700 leading-snug group-hover:text-primary transition-colors">{doc.title}</p>
@@ -419,6 +425,17 @@ export default function Resources() {
           )}
           
         </section>
+        
+        {/* Download Modal */}
+        <DownloadConsentModal 
+          isOpen={!!activeDownload}
+          onClose={() => setActiveDownload(null)}
+          onConfirm={() => {
+            if (activeDownload) forceDownload(activeDownload.url, activeDownload.filename);
+          }}
+          pdfUrl={activeDownload?.url}
+          filename={activeDownload?.filename}
+        />
       </main>
       <Footer />
     </>

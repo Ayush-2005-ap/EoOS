@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { fetchStates, ApiStateData } from "@/services/api";
 import { ArrowLeft, Download, FileText, Loader2 } from "lucide-react";
 import Link from "next/link";
+import DownloadConsentModal from "@/components/DownloadConsentModal";
 
 export default function StateResourceViewer() {
   const params = useParams();
@@ -15,6 +16,18 @@ export default function StateResourceViewer() {
 
   const [stateData, setStateData] = useState<ApiStateData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  const handleDownloadConfirm = () => {
+    if (!stateData?.pdfUrl) return;
+    const link = document.createElement('a');
+    link.href = `${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`;
+    link.download = `EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     fetchStates()
@@ -74,16 +87,13 @@ export default function StateResourceViewer() {
                 </div>
                 
                 {stateData.pdfUrl && (
-                  <a 
-                    href={`${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`}
-                    target="_blank"
-                    rel="noreferrer"
-                    download={`EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`}
+                  <button 
+                    onClick={() => setIsDownloadModalOpen(true)}
                     className="flex items-center justify-center gap-2 bg-secondary text-white px-6 py-3 rounded-xl font-bold hover:bg-[#E6B800] transition-colors shadow-md shrink-0"
                   >
                     <Download size={18} />
                     Download Official PDF
-                  </a>
+                  </button>
                 )}
               </div>
 
@@ -109,6 +119,17 @@ export default function StateResourceViewer() {
         </div>
       </main>
       <Footer />
+
+      {/* Download Modal */}
+      <DownloadConsentModal 
+        isOpen={isDownloadModalOpen}
+        onClose={() => setIsDownloadModalOpen(false)}
+        onConfirm={handleDownloadConfirm}
+        title={`Download ${stateData?.name} Report`}
+        description={`Please provide your details below to download the EoOS 2026 report for ${stateData?.name}.`}
+        pdfUrl={stateData?.pdfUrl ? `${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf` : undefined}
+        filename={stateData?.name ? `EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf` : undefined}
+      />
     </>
   );
 }

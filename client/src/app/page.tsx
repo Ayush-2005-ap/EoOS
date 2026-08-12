@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import IndiaMap from "@/components/IndiaMap";
 import { fetchStates, fetchDomains, ApiStateData, ApiDomain } from "@/services/api";
+import DownloadConsentModal from "@/components/DownloadConsentModal";
 import { ArrowRight, Play, BookOpen, AlertCircle, BarChart3, TrendingUp, Award, Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -18,6 +19,17 @@ export default function Home() {
   const [statesData, setStatesData] = useState<ApiStateData[]>([]);
   const [domainsData, setDomainsData] = useState<ApiDomain[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+
+  const handleDownloadConfirm = () => {
+    const link = document.createElement('a');
+    link.href = "https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf?download=EoOS_Report_2026.pdf";
+    link.download = "EoOS_Report_2026.pdf";
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -141,17 +153,13 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <a 
-                  href="https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf"
-                  download="EoOS_2026.pdf"
-                  target="_blank"
-                  rel="noreferrer"
+                <button 
+                  onClick={() => setIsDownloadModalOpen(true)}
+                  className="w-full sm:w-auto bg-cover text-black px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-cover-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-cover/25 hover:-translate-y-0.5"
                 >
-                  <button className="w-full sm:w-auto bg-cover text-black px-8 py-3.5 rounded-xl font-semibold text-[15px] hover:bg-cover-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-cover/25 hover:-translate-y-0.5">
-                    Download Report
-                    <ArrowRight size={18} />
-                  </button>
-                </a>
+                  Download Report
+                  <ArrowRight size={18} />
+                </button>
                 <Link href="/simulate">
                   <button className="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white/10 px-8 py-3.5 rounded-xl font-semibold text-[15px] transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5">
                     <Play size={16} fill="white" />
@@ -638,6 +646,16 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Download Modal */}
+        <DownloadConsentModal 
+          isOpen={isDownloadModalOpen}
+          onClose={() => setIsDownloadModalOpen(false)}
+          onConfirm={handleDownloadConfirm}
+          title="Download EoOS Index 2026 Report"
+          description="Please provide your details below to download the full report."
+          pdfUrl="https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf?download=EoOS_Report_2026.pdf"
+          filename="EoOS_Report_2026.pdf"
+        />
       </main>
       <Footer />
     </>

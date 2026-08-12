@@ -386,7 +386,7 @@ export default function Simulator() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden border border-outline-variant/30 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between p-6 border-b border-outline-variant/30 bg-surface-container-low/50">
-              <h2 className="font-plus-jakarta text-xl font-bold text-primary">Export Simulated Rankings</h2>
+              <h2 className="font-plus-jakarta text-xl font-bold text-secondary">Export Simulated Rankings</h2>
               <button 
                 onClick={() => setIsExportModalOpen(false)}
                 className="text-on-surface-variant hover:text-primary transition-colors"
@@ -402,7 +402,7 @@ export default function Simulator() {
                   <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
                     <Send size={32} />
                   </div>
-                  <h3 className="font-plus-jakarta text-xl font-bold text-primary">Email Sent!</h3>
+                  <h3 className="font-plus-jakarta text-xl font-bold text-secondary">Email Sent!</h3>
                   <p className="text-on-surface-variant text-[15px]">
                     Your customized simulation report has been emailed to you successfully.
                   </p>
