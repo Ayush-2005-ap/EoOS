@@ -102,11 +102,24 @@ router.post("/download-consent", async (req, res) => {
           },
         });
 
+        const firstName = name.split(' ')[0] || "there";
+
         await transporter.sendMail({
           from: `"EoOS Index Data Portal" <${process.env.SMTP_USER || "no-reply@ethereal.email"}>`,
           to: email,
           subject: "Your EoOS Index Report Download",
-          text: `Dear ${name},\n\nThank you for downloading the Ease of Operating Schools (EoOS) Index 2026. Please find your requested report attached to this email.\n\nWe appreciate your interest in our research work and hope the report serves as a useful resource for understanding the regulatory framework governing unaided private schools across India. The Index aims to contribute to informed discussions on the governance of private school education and to support evidence-based policy reform.\n\nWe would be delighted to hear your feedback, comments, or suggestions on the report. Your insights will help us strengthen future editions and improve the quality of our research.\n\nFor any feedback or queries, please feel free to write to us at research@ccs.in\n\nThank you for your support and engagement.\n\nWarm regards,\n\nCentre for Civil Society`,
+          html: `<p>Hello ${firstName},</p>
+<p>Thank you for downloading the Ease of Operating Schools Index 2026. The report is attached to this email, so you have a copy to keep and share.</p>
+<p>The Index is a comparative assessment of school regulatory frameworks across Indian states. It looks at the regulatory burden schools face and where the process can be made simpler, so that school leaders can spend less time on compliance and more on students.</p>
+<p>If you find the report useful, here are a few ways to stay connected with our work at the Centre for Civil Society:</p>
+<ol>
+  <li>Follow Student First at <a href="https://studentfirst.in">studentfirst.in</a> for updates on school education reform</li>
+  <li>Visit <a href="https://ccs.in">ccs.in</a> to explore our research across education, livelihood, and governance</li>
+  <li>Follow us on <a href="https://www.linkedin.com/company/centre-for-civil-society/">LinkedIn</a> and <a href="https://twitter.com/ccsindia">Twitter</a> for regular findings, data, and stories on the ground</li>
+</ol>
+<p>We hope the Index is a useful reference in your work.</p>
+<p>Warm regards,<br/>Centre for Civil Society</p>`,
+          text: `Hello ${firstName},\n\nThank you for downloading the Ease of Operating Schools Index 2026. The report is attached to this email, so you have a copy to keep and share.\n\nThe Index is a comparative assessment of school regulatory frameworks across Indian states. It looks at the regulatory burden schools face and where the process can be made simpler, so that school leaders can spend less time on compliance and more on students.\n\nIf you find the report useful, here are a few ways to stay connected with our work at the Centre for Civil Society:\n\n1. Follow Student First at studentfirst.in for updates on school education reform\n2. Visit ccs.in to explore our research across education, livelihood, and governance\n3. Follow us on LinkedIn and Twitter for regular findings, data, and stories on the ground\n\nWe hope the Index is a useful reference in your work.\n\nWarm regards,\nCentre for Civil Society`,
           attachments: [
             {
               filename: filename || "EoOS_Report.pdf",
