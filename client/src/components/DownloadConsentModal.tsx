@@ -23,6 +23,7 @@ export default function DownloadConsentModal({
   const [form, setForm] = useState({ name: "", email: "", phone: "", consent: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showMore, setShowMore] = useState(false);
 
   if (!isOpen) return null;
 
@@ -128,7 +129,20 @@ export default function DownloadConsentModal({
                   className="mt-1 w-4 h-4 rounded border-gray-300 text-secondary focus:ring-secondary"
                 />
                 <label htmlFor="consent" className="text-[13px] text-on-surface-variant leading-relaxed">
-                  I consent to storing my name, email, and phone number in the database to receive updates on upcoming events and news from the Centre for Civil Society.
+                  I consent to storing my name, email, and phone number in the database.
+                  {!showMore ? (
+                    <button 
+                      type="button"
+                      onClick={() => setShowMore(true)}
+                      className="text-secondary hover:underline ml-1 font-semibold"
+                    >
+                      View more
+                    </button>
+                  ) : (
+                    <span className="block mt-1 text-[12px] text-on-surface-variant/80">
+                      This information may be used to send you updates on upcoming events and news from the Centre for Civil Society.
+                    </span>
+                  )}
                 </label>
               </div>
             </div>

@@ -43,6 +43,7 @@ export default function Simulator() {
     phone: "",
     consent: false,
   });
+  const [showMoreConsent, setShowMoreConsent] = useState(false);
 
   useEffect(() => {
     Promise.all([fetchStates(), fetchDomains()])
@@ -464,7 +465,20 @@ export default function Simulator() {
                       className="mt-1 shrink-0 w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary/30"
                     />
                     <label htmlFor="consent" className="text-[12px] text-on-surface-variant leading-relaxed">
-                      I consent to storing my name, email, and phone number in the database to receive updates on upcoming events and news from the Centre for Civil Society.
+                      I consent to storing my name, email, and phone number in the database.
+                      {!showMoreConsent ? (
+                        <button 
+                          type="button"
+                          onClick={() => setShowMoreConsent(true)}
+                          className="text-secondary hover:underline ml-1 font-semibold"
+                        >
+                          View more
+                        </button>
+                      ) : (
+                        <span className="block mt-1 text-[11px] text-on-surface-variant/80">
+                          This information may be used to send you updates on upcoming events and news from the Centre for Civil Society.
+                        </span>
+                      )}
                     </label>
                   </div>
 
