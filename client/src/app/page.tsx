@@ -22,13 +22,7 @@ export default function Home() {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const handleDownloadConfirm = () => {
-    const link = document.createElement('a');
-    link.href = "https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf?download=EoOS_Report_2026.pdf";
-    link.download = "EoOS_Report_2026.pdf";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.location.href = "https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf?download=EoOS_Report_2026.pdf";
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);

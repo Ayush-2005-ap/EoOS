@@ -10,16 +10,9 @@ import DownloadConsentModal from "@/components/DownloadConsentModal";
 
 async function forceDownload(url: string, filename: string) {
   try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(blobUrl);
+    // Check if the URL already has a download parameter, if not, try to append it
+    const downloadUrl = url.includes('?download=') ? url : `${url}?download=${filename}`;
+    window.location.href = downloadUrl;
   } catch {
     window.open(url, "_blank");
   }

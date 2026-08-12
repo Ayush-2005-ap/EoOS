@@ -20,13 +20,7 @@ export default function StateResourceViewer() {
 
   const handleDownloadConfirm = () => {
     if (!stateData?.pdfUrl) return;
-    const link = document.createElement('a');
-    link.href = `${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`;
-    link.download = `EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`;
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.location.href = `${stateData.pdfUrl}?download=EoOS_2026_${stateData.name.replace(/\s+/g, '_')}.pdf`;
   };
 
   useEffect(() => {
