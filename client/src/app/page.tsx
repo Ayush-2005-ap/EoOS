@@ -22,7 +22,7 @@ export default function Home() {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const handleDownloadConfirm = () => {
-    window.location.href = "https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786092749409-EoOS_Index_2026_CCS.pdf?download=EoOS_Report_2026.pdf";
+    window.location.href = "https://sxboxrmzsilumolzgkzr.supabase.co/storage/v1/object/public/eoos-media/reports/1786615747234-EoOS_Report_2026.pdf";
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
