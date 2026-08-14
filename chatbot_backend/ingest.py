@@ -17,8 +17,14 @@ def main():
     # Clear existing documents to avoid duplicates
     print("Clearing existing documents from Supabase...")
     try:
-        # Delete everything where content is not null (which is all rows)
-        supabase.table("documents").delete().neq("content", "never_matches_anything").execute()
+        res = supabase.table("documents").select("id").execute()
+        if res.data:
+            ids = [r['id'] for r in res.data]
+            print(f"Found {len(ids)} documents to delete...")
+            for i in range(0, len(ids), 200):
+                chunk = ids[i:i+200]
+                supabase.table("documents").delete().in_("id", chunk).execute()
+                print(f"Deleted {min(i+200, len(ids))}/{len(ids)} documents")
     except Exception as e:
         print(f"Note: Could not clear table automatically: {e}")
 
@@ -67,13 +73,14 @@ def main():
     print("Generating embeddings and storing in Supabase...")
     embeddings = OpenAIEmbeddings()
     
-    # Insert documents into Supabase vector store
+    # Insert documents into Supabase vector store in small batches
     SupabaseVectorStore.from_documents(
         docs,
         embeddings,
         client=supabase,
         table_name="documents",
-        query_name="match_documents"
+        query_name="match_documents",
+        chunk_size=100  # Smaller batch size to prevent timeout
     )
     
     print("Successfully ingested all documents into Supabase!")
