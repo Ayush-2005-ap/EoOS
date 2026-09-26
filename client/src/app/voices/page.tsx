@@ -2,74 +2,33 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Quote, Play, ArrowRight, Loader2, X } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { Quote, ArrowRight, Loader2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const HoverVideoCard = ({ 
-  videoUrl, 
-  youtubeUrl, 
-  category, 
-  title 
-}: { 
-  videoUrl: string, 
-  youtubeUrl: string, 
-  category: string, 
-  title: string 
-}) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const handleMouseEnter = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.muted = false;
-      videoRef.current.play().catch(() => {});
+// ─── Helper: convert any YouTube URL to an embed URL ──────────────────────────
+function toYouTubeEmbedUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    // https://youtu.be/VIDEO_ID
+    if (u.hostname === "youtu.be") {
+      return `https://www.youtube.com/embed${u.pathname}`;
     }
-  };
+    // https://www.youtube.com/watch?v=VIDEO_ID
+    const v = u.searchParams.get("v");
+    if (v) return `https://www.youtube.com/embed/${v}`;
+    // Already an embed URL
+    if (u.pathname.startsWith("/embed/")) return url;
+  } catch {
+    // fall through
+  }
+  return url;
+}
 
-  const handleMouseLeave = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {});
-    }
-  };
-
-  return (
-    <a 
-      href={youtubeUrl} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="video-card block group relative overflow-hidden rounded-xl bg-surface-container shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="relative w-full aspect-video">
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          className="w-full h-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-        <div className="absolute inset-0 bg-primary/40 group-hover:bg-primary/20 transition-all duration-300 flex items-center justify-center">
-          <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
-            <Play className="text-primary fill-primary ml-1" size={28} />
-          </div>
-        </div>
-      </div>
-      <div className="p-4 bg-white dark:bg-surface border-t border-outline-variant/10">
-        <p className="font-label-sm text-[12px] font-semibold text-secondary mb-1 uppercase tracking-wider">{category}</p>
-        <h3 className="font-label-md text-[16px] font-bold text-primary">{title}</h3>
-      </div>
-    </a>
-  );
-};
 
 export default function Voices() {
   const [videoStories, setVideoStories] = useState<any[]>([]);
-  const [masonryQuotes, setMasonryQuotes] = useState<any[]>([]);
+  const [pressReleases, setPressReleases] = useState<any[]>([]);
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
@@ -78,20 +37,20 @@ export default function Voices() {
     const fetchData = async () => {
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://eoos-backend.onrender.com/api";
-        const [voicesRes, reviewsRes, galleryRes] = await Promise.all([
+        const [voicesRes, pressRes, galleryRes] = await Promise.all([
           fetch(`${baseUrl}/media/voices`),
-          fetch(`${baseUrl}/media/reviews`),
+          fetch(`${baseUrl}/media/press-releases`),
           fetch(`${baseUrl}/media/gallery`)
         ]);
         const voicesData = await voicesRes.json();
-        const reviewsData = await reviewsRes.json();
+        const pressData = await pressRes.json();
         const galleryData = await galleryRes.json();
 
         setVideoStories(voicesData.data || []);
-        setMasonryQuotes(reviewsData.data || []);
+        setPressReleases(pressData.data || []);
         setGalleryImages(galleryData.data || []);
       } catch (e) {
-        console.error("Failed to fetch voices and testimonials:", e);
+        console.error("Failed to fetch voices data:", e);
       } finally {
         setLoading(false);
       }
@@ -110,6 +69,11 @@ export default function Voices() {
       </>
     );
   }
+
+  // Collect voices that have a pressReleaseUrl set
+  const pressReleaseEmbeds = videoStories.filter(
+    (v) => v.pressReleaseUrl && v.pressReleaseUrl.trim() !== ""
+  );
 
   return (
     <>
@@ -141,6 +105,21 @@ export default function Voices() {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
+        .yt-embed-wrapper {
+          position: relative;
+          padding-bottom: 56.25%; /* 16:9 */
+          height: 0;
+          overflow: hidden;
+          border-radius: 1rem;
+          box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        }
+        .yt-embed-wrapper iframe {
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          border: 0;
+          border-radius: 1rem;
+        }
       `}} />
       <main className="pt-32 pb-16 max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -158,7 +137,7 @@ export default function Voices() {
           </p>
         </header>
 
-        {/* Video Testimonials Row */}
+        {/* Field Reports Section */}
         <section className="mb-20">
           <div className="flex justify-between items-end mb-8">
             <h2 className="font-plus-jakarta text-2xl font-bold text-primary">Field Reports</h2>
@@ -166,53 +145,141 @@ export default function Voices() {
               View all videos <ArrowRight size={16} />
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {videoStories.map((story, idx) => {
-              const vidUrl = story.videoUrl 
-                ? (story.videoUrl.startsWith("http") ? story.videoUrl : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${story.videoUrl}`) 
-                : "";
-              return <HoverVideoCard key={story.id || idx} videoUrl={vidUrl} youtubeUrl={story.youtubeUrl} category={story.category} title={story.title} />;
-            })}
-          </div>
+
+          {/* ── Press Release YouTube Embeds ── */}
+          {pressReleaseEmbeds.length > 0 && (
+            <div className="mb-10 space-y-8">
+              {pressReleaseEmbeds.map((story, idx) => (
+                <motion.div
+                  key={story.id || idx}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  className="w-full"
+                >
+                  {/* Label */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 text-[11px] font-bold uppercase tracking-wider rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                      Press Release
+                    </span>
+                    {story.category && story.category !== "General" && (
+                      <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{story.category}</span>
+                    )}
+                  </div>
+                  {/* Title */}
+                  {story.title && (
+                    <h3 className="font-plus-jakarta text-xl font-bold text-primary mb-4">{story.title}</h3>
+                  )}
+                  {/* Responsive YouTube Embed */}
+                  <div className="yt-embed-wrapper">
+                    <iframe
+                      src={toYouTubeEmbedUrl(story.pressReleaseUrl)}
+                      title={story.title || "Press Release Video"}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                </motion.div>
+              ))}
+              {/* Divider before video cards */}
+              {videoStories.length > 0 && (
+                <div className="flex items-center gap-4 pt-2">
+                  <div className="flex-1 h-px bg-outline-variant/30"></div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">More Stories</span>
+                  <div className="flex-1 h-px bg-outline-variant/30"></div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── Video Cards Grid (YouTube iframes) ── */}
+          {videoStories.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {videoStories.map((story, idx) => (
+                <motion.div
+                  key={story.id || idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.07 }}
+                  className="rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white border border-outline-variant/10"
+                >
+                  <div className="yt-embed-wrapper">
+                    <iframe
+                      src={story.youtubeUrl}
+                      title={story.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                  <div className="p-4 border-t border-outline-variant/10">
+                    <p className="text-[11px] font-bold text-secondary uppercase tracking-wider mb-1">{story.category}</p>
+                    <h3 className="text-[15px] font-bold text-primary line-clamp-2">{story.title}</h3>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
         </section>
 
-        {/* Testimonials Masonry */}
-        <section>
-          <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-8">Voices from the Field</h2>
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-            {masonryQuotes.map((item, idx) => {
-              let cardClasses = "";
-              if (item.type === "glass") {
-                cardClasses = "glass-card p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow break-inside-avoid";
-              } else if (item.type === "solid") {
-                cardClasses = "bg-primary text-white p-8 rounded-xl shadow-lg break-inside-avoid";
-              } else {
-                cardClasses = "bg-blue-50 dark:bg-slate-800 p-8 rounded-xl border border-blue-100 dark:border-slate-700 break-inside-avoid";
-              }
+        {/* Press Release Section */}
+        <section className="mb-20">
+          <h2 className="font-plus-jakarta text-2xl font-bold text-primary mb-8">Press Release</h2>
 
-              return (
-                <div key={idx} className={cardClasses}>
-                  {item.type === "glass" && <Quote className="text-secondary opacity-50 mb-6 scale-x-[-1]" size={32} />}
-                  <p className={`text-lg mb-8 ${item.type === "solid" ? "text-white" : item.type === "glass" ? "text-primary italic" : "text-primary font-semibold"}`}>
-                    "{item.quote}"
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-full overflow-hidden flex flex-shrink-0 items-center justify-center ${item.type === "solid" ? "bg-white/20" : "bg-slate-200"}`}>
-                      {item.avatarUrl ? (
-                        <img className="w-full h-full object-cover" src={item.avatarUrl.startsWith("http") ? item.avatarUrl : `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace("/api", "") : "https://eoos-backend.onrender.com"}${item.avatarUrl}`} alt={item.author} />
-                      ) : (
-                        <span className="font-bold text-primary">{item.initials || item.author?.charAt(0)}</span>
-                      )}
-                    </div>
-                    <div>
-                      <h4 className={`font-bold text-sm ${item.type === "solid" ? "text-white" : "text-primary"}`}>{item.author}</h4>
-                      <p className={`text-xs mt-1 ${item.type === "solid" ? "text-white/80" : "text-slate-500"}`}>{item.role}</p>
-                    </div>
+          {pressReleases.length === 0 ? (
+            <p className="text-on-surface-variant">No press releases available yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {pressReleases.map((item, idx) => (
+                <motion.a
+                  key={item.id || idx}
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group glass-card p-6 rounded-xl hover:shadow-md transition-all duration-300 flex flex-col gap-3 cursor-pointer"
+                >
+                  {/* Top row: publication + coverage type */}
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="font-plus-jakarta font-bold text-primary text-[15px] group-hover:underline leading-snug">
+                      {item.publication}
+                    </span>
+                    {item.coverageType && (
+                      <span className="flex-shrink-0 inline-block px-2.5 py-1 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full">
+                        {item.coverageType}
+                      </span>
+                    )}
                   </div>
-                </div>
-              );
-            })}
-          </div>
+
+                  {/* Summary */}
+                  {item.summary && (
+                    <p className="text-sm text-on-surface-variant leading-relaxed line-clamp-3">{item.summary}</p>
+                  )}
+
+                  {/* Footer: author + date */}
+                  <div className="flex items-center gap-4 mt-auto pt-3 border-t border-outline-variant/10 text-xs text-slate-500">
+                    {item.author && (
+                      <span className="flex items-center gap-1">
+                        <Quote size={10} className="opacity-40" />
+                        {item.author}
+                      </span>
+                    )}
+                    {item.date && (
+                      <span className="ml-auto">
+                        {new Date(item.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                      </span>
+                    )}
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Gallery Infinite Marquee */}

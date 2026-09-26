@@ -82,32 +82,20 @@ router.get("/voices", async (req, res) => {
   }
 });
 
-router.post("/voices", requireAdmin, cloudUpload.fields([{ name: "thumbnail", maxCount: 1 }, { name: "video", maxCount: 1 }]), async (req, res) => {
+router.post("/voices", requireAdmin, async (req, res) => {
   try {
-    const { title, youtubeUrl, category } = req.body;
+    const { title, youtubeUrl, category, pressReleaseUrl } = req.body;
     if (!title || !youtubeUrl) return res.status(400).json({ error: "Title and YouTube URL are required" });
 
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-    
-    let thumbnailPath = "";
-    let videoUrl = "";
-
-    if (files?.["thumbnail"]) {
-      const thumbFile = files["thumbnail"][0];
-      const thumbName = `voices/${Date.now()}-thumb-${thumbFile.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(thumbName, thumbFile.buffer || thumbFile.path, thumbFile.mimetype);
-      thumbnailPath = result.publicUrl;
-    }
-
-    if (files?.["video"]) {
-      const videoFile = files["video"][0];
-      const vidName = `voices/${Date.now()}-video-${videoFile.originalname.replace(/\\s+/g, "_")}`;
-      const result = await supabaseStorage.upload(vidName, videoFile.buffer || videoFile.path, videoFile.mimetype);
-      videoUrl = result.publicUrl;
-    }
-
     const voice = await prisma.voice.create({
-      data: { title, youtubeUrl, thumbnailPath, videoUrl, category: category || "General" },
+      data: {
+        title,
+        youtubeUrl,
+        category: category || "General",
+        pressReleaseUrl: pressReleaseUrl || "",
+        thumbnailPath: "",
+        videoUrl: "",
+      },
     });
     res.status(201).json({ data: voice });
   } catch (err: any) {
@@ -193,6 +181,52 @@ router.delete("/reviews/:id", requireAdmin, async (req, res) => {
     }
 
     await prisma.testimonial.delete({ where: { id: String(id) } });
+    res.json({ message: "Deleted successfully" });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ============================================================================
+// PRESS RELEASES
+// ============================================================================
+
+router.get("/press-releases", async (req, res) => {
+  try {
+    const items = await prisma.pressRelease.findMany({ orderBy: { createdAt: "desc" } });
+    res.json({ data: items });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/press-releases", requireAdmin, async (req, res) => {
+  try {
+    const { publication, link, author, date, summary, coverageType } = req.body;
+    if (!publication || !link) return res.status(400).json({ error: "Publication name and link are required" });
+
+    const item = await prisma.pressRelease.create({
+      data: {
+        publication,
+        link,
+        author: author || "",
+        date: date || "",
+        summary: summary || "",
+        coverageType: coverageType || "",
+      },
+    });
+    res.status(201).json({ data: item });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/press-releases/:id", requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = await prisma.pressRelease.findUnique({ where: { id: String(id) } });
+    if (!item) return res.status(404).json({ error: "Not found" });
+    await prisma.pressRelease.delete({ where: { id: String(id) } });
     res.json({ message: "Deleted successfully" });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
