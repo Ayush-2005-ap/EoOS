@@ -141,9 +141,14 @@ export default function Voices() {
         <section className="mb-20">
           <div className="flex justify-between items-end mb-8">
             <h2 className="font-plus-jakarta text-2xl font-bold text-primary">Field Reports</h2>
-            <button className="text-secondary font-bold text-sm flex items-center gap-2 hover:underline">
+            <a
+              href="https://youtube.com/playlist?list=PLGbb_WwV12YU&si=rEi1xAyJzUkCzKeM"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary font-bold text-sm flex items-center gap-2 hover:underline"
+            >
               View all videos <ArrowRight size={16} />
-            </button>
+            </a>
           </div>
 
           {/* ── Press Release YouTube Embeds ── */}
